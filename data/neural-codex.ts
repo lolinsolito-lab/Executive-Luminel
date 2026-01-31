@@ -266,7 +266,7 @@ export const NEURAL_CODEX: StrategyCard[] = [
 // Get card by context
 export const getCardByContext = (context: string): StrategyCard | undefined => {
   const lowerContext = context.toLowerCase();
-  return NEURAL_CODEX.find(card => 
+  return NEURAL_CODEX.find(card =>
     card.context.some(c => lowerContext.includes(c))
   );
 };
@@ -278,19 +278,32 @@ export const getDailyCard = (tier: 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE'): Stra
     'STRATEGIST': ['GRINDER', 'STRATEGIST'],
     'EXECUTIVE': ['GRINDER', 'STRATEGIST', 'EXECUTIVE']
   };
-  
+
   const availableTiers = tierHierarchy[tier];
   const availableCards = NEURAL_CODEX.filter(card => availableTiers.includes(card.tier));
-  
+
   // Use date as seed for daily consistency
   const today = new Date().toISOString().split('T')[0];
   const seed = today.split('-').reduce((a, b) => a + parseInt(b), 0);
   const index = seed % availableCards.length;
-  
+
   return availableCards[index];
 };
 
 // Get card by source book
 export const getCardsBySource = (source: StrategyCard['source']): StrategyCard[] => {
   return NEURAL_CODEX.filter(card => card.source === source);
+};
+
+// Get card by ID
+export const getCardById = (id: string): StrategyCard | undefined => {
+  return NEURAL_CODEX.find(card => card.id === id);
+};
+
+// Get multiple cards matching a context
+export const getCardsByContext = (context: string, limit: number = 3): StrategyCard[] => {
+  const lowerContext = context.toLowerCase();
+  return NEURAL_CODEX
+    .filter(card => card.context.some(c => lowerContext.includes(c)))
+    .slice(0, limit);
 };
