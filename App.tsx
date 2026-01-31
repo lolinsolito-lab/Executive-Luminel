@@ -295,19 +295,20 @@ const App: React.FC = () => {
 
     // 6. Main App
     return (
-      <div className="v5-executive flex h-screen w-full overflow-hidden font-sans relative z-0 bg-corp-onyx">
-        {/* Mobile Header (Simplified for V6) */}
-        <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-corp-onyx border-b border-corp-border p-4 flex justify-between items-center">
+      <div className="flex h-screen w-full overflow-hidden font-sans relative z-0 bg-[#F9F8F2]">
+        {/* Mobile Header */}
+        <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-amber-200/50 p-3 flex justify-between items-center shadow-sm">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-corp-gold/10 border border-corp-gold/50 rounded-sm flex items-center justify-center">
-              <span className="font-display font-bold text-lg text-corp-gold">L</span>
+            <div className="w-8 h-8 bg-amber-100 border border-amber-400 rounded-sm flex items-center justify-center">
+              <span className="font-display font-bold text-lg text-amber-600">L</span>
             </div>
+            <span className="font-display font-bold text-gray-900 text-sm">LUMINEL</span>
           </div>
-          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-corp-gold">
+          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-amber-600 p-1">
             {/* Hamburger Icon */}
             <div className="space-y-1.5">
-              <div className="w-6 h-0.5 bg-corp-gold"></div>
-              <div className="w-4 h-0.5 bg-corp-gold ml-auto"></div>
+              <div className="w-6 h-0.5 bg-amber-600"></div>
+              <div className="w-4 h-0.5 bg-amber-600 ml-auto"></div>
             </div>
           </button>
         </div>
@@ -316,7 +317,7 @@ const App: React.FC = () => {
         {/* Shows Rank, Status, Navigation. Essential for user orientation. */}
         {/* --- MOBILE SIDEBAR (Drawer) --- */}
         <div className={`
-          md:hidden fixed inset-y-0 left-0 z-50 w-[320px] bg-corp-onyx transition-transform duration-300 border-r border-corp-border shadow-2xl
+          md:hidden fixed inset-y-0 left-0 z-50 w-[280px] bg-[#F9F8F2] transition-transform duration-300 border-r border-amber-200/50 shadow-xl
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         `}>
           <Sidebar
@@ -326,14 +327,19 @@ const App: React.FC = () => {
           />
           {isAdmin && (
             <div className="absolute bottom-4 left-4 right-4">
-              <button onClick={() => setCurrentPage('admin')} className="god-mode-btn w-full">GOD MODE</button>
+              <button onClick={() => setCurrentPage('admin')} className="w-full py-2 bg-red-100 text-red-600 text-xs font-mono font-bold rounded-sm border border-red-200 hover:bg-red-200 transition-colors">GOD MODE</button>
             </div>
           )}
         </div>
 
+        {/* Mobile Overlay */}
+        {isSidebarOpen && (
+          <div className="md:hidden fixed inset-0 bg-black/30 z-40" onClick={() => setIsSidebarOpen(false)}></div>
+        )}
+
         {/* --- DESKTOP SIDEBAR (Static Column) --- */}
         {/* Force flex display on medium screens and up. NEVER hidden. */}
-        <div className="hidden md:flex flex-col w-[320px] flex-shrink-0 h-full bg-corp-onyx border-r border-corp-border/30 relative z-30">
+        <div className="hidden md:flex flex-col w-[280px] lg:w-[320px] flex-shrink-0 h-full bg-[#F9F8F2] border-r border-amber-200/50 relative z-30">
           <Sidebar
             user={userProfile}
             onOpenMap={() => setIsMapOpen(true)}
@@ -343,10 +349,10 @@ const App: React.FC = () => {
           {/* Admin Button Desktop */}
           {isAdmin && (
             <div className="absolute bottom-4 left-4 right-4 animate-fade-in z-50">
-              <div className="bg-red-900/10 border border-red-500/20 p-1 rounded-sm">
+              <div className="bg-red-50 border border-red-200 p-1 rounded-sm">
                 <button
                   onClick={() => setCurrentPage('admin')}
-                  className="w-full py-1.5 bg-transparent text-red-400 text-[10px] font-mono uppercase tracking-widest hover:text-red-300 transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-1.5 bg-transparent text-red-600 text-[10px] font-mono uppercase tracking-widest hover:text-red-700 transition-colors flex items-center justify-center gap-2"
                 >
                   <Crown size={10} />
                   GOD MODE
@@ -357,7 +363,7 @@ const App: React.FC = () => {
         </div>
 
         {/* --- CENTER COLUMN: WAR ROOM (Chat Console) --- */}
-        <div className="flex-1 pt-16 md:pt-0 relative w-full overflow-hidden flex flex-col bg-corp-onyx">
+        <div className="flex-1 pt-14 md:pt-0 relative w-full overflow-hidden flex flex-col bg-[#F9F8F2]">
           <ChatConsole
             messages={messages}
             isLoading={isLoading}
