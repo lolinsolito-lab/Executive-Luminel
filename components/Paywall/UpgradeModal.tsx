@@ -1,5 +1,6 @@
-import React from 'react';
-import { X, Lock, Zap, Crown, Check, ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Lock, Zap, Crown, Check, ArrowRight, Loader2 } from 'lucide-react';
+import { isStripeConfigured, STRIPE_PRICES } from '../../lib/stripe';
 
 interface UpgradeModalProps {
     isOpen: boolean;
@@ -7,6 +8,12 @@ interface UpgradeModalProps {
     currentTier: 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE';
     featureRequested?: string;
 }
+
+// Stripe Payment Links (create these in your Stripe Dashboard)
+const PAYMENT_LINKS = {
+    STRATEGIST: 'https://buy.stripe.com/test_PLACEHOLDER_STRATEGIST',
+    EXECUTIVE: 'https://buy.stripe.com/test_PLACEHOLDER_EXECUTIVE'
+};
 
 const TIERS = [
     {
@@ -76,12 +83,25 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
     currentTier,
     featureRequested
 }) => {
+    const [isLoading, setIsLoading] = useState<string | null>(null);
+
     if (!isOpen) return null;
 
-    const handleUpgrade = (tierId: string) => {
-        // TODO: Integrate with Stripe Checkout
-        console.log('Upgrading to:', tierId);
-        alert(`Stripe Checkout per ${tierId} - Da implementare con Supabase + Stripe`);
+    const handleUpgrade = async (tierId: 'STRATEGIST' | 'EXECUTIVE') => {
+        setIsLoading(tierId);
+
+        // For now, open Stripe Payment Link (replace URLs when you create them)
+        const paymentLink = PAYMENT_LINKS[tierId];
+
+        if (paymentLink.includes('PLACEHOLDER')) {
+            alert(`⚠️ Stripe Payment Link non configurato per ${tierId}.\n\nCrea un Payment Link in Stripe Dashboard e aggiorna PAYMENT_LINKS nel codice.`);
+            setIsLoading(null);
+            return;
+        }
+
+        // Redirect to Stripe
+        window.open(paymentLink, '_blank');
+        setIsLoading(null);
     };
 
     return (
@@ -149,7 +169,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
                             {/* Header */}
                             <div className="text-center mb-4">
                                 <h3 className={`font-display font-bold text-sm tracking-widest uppercase ${tier.id === 'EXECUTIVE' ? 'text-corp-gold' :
-                                        tier.id === 'STRATEGIST' ? 'text-corp-blue' : 'text-corp-silver'
+                                    tier.id === 'STRATEGIST' ? 'text-corp-blue' : 'text-corp-silver'
                                     }`}>
                                     {tier.name}
                                 </h3>
@@ -178,15 +198,15 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
 
                             {/* CTA */}
                             <button
-                                onClick={() => !tier.disabled && handleUpgrade(tier.id)}
+                                onClick={() => !tier.disabled && tier.id !== 'GRINDER' && handleUpgrade(tier.id as 'STRATEGIST' | 'EXECUTIVE')}
                                 disabled={tier.disabled || tier.id === currentTier}
                                 className={`w-full py-2.5 text-xs font-bold uppercase tracking-widest transition-all ${tier.id === currentTier
-                                        ? 'bg-corp-silver/20 text-corp-silver cursor-not-allowed'
-                                        : tier.disabled
-                                            ? 'bg-corp-bg border border-corp-silver/30 text-corp-silver cursor-not-allowed'
-                                            : tier.id === 'EXECUTIVE'
-                                                ? 'bg-corp-gold text-corp-onyx hover:shadow-[0_0_20px_rgba(212,175,55,0.5)]'
-                                                : 'bg-corp-blue text-white hover:shadow-[0_0_20px_rgba(0,122,255,0.5)]'
+                                    ? 'bg-corp-silver/20 text-corp-silver cursor-not-allowed'
+                                    : tier.disabled
+                                        ? 'bg-corp-bg border border-corp-silver/30 text-corp-silver cursor-not-allowed'
+                                        : tier.id === 'EXECUTIVE'
+                                            ? 'bg-corp-gold text-corp-onyx hover:shadow-[0_0_20px_rgba(212,175,55,0.5)]'
+                                            : 'bg-corp-blue text-white hover:shadow-[0_0_20px_rgba(0,122,255,0.5)]'
                                     }`}
                             >
                                 {tier.id === currentTier ? 'Piano Attuale' : tier.cta}
