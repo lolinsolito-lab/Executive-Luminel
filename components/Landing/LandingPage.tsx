@@ -97,21 +97,53 @@ const PRICING = [
 
 // Imports moved to top
 
+const Navbar = ({ onEnterApp }: { onEnterApp: () => void }) => {
+    const [scrolled, setScrolled] = useState(false);
+
+    React.useEffect(() => {
+        const handleScroll = () => setScrolled(window.scrollY > 50);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    return (
+        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'py-4 bg-corp-onyx/80 backdrop-blur-md shadow-sm border-b border-corp-gold/20' : 'py-6 bg-transparent'}`}>
+            <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <Crown size={20} className="text-corp-gold" />
+                    <span className="font-serif font-bold text-corp-platinum tracking-widest">LUMINEL</span>
+                </div>
+
+                <div className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-widest text-corp-silver">
+                    <a href="#manifesto" className="hover:text-corp-gold transition-colors">Manifesto</a>
+                    <a href="#features" className="hover:text-corp-gold transition-colors">Arsenale</a>
+                    <a href="#pricing" className="hover:text-corp-gold transition-colors">Status</a>
+                </div>
+
+                <button
+                    onClick={onEnterApp}
+                    className={`px-6 py-2 border text-xs font-bold uppercase tracking-widest transition-all ${scrolled ? 'bg-corp-gold text-corp-onyx border-corp-gold' : 'bg-transparent text-corp-platinum border-corp-platinum/30 hover:border-corp-gold hover:text-corp-gold'}`}
+                >
+                    Accesso
+                </button>
+            </div>
+        </nav>
+    );
+};
+
 export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
     const [legalType, setLegalType] = useState<'privacy' | 'terms' | 'cookies' | 'disclaimer' | null>(null);
-
     const [email, setEmail] = useState('');
-    const [scrollY, setScrollY] = useState(0);
 
     const handleWaitlist = (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: Integrate with Resend/Supabase
-        alert(`Email ${email} aggiunta alla waitlist! (Da integrare con Resend)`);
+        alert(`Email ${email} aggiunta alla waitlist!`);
         setEmail('');
     };
 
     return (
-        <div className="min-h-screen bg-corp-onyx text-corp-platinum font-sans">
+        <div className="min-h-screen bg-corp-onyx text-corp-platinum font-sans selection:bg-corp-gold selection:text-white">
+            <Navbar onEnterApp={onEnterApp} />
 
             {/* HERO SECTION */}
             <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -123,177 +155,165 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
 
                 <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
                     {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-corp-gold/10 border border-corp-gold/30 rounded-sm mb-8 animate-fade-in">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-corp-gold/10 to-transparent border-l-2 border-corp-gold rounded-sm mb-8 animate-fade-in shadow-sm">
                         <Crown size={14} className="text-corp-gold" />
-                        <span className="text-[10px] font-mono text-corp-gold uppercase tracking-widest">V5.0 // THE ARCHITECT</span>
+                        <span className="text-[10px] font-mono text-corp-platinum uppercase tracking-widest font-bold">V5.0 // THE ARCHITECT</span>
                     </div>
 
-                    {/* Main Headline */}
-                    <h1 className="text-5xl md:text-7xl font-serif font-bold tracking-tight mb-6 animate-fade-in drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]">
-                        <span className="text-corp-platinum">LUMINEL</span>
-                        <span className="text-corp-gold font-serif italic"> EXECUTIVE</span>
+                    {/* Main Headline - VOGUE STYLE */}
+                    <h1 className="text-5xl md:text-8xl font-serif font-bold tracking-tight mb-8 animate-fade-in leading-[1.1]">
+                        <span className="text-corp-platinum drop-shadow-xl">LUMINEL</span>
+                        <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-corp-gold via-[#D4AF37] to-corp-gold font-serif italic relative">
+                            EXECUTIVE
+                            <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-transparent via-corp-gold to-transparent opacity-50"></span>
+                        </span>
                     </h1>
 
                     {/* Tagline */}
-                    <p className="text-xl md:text-2xl font-mono text-corp-blue tracking-widest mb-4 animate-fade-in">
+                    <p className="text-xl md:text-2xl font-mono text-corp-blue tracking-widest mb-6 animate-fade-in">
                         Career Intelligence for the 1%
                     </p>
 
                     {/* Sub-headline */}
-                    <p className="text-lg text-corp-silver max-w-2xl mx-auto mb-12 animate-fade-in font-light leading-relaxed">
-                        L'Intelligence che trasforma professionisti in <span className="text-corp-platinum font-medium">Architetti del Potere</span>.
-                        <br />
-                        <span className="text-corp-gold italic">L'Elite non compete. Domina.</span>
+                    <p className="text-lg md:text-xl text-corp-silver max-w-2xl mx-auto mb-12 animate-fade-in font-light leading-relaxed">
+                        L'Intelligence che trasforma professionisti in <span className="text-corp-platinum font-bold border-b border-corp-gold/50">Architetti del Potere</span>.
+                        <br className="hidden md:block" />
+                        <span className="text-corp-platinum italic mt-2 block">"L'Elite non compete. Domina."</span>
                     </p>
 
                     {/* CTA Buttons */}
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-6 animate-fade-in">
                         <button
                             onClick={onEnterApp}
-                            className="group px-8 py-4 bg-corp-gold text-corp-onyx font-serif font-bold uppercase tracking-[0.2em] text-sm hover:shadow-[0_0_40px_rgba(197,160,89,0.6)] hover:bg-white transition-all duration-500"
+                            className="group px-10 py-5 bg-corp-platinum text-corp-bg font-serif font-bold uppercase tracking-[0.2em] text-sm hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)] hover:-translate-y-1 transition-all duration-500 border border-transparent hover:border-corp-gold"
                         >
                             Accedi al Vault
-                            <ArrowRight size={16} className="inline ml-2 group-hover:translate-x-1 transition-transform" />
+                            <ArrowRight size={16} className="inline ml-2 group-hover:translate-x-1 transition-transform text-corp-gold" />
                         </button>
                         <a
                             href="#pricing"
-                            className="px-8 py-4 border border-corp-silver/30 text-corp-silver hover:border-corp-gold hover:text-corp-gold transition-colors uppercase tracking-widest text-sm"
+                            className="group px-10 py-5 border border-corp-platinum/20 text-corp-platinum hover:border-corp-gold hover:text-corp-gold transition-all uppercase tracking-widest text-sm bg-white/50 backdrop-blur-sm"
                         >
                             Vedi i Piani
                         </a>
                     </div>
-
-                    {/* Social Proof Mini */}
-                    <div className="mt-16 flex items-center justify-center gap-8 text-corp-silver animate-fade-in">
-                        <div className="text-center">
-                            <div className="text-2xl font-bold text-corp-platinum">2,847</div>
-                            <div className="text-[10px] font-mono uppercase tracking-widest">Executives Attivi</div>
-                        </div>
-                        <div className="w-px h-10 bg-corp-border"></div>
-                        <div className="text-center">
-                            <div className="text-2xl font-bold text-corp-gold">+47%</div>
-                            <div className="text-[10px] font-mono uppercase tracking-widest">Salary Increase Avg</div>
-                        </div>
-                        <div className="w-px h-10 bg-corp-border"></div>
-                        <div className="text-center">
-                            <div className="text-2xl font-bold text-corp-platinum">8.2</div>
-                            <div className="text-[10px] font-mono uppercase tracking-widest">Mesi per Promo</div>
-                        </div>
-                    </div>
                 </div>
 
+                {/* Scroll Indicator */}
                 <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
                     <ChevronRight size={24} className="text-corp-silver rotate-90" />
                 </div>
             </section>
 
-            {/* MANIFESTO SECTION (VIRAL HOOK) */}
-            <section className="py-20 px-6 bg-corp-platinum text-corp-onyx border-y border-corp-gold/30">
-                <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-xs font-mono uppercase tracking-[0.3em] text-corp-gold mb-8">The Rules of the Game</h2>
-                    <div className="space-y-12">
+            {/* MANIFESTO SECTION (VIRAL HOOK) - ITALIANO */}
+            <section id="manifesto" className="py-24 px-6 bg-white relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(#C5A059_0.5px,transparent_0.5px)] [background-size:20px_20px] opacity-20"></div>
+                <div className="max-w-4xl mx-auto text-center relative z-10">
+                    <h2 className="text-xs font-mono uppercase tracking-[0.4em] text-corp-gold mb-12 flex items-center justify-center gap-4">
+                        <span className="w-8 h-px bg-corp-gold"></span>
+                        Le Regole del Gioco
+                        <span className="w-8 h-px bg-corp-gold"></span>
+                    </h2>
+                    <div className="space-y-16">
                         <div className="group">
-                            <h3 className="text-2xl md:text-4xl font-serif font-bold mb-2 group-hover:text-corp-gold transition-colors duration-300">"Competence is the baseline. Politics is the multiplier."</h3>
-                            <p className="text-corp-silver font-mono text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Rule No. 1</p>
+                            <h3 className="text-3xl md:text-5xl font-serif font-bold mb-4 text-corp-platinum group-hover:text-corp-gold transition-colors duration-500">
+                                "La competenza è la base. <br /><span className="italic font-light">La politica è il moltiplicatore.</span>"
+                            </h3>
+                            <p className="text-corp-silver font-mono text-[10px] uppercase tracking-[0.3em] opacity-50 group-hover:opacity-100 transition-opacity">Regola N. 1</p>
                         </div>
-                        <div className="w-12 h-px bg-corp-gold/30 mx-auto"></div>
                         <div className="group">
-                            <h3 className="text-2xl md:text-4xl font-serif font-bold mb-2 group-hover:text-corp-gold transition-colors duration-300">"Don't ask for permission. Create leverage."</h3>
-                            <p className="text-corp-silver font-mono text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Rule No. 2</p>
+                            <h3 className="text-3xl md:text-5xl font-serif font-bold mb-4 text-corp-platinum group-hover:text-corp-gold transition-colors duration-500">
+                                "Non chiedere il permesso. <br /><span className="italic font-light">Crea una Leva.</span>"
+                            </h3>
+                            <p className="text-corp-silver font-mono text-[10px] uppercase tracking-[0.3em] opacity-50 group-hover:opacity-100 transition-opacity">Regola N. 2</p>
                         </div>
-                        <div className="w-12 h-px bg-corp-gold/30 mx-auto"></div>
                         <div className="group">
-                            <h3 className="text-2xl md:text-4xl font-serif font-bold mb-2 group-hover:text-corp-gold transition-colors duration-300">"Nice guys finish last. Architects define the finish line."</h3>
-                            <p className="text-corp-silver font-mono text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Rule No. 3</p>
+                            <h3 className="text-3xl md:text-5xl font-serif font-bold mb-4 text-corp-platinum group-hover:text-corp-gold transition-colors duration-500">
+                                "I bravi ragazzi arrivano ultimi. <br /><span className="italic font-light">Gli Architetti disegnano il traguardo.</span>"
+                            </h3>
+                            <p className="text-corp-silver font-mono text-[10px] uppercase tracking-[0.3em] opacity-50 group-hover:opacity-100 transition-opacity">Regola N. 3</p>
                         </div>
                     </div>
                 </div>
             </section>
 
             {/* PROBLEM SECTION */}
-            <section className="py-24 px-6 border-t border-corp-border">
+            <section className="py-24 px-6 bg-corp-onyx">
                 <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-3xl md:text-4xl font-display font-bold mb-8">
-                        Il <span className="text-corp-danger">problema</span> che nessuno ti dice
+                    <h2 className="text-3xl md:text-4xl font-display font-bold mb-8 text-corp-platinum">
+                        Il <span className="text-corp-danger relative inline-block">
+                            problema
+                            <span className="absolute bottom-0 left-0 w-full h-[2px] bg-corp-danger opacity-50"></span>
+                        </span> che nessuno ti dice
                     </h2>
-                    <p className="text-lg text-corp-silver leading-relaxed mb-12">
-                        Lavori 60 ore. Eccelli tecnicamente. Eppure la promozione va sempre a <span className="text-corp-gold">quello che sa giocare</span>.
+                    <p className="text-lg text-corp-platinum/80 leading-relaxed mb-12 font-light">
+                        Lavori 60 ore. Eccelli tecnicamente. Eppure la promozione va sempre a <span className="text-corp-gold font-bold">quello che sa giocare</span>.
                         <br /><br />
-                        La Meritocrazia è una favola. La <span className="text-corp-gold font-serif italic">Strategia Politica</span> è la realtà.
-                        <br /><br />
-                        Il sistema è truccato. <span className="text-corp-platinum font-bold">Impara a barare con classe.</span>
+                        La Meritocrazia è una favola. La <span className="text-corp-platinum font-serif italic text-2xl">Strategia Politica</span> è la realtà.
                     </p>
-                    <div className="grid md:grid-cols-3 gap-6">
-                        <div className="p-6 border border-corp-danger/30 bg-corp-danger/5 rounded-sm">
-                            <X size={24} className="text-corp-danger mx-auto mb-4" />
-                            <div className="text-sm text-corp-silver">Aspetti Dicembre per chiedere l'aumento</div>
-                        </div>
-                        <div className="p-6 border border-corp-danger/30 bg-corp-danger/5 rounded-sm">
-                            <X size={24} className="text-corp-danger mx-auto mb-4" />
-                            <div className="text-sm text-corp-silver">Credi che "il lavoro parli da solo"</div>
-                        </div>
-                        <div className="p-6 border border-corp-danger/30 bg-corp-danger/5 rounded-sm">
-                            <X size={24} className="text-corp-danger mx-auto mb-4" />
-                            <div className="text-sm text-corp-silver">Ignori la politica aziendale</div>
-                        </div>
-                    </div>
                 </div>
             </section>
 
-            {/* TRAP VS ESCAPE (EDUCATION) */}
-            <section className="py-24 px-6 bg-corp-bg">
-                <div className="max-w-5xl mx-auto">
+            {/* TRAP VS ESCAPE (EDUCATION) - ITALIANO */}
+            <section className="py-24 px-6 bg-corp-bg/50">
+                <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-                            Scegli il tuo <span className="text-corp-gold">Ruolo</span>
+                        <h2 className="text-3xl md:text-5xl font-serif font-bold mb-6 text-corp-platinum">
+                            Scegli il tuo <span className="text-transparent bg-clip-text bg-gradient-to-r from-corp-gold to-[#D4AF37]">Ruolo</span>
                         </h2>
-                        <p className="text-corp-silver">Ci sono due modi di giocare. Solo uno vince.</p>
+                        <p className="text-corp-silver font-mono text-xs uppercase tracking-widest">Ci sono due modi di vivere la carriera.</p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-0 border border-corp-border/50 rounded-lg overflow-hidden shadow-2xl">
+                    <div className="grid md:grid-cols-2 shadow-2xl rounded-sm overflow-hidden border border-corp-platinum/10">
                         {/* THE TRAP */}
-                        <div className="p-10 bg-corp-platinum/5 border-r border-corp-border/30">
-                            <h3 className="text-xl font-mono text-corp-silver uppercase tracking-widest mb-8 text-center">The Employee</h3>
-                            <div className="space-y-6">
-                                <div className="flex items-center gap-4 text-corp-silver/70">
-                                    <X size={20} className="text-corp-silver" />
-                                    <span>Aspetta la "Performance Review"</span>
+                        <div className="p-12 bg-white relative">
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-12 bg-gray-200"></div>
+                            <h3 className="text-xl font-mono text-gray-400 uppercase tracking-[0.2em] mb-12 text-center">Il Dipendente</h3>
+                            <div className="space-y-8">
+                                <div className="flex items-center gap-6 group">
+                                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-red-50 transition-colors">
+                                        <X size={16} className="text-gray-400 group-hover:text-red-500" />
+                                    </div>
+                                    <span className="text-gray-500 font-light text-lg">Aspetta la "Valutazione Annuale"</span>
                                 </div>
-                                <div className="flex items-center gap-4 text-corp-silver/70">
-                                    <X size={20} className="text-corp-silver" />
-                                    <span>Crede che HR sia amico</span>
+                                <div className="flex items-center gap-6 group">
+                                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-red-50 transition-colors">
+                                        <X size={16} className="text-gray-400 group-hover:text-red-500" />
+                                    </div>
+                                    <span className="text-gray-500 font-light text-lg">Si fida delle Risorse Umane</span>
                                 </div>
-                                <div className="flex items-center gap-4 text-corp-silver/70">
-                                    <X size={20} className="text-corp-silver" />
-                                    <span>Lavora 10h/giorno sperando notino</span>
-                                </div>
-                                <div className="flex items-center gap-4 text-corp-silver/70">
-                                    <X size={20} className="text-corp-silver" />
-                                    <span>Chiede permesso</span>
+                                <div className="flex items-center gap-6 group">
+                                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-red-50 transition-colors">
+                                        <X size={16} className="text-gray-400 group-hover:text-red-500" />
+                                    </div>
+                                    <span className="text-gray-500 font-light text-lg">Lavora di più sperando venga notato</span>
                                 </div>
                             </div>
                         </div>
 
                         {/* THE ESCAPE */}
-                        <div className="p-10 bg-corp-onyx relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-corp-gold/10 to-transparent pointer-events-none"></div>
-                            <h3 className="text-xl font-mono text-corp-gold uppercase tracking-widest mb-8 text-center font-bold">The Architect</h3>
-                            <div className="space-y-6 relative z-10">
-                                <div className="flex items-center gap-4 text-corp-platinum font-medium">
-                                    <Check size={20} className="text-corp-gold" />
-                                    <span>Negozia Off-Cycle (Marzo/Settembre)</span>
+                        <div className="p-12 bg-corp-platinum relative overflow-hidden text-white">
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-corp-gold/20 via-transparent to-transparent"></div>
+                            <h3 className="text-xl font-mono text-corp-gold uppercase tracking-[0.2em] mb-12 text-center font-bold relative z-10">L'Architetto</h3>
+                            <div className="space-y-8 relative z-10">
+                                <div className="flex items-center gap-6 group">
+                                    <div className="w-8 h-8 rounded-full bg-corp-gold/20 flex items-center justify-center border border-corp-gold/50">
+                                        <Check size={16} className="text-corp-gold" />
+                                    </div>
+                                    <span className="text-white font-serif text-xl italic">Negozia Fuori Ciclo</span>
                                 </div>
-                                <div className="flex items-center gap-4 text-corp-platinum font-medium">
-                                    <Check size={20} className="text-corp-gold" />
-                                    <span>Usa HR come leva tattica</span>
+                                <div className="flex items-center gap-6 group">
+                                    <div className="w-8 h-8 rounded-full bg-corp-gold/20 flex items-center justify-center border border-corp-gold/50">
+                                        <Check size={16} className="text-corp-gold" />
+                                    </div>
+                                    <span className="text-white font-serif text-xl italic">Usa HR come leva tattica</span>
                                 </div>
-                                <div className="flex items-center gap-4 text-corp-platinum font-medium">
-                                    <Check size={20} className="text-corp-gold" />
-                                    <span>Crea asset strategici visibili</span>
-                                </div>
-                                <div className="flex items-center gap-4 text-corp-platinum font-medium">
-                                    <Check size={20} className="text-corp-gold" />
-                                    <span>Crea opzioni</span>
+                                <div className="flex items-center gap-6 group">
+                                    <div className="w-8 h-8 rounded-full bg-corp-gold/20 flex items-center justify-center border border-corp-gold/50">
+                                        <Check size={16} className="text-corp-gold" />
+                                    </div>
+                                    <span className="text-white font-serif text-xl italic">Costruisce Asset di Potere</span>
                                 </div>
                             </div>
                         </div>
@@ -302,33 +322,33 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             </section>
 
             {/* FEATURES SECTION */}
-            <section className="py-24 px-6 bg-gradient-to-b from-transparent via-corp-bg/50 to-transparent">
+            <section id="features" className="py-24 px-6 bg-gradient-to-b from-transparent via-white/50 to-transparent">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-                            Le <span className="text-corp-gold">armi</span> dell'Elite
+                        <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4 text-corp-platinum">
+                            L'Arsenale <span className="text-corp-gold italic">Elite</span>
                         </h2>
-                        <p className="text-corp-silver">Tecnologia + Psicologia + Strategia</p>
+                        <p className="text-corp-silver font-light uppercase tracking-widest text-sm">Tecnologia + Psicologia + Strategia</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-8">
                         {FEATURES.map((feature, i) => (
                             <div
                                 key={i}
-                                className="group p-8 border border-corp-border bg-corp-bg/50 rounded-sm hover:border-corp-gold/30 hover:shadow-[0_0_30px_rgba(212,175,55,0.1)] transition-all"
+                                className="group p-10 border border-corp-platinum/10 bg-white rounded-sm hover:border-corp-gold/50 hover:shadow-xl transition-all duration-300"
                             >
-                                <div className="flex items-start gap-4">
-                                    <div className="p-3 bg-corp-gold/10 border border-corp-gold/30 text-corp-gold group-hover:bg-corp-gold group-hover:text-corp-onyx transition-colors">
-                                        <feature.icon size={24} />
+                                <div className="flex items-start gap-6">
+                                    <div className="p-4 bg-corp-onyx text-corp-gold rounded-sm shadow-md group-hover:scale-110 transition-transform">
+                                        <feature.icon size={28} strokeWidth={1.5} />
                                     </div>
                                     <div className="flex-1">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <h3 className="text-lg font-bold text-corp-platinum">{feature.title}</h3>
-                                            <span className="text-[8px] font-mono px-2 py-0.5 bg-corp-blue/20 text-corp-blue border border-corp-blue/30 rounded-sm">
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <h3 className="text-xl font-serif font-bold text-corp-platinum group-hover:text-corp-gold transition-colors">{feature.title}</h3>
+                                            <span className="text-[10px] font-mono px-2 py-0.5 bg-corp-platinum text-white uppercase tracking-wider rounded-sm">
                                                 {feature.tier}
                                             </span>
                                         </div>
-                                        <p className="text-sm text-corp-silver leading-relaxed">{feature.description}</p>
+                                        <p className="text-sm text-corp-silver/80 leading-relaxed font-light">{feature.description}</p>
                                     </div>
                                 </div>
                             </div>
@@ -337,93 +357,55 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 </div>
             </section>
 
-            {/* TESTIMONIALS SECTION */}
-            <section className="py-24 px-6 border-t border-corp-border">
-                <div className="max-w-6xl mx-auto">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-                            Risultati <span className="text-corp-gold">reali</span>
-                        </h2>
-                        <p className="text-corp-silver">Da professionisti come te</p>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-8">
-                        {TESTIMONIALS.map((testimonial, i) => (
-                            <div
-                                key={i}
-                                className="p-6 border border-corp-border bg-corp-bg/30 rounded-sm hover:border-corp-gold/30 transition-colors"
-                            >
-                                <div className="flex items-center gap-3 mb-4">
-                                    <div className="w-12 h-12 bg-corp-gold/20 border border-corp-gold/30 rounded-full flex items-center justify-center text-corp-gold font-bold">
-                                        {testimonial.avatar}
-                                    </div>
-                                    <div>
-                                        <div className="font-bold text-corp-platinum">{testimonial.name}</div>
-                                        <div className="text-xs text-corp-silver">{testimonial.role}</div>
-                                    </div>
-                                </div>
-                                <p className="text-sm text-corp-silver italic mb-4">"{testimonial.quote}"</p>
-                                <div className="flex items-center gap-2">
-                                    <TrendingUp size={14} className="text-emerald-500" />
-                                    <span className="text-sm font-bold text-emerald-500">{testimonial.result}</span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* PRICING SECTION */}
-            <section id="pricing" className="py-24 px-6 bg-gradient-to-b from-transparent via-corp-gold/5 to-transparent">
+            {/* PRICING SECTION - MAGAZINE STYLE */}
+            <section id="pricing" className="py-32 px-6">
                 <div className="max-w-5xl mx-auto">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-                            Scegli il tuo <span className="text-corp-gold">livello</span>
+                    <div className="text-center mb-20 relative">
+                        <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-9xl font-serif text-corp-platinum/5 pointer-events-none">STATUS</span>
+                        <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4 relative z-10 text-corp-platinum">
+                            Scegli il tuo <span className="text-corp-gold italic">Livello</span>
                         </h2>
-                        <p className="text-corp-silver">Investi in te stesso. Il ROI medio è 12x.</p>
+                        <p className="text-corp-silver font-mono text-xs uppercase tracking-[0.2em] relative z-10">Il ROI medio è 12x.</p>
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-6">
+                    <div className="grid md:grid-cols-3 gap-8 items-center">
                         {PRICING.map((tier) => (
                             <div
                                 key={tier.id}
-                                className={`relative p-6 border rounded-sm transition-all ${tier.style}`}
+                                className={`relative p-8 rounded-sm transition-all duration-500 group ${tier.id === 'STRATEGIST' ? 'bg-corp-platinum text-white scale-110 shadow-2xl z-10 border-0' :
+                                        'bg-white border border-corp-platinum/10 hover:border-corp-gold/30'
+                                    }`}
                             >
-                                {tier.popular && (
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-corp-blue text-white text-[9px] font-bold uppercase tracking-widest">
-                                        Più Popolare
-                                    </div>
-                                )}
-
-                                <div className="text-center mb-6">
-                                    <h3 className={`font-display font-bold text-sm tracking-widest uppercase mb-2 ${tier.id === 'EXECUTIVE' ? 'text-corp-gold' :
-                                        tier.id === 'STRATEGIST' ? 'text-corp-blue' : 'text-corp-silver'
+                                <div className="text-center mb-8">
+                                    <h3 className={`font-mono font-bold text-xs tracking-[0.3em] uppercase mb-4 ${tier.id === 'STRATEGIST' ? 'text-corp-gold' : 'text-corp-silver'
                                         }`}>
                                         {tier.name}
                                     </h3>
-                                    <div className="flex items-baseline justify-center gap-1">
-                                        <span className="text-3xl font-bold text-corp-platinum">{tier.price}</span>
-                                        <span className="text-xs text-corp-silver">{tier.period}</span>
+                                    <div className="flex items-baseline justify-center gap-1 mb-2">
+                                        <span className={`text-4xl font-serif font-bold ${tier.id === 'STRATEGIST' ? 'text-white' : 'text-corp-platinum'
+                                            }`}>{tier.price}</span>
+                                        <span className={`text-xs ${tier.id === 'STRATEGIST' ? 'text-white/50' : 'text-corp-silver/50'
+                                            }`}>{tier.period}</span>
                                     </div>
-                                    <p className="text-xs text-corp-silver mt-2">{tier.description}</p>
+                                    <p className={`text-xs font-light italic ${tier.id === 'STRATEGIST' ? 'text-white/70' : 'text-corp-silver'
+                                        }`}>{tier.description}</p>
                                 </div>
 
-                                <div className="space-y-3 mb-6">
+                                <ul className="space-y-4 mb-8">
                                     {tier.features.map((feature, i) => (
-                                        <div key={i} className="flex items-center gap-2 text-sm text-corp-platinum/80">
-                                            <Check size={14} className="text-emerald-500 shrink-0" />
+                                        <li key={i} className={`flex items-center gap-3 text-sm ${tier.id === 'STRATEGIST' ? 'text-white/90' : 'text-corp-platinum/80'
+                                            }`}>
+                                            <Check size={14} className={tier.id === 'STRATEGIST' ? 'text-corp-gold' : 'text-corp-platinum'} />
                                             <span>{feature}</span>
-                                        </div>
+                                        </li>
                                     ))}
-                                </div>
+                                </ul>
 
                                 <button
                                     onClick={onEnterApp}
-                                    className={`w-full py-3 text-xs font-bold uppercase tracking-widest transition-all ${tier.id === 'EXECUTIVE'
-                                        ? 'bg-corp-gold text-corp-onyx hover:shadow-[0_0_20px_rgba(212,175,55,0.5)]'
-                                        : tier.id === 'STRATEGIST'
-                                            ? 'bg-corp-blue text-white hover:shadow-[0_0_20px_rgba(0,122,255,0.5)]'
-                                            : 'bg-corp-bg border border-corp-silver/30 text-corp-silver hover:border-corp-gold hover:text-corp-gold'
+                                    className={`w-full py-4 text-xs font-bold uppercase tracking-[0.2em] transition-all border ${tier.id === 'STRATEGIST'
+                                            ? 'bg-corp-gold border-corp-gold text-corp-onyx hover:bg-white hover:text-corp-platinum'
+                                            : 'bg-transparent border-corp-platinum/20 text-corp-platinum hover:border-corp-platinum hover:bg-corp-platinum hover:text-white'
                                         }`}
                                 >
                                     {tier.cta}
@@ -435,48 +417,51 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             </section>
 
             {/* FINAL CTA SECTION */}
-            <section className="py-24 px-6 border-t border-corp-border">
-                <div className="max-w-3xl mx-auto text-center">
-                    <Crown size={48} className="text-corp-gold mx-auto mb-8 animate-float" />
-                    <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
-                        La massa aspetta il momento giusto.
-                        <br />
-                        <span className="text-corp-gold">L'Elite crea il momento.</span>
+            <section className="py-24 px-6 border-t border-corp-gold/20 bg-corp-onyx relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-corp-gold/10 via-transparent to-transparent"></div>
+                <div className="max-w-3xl mx-auto text-center relative z-10">
+                    <Crown size={64} className="text-corp-gold mx-auto mb-10 animate-float drop-shadow-lg" />
+                    <h2 className="text-4xl md:text-6xl font-serif font-bold mb-8 leading-tight text-corp-platinum">
+                        La massa aspetta.<br />
+                        <span className="text-corp-gold italic">L'Elite crea.</span>
                     </h2>
-                    <p className="text-corp-silver mb-12">
-                        Ogni giorno che aspetti, qualcun altro sta negoziando la tua promozione.
-                    </p>
 
                     <button
                         onClick={onEnterApp}
-                        className="group px-12 py-5 bg-corp-gold text-corp-onyx font-serif font-bold uppercase tracking-[0.25em] text-lg hover:shadow-[0_0_60px_rgba(197,160,89,0.8)] hover:scale-105 transition-all duration-500 animate-golden-pulse"
+                        className="group px-14 py-6 bg-corp-gold text-corp-onyx font-serif font-bold uppercase tracking-[0.25em] text-lg hover:shadow-[0_0_80px_rgba(197,160,89,0.6)] hover:scale-105 transition-all duration-500 animate-golden-pulse"
                     >
                         Richiedi Accesso
                         <Sparkles size={20} className="inline ml-3" />
                     </button>
 
-                    <p className="text-[10px] text-corp-silver mt-6 font-mono">
-                        No credit card required • Cancel anytime • 30-day money-back guarantee
+                    <p className="text-[10px] text-corp-silver/50 mt-8 font-mono tracking-widest uppercase">
+                        Protocollo V5.0 // Accesso Limitato
                     </p>
                 </div>
             </section>
 
-            {/* FOOTER - FIXED CONTRAST */}
-            <footer className="py-12 px-6 border-t border-corp-border bg-corp-platinum text-corp-onyx">
-                <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="flex items-center gap-2">
-                        <Crown size={16} className="text-corp-gold" />
-                        <span className="font-display font-bold text-corp-platinum">LUMINEL EXECUTIVE</span>
-                        <span className="text-[10px] font-mono text-corp-silver">V5.0</span>
-                    </div>
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-corp-silver/60">
-                        <p>&copy; 2026 LUMINEL EXECUTIVE. Tutti i diritti riservati.</p>
-                        <div className="flex gap-6">
-                            <button onClick={() => setLegalType('privacy')} className="hover:text-corp-gold transition-colors">Privacy Policy</button>
-                            <button onClick={() => setLegalType('terms')} className="hover:text-corp-gold transition-colors">Termini di Servizio</button>
-                            <button onClick={() => setLegalType('cookies')} className="hover:text-corp-gold transition-colors">Cookie Policy</button>
-                            <button onClick={() => setLegalType('disclaimer')} className="hover:text-corp-gold transition-colors">Disclaimer</button>
+            {/* FOOTER - LUMINEL MAGAZINE STYLE */}
+            <footer className="py-16 px-6 bg-white border-t border-corp-platinum/10">
+                <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end gap-12">
+                    <div className="space-y-6">
+                        <div className="flex items-center gap-3">
+                            <Crown size={24} className="text-corp-gold" />
+                            <span className="font-serif font-bold text-2xl text-corp-platinum tracking-widest">LUMINEL</span>
                         </div>
+                        <p className="text-xs text-corp-silver max-w-xs leading-relaxed">
+                            Piattaforma avanzata di intelligenza strategica per la carriera.
+                            <br />
+                            Costruita per chi non accetta il secondo posto.
+                        </p>
+                        <p className="text-[10px] text-corp-silver/50 font-mono uppercase tracking-widest">
+                            &copy; 2026 LUMINEL EXECUTIVE.
+                        </p>
+                    </div>
+
+                    <div className="flex gap-8 text-xs font-bold text-corp-platinum uppercase tracking-widest">
+                        <button onClick={() => setLegalType('privacy')} className="hover:text-corp-gold transition-colors decoration-corp-gold underline-offset-4 hover:underline">Privacy</button>
+                        <button onClick={() => setLegalType('terms')} className="hover:text-corp-gold transition-colors decoration-corp-gold underline-offset-4 hover:underline">Termini</button>
+                        <button onClick={() => setLegalType('disclaimer')} className="hover:text-corp-gold transition-colors decoration-corp-gold underline-offset-4 hover:underline">Info Legali</button>
                     </div>
                 </div>
             </footer>
