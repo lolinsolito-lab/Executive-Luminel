@@ -118,8 +118,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 {/* Deep Void Background - No Grid */}
                 <div className="absolute inset-0 bg-corp-onyx"></div>
 
-                {/* Subtle Ambient Light (Top Center Spotlight) */}
-                <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[120vw] h-[80vh] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-corp-gold/5 via-corp-onyx/50 to-transparent blur-[120px] pointer-events-none"></div>
+                {/* Golden Gradient Bloom */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-radial from-corp-gold/20 via-transparent to-transparent blur-[100px] opacity-60"></div>
 
                 <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
                     {/* Badge */}
@@ -141,7 +141,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
 
                     {/* Sub-headline */}
                     <p className="text-lg text-corp-silver max-w-2xl mx-auto mb-12 animate-fade-in font-light leading-relaxed">
-                        L'Intelligence che trasforma professionisti in <span className="text-white font-medium">Architetti del Potere</span>.
+                        L'Intelligence che trasforma professionisti in <span className="text-corp-platinum font-medium">Architetti del Potere</span>.
                         <br />
                         <span className="text-corp-gold italic">L'Elite non compete. Domina.</span>
                     </p>
