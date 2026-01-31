@@ -6,6 +6,7 @@ import { DataStream } from './components/DataStream';
 import { Sidebar } from './components/Sidebar'; // Restored per User Feedback
 import { ChatConsole } from './components/ChatConsole';
 import { StrategicMapModal } from './components/StrategicMapModal';
+import { HierarchyModal } from './components/HierarchyModal';
 import { UpgradeModal } from './components/Paywall/UpgradeModal';
 import { LandingPage } from './components/Landing/LandingPage';
 import { AdminDashboard } from './components/Admin/AdminDashboard';
