@@ -9,10 +9,10 @@ interface UpgradeModalProps {
     featureRequested?: string;
 }
 
-// Stripe Payment Links (create these in your Stripe Dashboard)
+// Stripe Payment Links (created via API)
 const PAYMENT_LINKS = {
-    STRATEGIST: 'https://buy.stripe.com/test_PLACEHOLDER_STRATEGIST',
-    EXECUTIVE: 'https://buy.stripe.com/test_PLACEHOLDER_EXECUTIVE'
+    STRATEGIST: 'https://buy.stripe.com/test_eVq00ievT88MgE10GkeLv0YZe7m01',
+    EXECUTIVE: 'https://buy.stripe.com/test_aFacN4gE10GkeLv0YZe7m01'
 };
 
 const TIERS = [
