@@ -7,6 +7,7 @@ import {
 
 interface LandingPageProps {
     onEnterApp: () => void;
+    onOpenLegal?: (page: string) => void;
 }
 
 const TESTIMONIALS = [

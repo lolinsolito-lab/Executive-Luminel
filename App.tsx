@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { supabase } from './lib/supabase';
 import { Analytics } from '@vercel/analytics/react';
 import { Sidebar } from './components/Sidebar';
 import { ChatConsole } from './components/ChatConsole';
@@ -30,8 +31,8 @@ const App: React.FC = () => {
   const [upgradeFeature, setUpgradeFeature] = useState<string | undefined>();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Check if current user is admin
-  const isAdmin = ADMIN_EMAILS.includes(userProfile.email || '');
+  // Check if current user is admin (DB flag or hardcoded list)
+  const isAdmin = userProfile.isAdmin || ADMIN_EMAILS.includes(userProfile.email || '');
 
   // Handle entering the app from landing
   const handleEnterApp = () => {
@@ -43,6 +44,32 @@ const App: React.FC = () => {
     setUpgradeFeature(feature);
     setIsUpgradeOpen(true);
   };
+
+  // Load User Profile from DB
+  useEffect(() => {
+    const loadUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+        if (profile) {
+          setUserProfile(prev => ({
+            ...prev,
+            id: user.id,
+            email: user.email,
+            name: profile.full_name || user.email?.split('@')[0] || 'Executive',
+            subscription: profile.subscription_tier as any,
+            isAdmin: profile.is_admin,
+            performanceXP: profile.performance_xp,
+            politicalCapital: profile.political_capital,
+            // Conserviamo valori locali se mancanti nel DB o usiamo default
+            ...prev
+          }));
+          // Se utente loggato, salta landing se non è la prima visita (opzionale, per ora lasciamo landing)
+        }
+      }
+    };
+    loadUser();
+  }, []);
 
   useEffect(() => {
     const init = async () => {

@@ -1,7 +1,7 @@
 import { Resend } from 'resend';
 
 export const config = {
-    runtime: 'edge',
+    runtime: 'nodejs',
 };
 
 // Initialize Resend with API Key from environment variables
