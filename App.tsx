@@ -32,6 +32,8 @@ const App: React.FC = () => {
   const [upgradeFeature, setUpgradeFeature] = useState<string | undefined>();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isAuthModalMode, setIsAuthModalMode] = useState<'login' | 'signup' | 'recover' | 'update'>('login');
+  const [authModalMode, setAuthModalMode] = useState<'login' | 'signup' | 'recover' | 'update'>('login');
 
   // Check if current user is admin (DB flag or hardcoded list)
   const isAdmin = userProfile.isAdmin || ADMIN_EMAILS.includes(userProfile.email || '');
@@ -68,14 +70,24 @@ const App: React.FC = () => {
             isAdmin: profile.is_admin,
             performanceXP: profile.performance_xp,
             politicalCapital: profile.political_capital,
-            // Conserviamo valori locali se mancanti nel DB o usiamo default
             ...prev
           }));
-          // Se utente loggato, salta landing se non è la prima visita (opzionale, per ora lasciamo landing)
         }
       }
     };
     loadUser();
+
+    // Listen for Password Recovery
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setIsAuthModalMode('update');
+        setIsAuthOpen(true);
+      }
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, []);
 
   // BRAND SIGNATURE
@@ -331,6 +343,7 @@ const App: React.FC = () => {
       <AuthModal
         isOpen={isAuthOpen}
         onClose={() => setIsAuthOpen(false)}
+        initialMode={isAuthModalMode}
         onSuccess={() => {
           // User loaded by useEffect, just need to enter app
           setCurrentPage('app');

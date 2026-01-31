@@ -7,11 +7,13 @@ interface AuthModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSuccess: () => void;
+    initialMode?: 'login' | 'signup' | 'recover' | 'update';
 }
 
-export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => {
-    const [isLogin, setIsLogin] = useState(true);
-    const [isRecover, setIsRecover] = useState(false);
+export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess, initialMode = 'login' }) => {
+    const [isLogin, setIsLogin] = useState(initialMode === 'login');
+    const [isRecover, setIsRecover] = useState(initialMode === 'recover');
+    const [isUpdate, setIsUpdate] = useState(initialMode === 'update');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
@@ -34,6 +36,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                 });
                 if (error) throw error;
                 setMessage("Link di recupero inviato. Controlla la tua email.");
+            } else if (isUpdate) {
+                const { error } = await supabase.auth.updateUser({ password: password });
+                if (error) throw error;
+                setMessage("Password aggiornata con successo.");
+                setTimeout(() => {
+                    onSuccess();
+                    onClose();
+                }, 1500);
             } else if (isLogin) {
                 const { error } = await supabase.auth.signInWithPassword({
                     email,
@@ -77,14 +87,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
 
                 <div className="p-8">
                     <h2 className="text-2xl font-display font-bold text-center text-corp-platinum mb-2">
-                        {isRecover ? 'Recupero Password' : (isLogin ? 'Bentornato, Executive' : 'Inizia la scalata')}
+                        {isUpdate ? 'Nuova Password' : (isRecover ? 'Recupero Password' : (isLogin ? 'Bentornato, Executive' : 'Inizia la scalata'))}
                     </h2>
                     <p className="text-center text-corp-silver/60 text-sm mb-8">
-                        {isRecover ? 'Inserisci la tua email aziendale' : (isLogin ? 'Accedi al tuo terminale strategico' : 'Crea il tuo profilo e accedi al vault')}
+                        {isUpdate ? 'Imposta la tua nuova password sicura' : (isRecover ? 'Inserisci la tua email aziendale' : (isLogin ? 'Accedi al tuo terminale strategico' : 'Crea il tuo profilo e accedi al vault'))}
                     </p>
 
                     <form onSubmit={handleAuth} className="space-y-4">
-                        {!isLogin && !isRecover && (
+                        {!isLogin && !isRecover && !isUpdate && (
                             <div className="space-y-1">
                                 <label className="text-xs font-mono text-corp-silver uppercase tracking-wider">Nome Completo</label>
                                 <div className="relative">
@@ -95,30 +105,32 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                                         onChange={(e) => setFullName(e.target.value)}
                                         className="w-full bg-white border border-corp-border/30 rounded p-2 pl-10 text-corp-platinum placeholder:text-corp-silver/40 focus:border-corp-gold focus:outline-none transition-colors"
                                         placeholder="John Doe"
-                                        required={!isLogin && !isRecover}
+                                        required={!isLogin && !isRecover && !isUpdate}
                                     />
                                 </div>
                             </div>
                         )}
 
-                        <div className="space-y-1">
-                            <label className="text-xs font-mono text-corp-silver uppercase tracking-wider">Email Aziendale</label>
-                            <div className="relative">
-                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-corp-silver/50" size={16} />
-                                <input
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-white border border-corp-border/30 rounded p-2 pl-10 text-corp-platinum placeholder:text-corp-silver/40 focus:border-corp-gold focus:outline-none transition-colors"
-                                    placeholder="name@company.com"
-                                    required
-                                />
+                        {!isUpdate && (
+                            <div className="space-y-1">
+                                <label className="text-xs font-mono text-corp-silver uppercase tracking-wider">Email Aziendale</label>
+                                <div className="relative">
+                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-corp-silver/50" size={16} />
+                                    <input
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        className="w-full bg-white border border-corp-border/30 rounded p-2 pl-10 text-corp-platinum placeholder:text-corp-silver/40 focus:border-corp-gold focus:outline-none transition-colors"
+                                        placeholder="name@company.com"
+                                        required={!isUpdate}
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         {!isRecover && (
                             <div className="space-y-1">
-                                <label className="text-xs font-mono text-corp-silver uppercase tracking-wider">Password</label>
+                                <label className="text-xs font-mono text-corp-silver uppercase tracking-wider">{isUpdate ? 'Nuova Password' : 'Password'}</label>
                                 <div className="relative">
                                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-corp-silver/50" size={16} />
                                     <input
@@ -152,7 +164,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                         >
                             {loading ? <Loader className="animate-spin" size={18} /> : (
                                 <>
-                                    {isRecover ? 'INVIA LINK DI RECUPERO' : (isLogin ? 'ACCEDI AL SISTEMA' : 'REGISTRA ACCOUNT')}
+                                    {isUpdate ? 'AGGIORNA PASSWORD' : (isRecover ? 'INVIA LINK DI RECUPERO' : (isLogin ? 'ACCEDI AL SISTEMA' : 'REGISTRA ACCOUNT'))}
                                     {!isRecover && <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />}
                                 </>
                             )}
@@ -189,8 +201,5 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                 </div>
             </div>
         </div>
-    );
-            </div >
-        </div >
     );
 };
