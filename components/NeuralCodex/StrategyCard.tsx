@@ -16,48 +16,38 @@ const sourceIcons = {
 };
 
 const sourceColors = {
-    power: 'text-amber-600',
-    habits: 'text-emerald-600',
-    psychology: 'text-rose-500',
-    ceo: 'text-purple-600',
-    ikigai: 'text-cyan-600'
-};
-
-const sourceBgColors = {
-    power: 'from-amber-100',
-    habits: 'from-emerald-100',
-    psychology: 'from-rose-100',
-    ceo: 'from-purple-100',
-    ikigai: 'from-cyan-100'
+    power: { text: 'text-amber-700', bg: 'bg-amber-50', border: 'border-amber-300', icon: 'text-amber-600' },
+    habits: { text: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-300', icon: 'text-emerald-600' },
+    psychology: { text: 'text-rose-700', bg: 'bg-rose-50', border: 'border-rose-300', icon: 'text-rose-600' },
+    ceo: { text: 'text-purple-700', bg: 'bg-purple-50', border: 'border-purple-300', icon: 'text-purple-600' },
+    ikigai: { text: 'text-cyan-700', bg: 'bg-cyan-50', border: 'border-cyan-300', icon: 'text-cyan-600' }
 };
 
 export const StrategyCardComponent: React.FC<StrategyCardProps> = ({ card, onApply }) => {
     const Icon = sourceIcons[card.source];
-    const textColor = sourceColors[card.source];
-    const bgGradient = sourceBgColors[card.source];
+    const colors = sourceColors[card.source];
 
     return (
         <div className={`
-      relative overflow-hidden
-      bg-gradient-to-br ${bgGradient} to-white
-      border border-amber-200 rounded-sm
-      p-5 space-y-4
-      hover:border-amber-400 transition-all duration-300
-      hover:shadow-lg
-      animate-fade-in
-    `}>
+            relative overflow-hidden
+            bg-white
+            border ${colors.border} rounded-sm
+            p-6 space-y-4
+            shadow-lg
+            animate-fade-in
+        `}>
             {/* Source Badge */}
             <div className="flex justify-between items-start">
-                <div className="flex items-center gap-2">
-                    <div className={`p-2 bg-white border border-gray-200 rounded-sm ${textColor} shadow-sm`}>
-                        <Icon size={16} />
+                <div className="flex items-center gap-3">
+                    <div className={`p-2.5 ${colors.bg} border ${colors.border} rounded-sm ${colors.icon} shadow-sm`}>
+                        <Icon size={18} />
                     </div>
                     <div>
-                        <div className="text-[9px] font-mono text-gray-500 uppercase tracking-widest">
+                        <div className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">
                             {card.sourceName}
                         </div>
                         {card.lawNumber && (
-                            <div className={`text-xs font-bold ${textColor}`}>
+                            <div className={`text-sm font-bold ${colors.text}`}>
                                 Legge #{card.lawNumber}
                             </div>
                         )}
@@ -66,27 +56,27 @@ export const StrategyCardComponent: React.FC<StrategyCardProps> = ({ card, onApp
 
                 {/* Tier Badge */}
                 <span className={`
-          text-[8px] font-mono px-2 py-1 rounded-sm uppercase tracking-widest
-          ${card.tier === 'EXECUTIVE' ? 'bg-amber-100 text-amber-700 border border-amber-300' :
+                    text-[9px] font-mono px-2.5 py-1 rounded-sm uppercase tracking-widest font-bold
+                    ${card.tier === 'EXECUTIVE' ? 'bg-amber-100 text-amber-700 border border-amber-300' :
                         card.tier === 'STRATEGIST' ? 'bg-blue-100 text-blue-700 border border-blue-300' :
                             'bg-gray-100 text-gray-600 border border-gray-200'}
-        `}>
+                `}>
                     {card.tier}
                 </span>
             </div>
 
             {/* Card Content */}
             <div className="space-y-3">
-                <h3 className="text-lg font-display font-bold text-gray-900">
+                <h3 className="text-xl font-display font-bold text-gray-900">
                     {card.title}
                 </h3>
-                <p className="text-xs font-mono text-gray-600 italic">
+                <p className="text-sm font-mono text-gray-600 italic">
                     "{card.subtitle}"
                 </p>
 
-                {/* Action */}
-                <div className="bg-amber-50 border-l-2 border-amber-400 p-4 rounded-r-sm">
-                    <div className="text-[9px] font-mono text-amber-600 uppercase tracking-widest mb-2 font-bold">
+                {/* Action Box */}
+                <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-sm shadow-inner">
+                    <div className="text-[10px] font-mono text-amber-700 uppercase tracking-widest mb-2 font-bold">
                         AZIONE CONSIGLIATA
                     </div>
                     <p className="text-sm text-gray-800 leading-relaxed">
@@ -96,15 +86,15 @@ export const StrategyCardComponent: React.FC<StrategyCardProps> = ({ card, onApp
             </div>
 
             {/* Impact */}
-            <div className="flex gap-4 pt-2 border-t border-amber-100">
+            <div className="flex gap-6 pt-3 border-t border-gray-200">
                 {card.impact.performance && (
-                    <div className="flex items-center gap-1 text-xs">
+                    <div className="flex items-center gap-2 text-sm">
                         <span className="text-gray-500">Performance:</span>
                         <span className="text-emerald-600 font-bold">+{card.impact.performance}</span>
                     </div>
                 )}
                 {card.impact.capital && (
-                    <div className="flex items-center gap-1 text-xs">
+                    <div className="flex items-center gap-2 text-sm">
                         <span className="text-gray-500">Capital:</span>
                         <span className="text-amber-600 font-bold">+{card.impact.capital}</span>
                     </div>
@@ -115,7 +105,7 @@ export const StrategyCardComponent: React.FC<StrategyCardProps> = ({ card, onApp
             {onApply && (
                 <button
                     onClick={onApply}
-                    className="w-full mt-2 py-2.5 bg-amber-500 text-white text-xs font-mono uppercase tracking-widest hover:bg-amber-600 transition-colors rounded-sm shadow-md"
+                    className="w-full py-3 bg-amber-500 text-white text-sm font-bold uppercase tracking-widest hover:bg-amber-600 transition-colors rounded-sm shadow-md"
                 >
                     Applica Strategia
                 </button>
