@@ -312,27 +312,44 @@ const App: React.FC = () => {
 
         {/* --- LEFT COLUMN: THE SIDEBAR (Restored per User Order) --- */}
         {/* Shows Rank, Status, Navigation. Essential for user orientation. */}
+        {/* --- MOBILE SIDEBAR (Drawer) --- */}
         <div className={`
-          fixed md:relative z-40 h-full transition-transform duration-300 bg-corp-onyx
-          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-          flex-shrink-0 border-r border-corp-border/30 w-full md:w-[320px]
+          md:hidden fixed inset-y-0 left-0 z-50 w-[320px] bg-corp-onyx transition-transform duration-300 border-r border-corp-border shadow-2xl
+          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         `}>
           <Sidebar
             user={userProfile}
             onOpenMap={() => { setIsMapOpen(true); setIsSidebarOpen(false); }}
             onOpenUpgrade={(feature) => { openUpgrade(feature); setIsSidebarOpen(false); }}
           />
+          {isAdmin && (
+            <div className="absolute bottom-4 left-4 right-4">
+              <button onClick={() => setCurrentPage('admin')} className="god-mode-btn w-full">GOD MODE</button>
+            </div>
+          )}
+        </div>
 
-          {/* Admin Button (Only visible if admin) */}
+        {/* --- DESKTOP SIDEBAR (Static Column) --- */}
+        {/* Force flex display on medium screens and up. NEVER hidden. */}
+        <div className="hidden md:flex flex-col w-[320px] flex-shrink-0 h-full bg-corp-onyx border-r border-corp-border/30 relative z-30">
+          <Sidebar
+            user={userProfile}
+            onOpenMap={() => setIsMapOpen(true)}
+            onOpenUpgrade={openUpgrade}
+          />
+
+          {/* Admin Button Desktop */}
           {isAdmin && (
             <div className="absolute bottom-4 left-4 right-4 animate-fade-in z-50">
-              <button
-                onClick={() => setCurrentPage('admin')}
-                className="w-full py-2 bg-red-900/20 border border-red-500/30 text-red-400 text-[10px] font-mono uppercase tracking-widest hover:bg-red-900/40 transition-colors flex items-center justify-center gap-2"
-              >
-                <Crown size={12} />
-                GOD MODE ACTIVE
-              </button>
+              <div className="bg-red-900/10 border border-red-500/20 p-1 rounded-sm">
+                <button
+                  onClick={() => setCurrentPage('admin')}
+                  className="w-full py-1.5 bg-transparent text-red-400 text-[10px] font-mono uppercase tracking-widest hover:text-red-300 transition-colors flex items-center justify-center gap-2"
+                >
+                  <Crown size={10} />
+                  GOD MODE
+                </button>
+              </div>
             </div>
           )}
         </div>
