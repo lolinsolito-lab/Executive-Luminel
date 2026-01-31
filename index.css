@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    /* DEFAULT THEME: PEARL WHITE (Landing Page) */
+    /* DEFAULT THEME: PEARL WHITE */
     --color-corp-onyx: #F9F8F2;
     --color-corp-platinum: #1A1A1A;
     --color-corp-bg: #FFFFFF;
@@ -12,12 +12,9 @@
     --color-corp-border: rgba(197, 160, 89, 0.3);
   }
 
-  /* LOCK VIEWPORT: Prevent any outer scrolling */
+  /* Base reset - allows scrolling by default (for landing pages) */
   html,
   body {
-    height: 100%;
-    max-height: 100vh;
-    overflow: hidden;
     margin: 0;
     padding: 0;
   }
@@ -27,41 +24,48 @@
     color: var(--color-corp-platinum);
   }
 
-  /* React root must also be locked */
+  /* React root - natural height */
   #root {
-    height: 100%;
-    max-height: 100vh;
-    overflow: hidden;
-  }
-
-  /* V5 EXECUTIVE THEME: MIDNIGHT NAVY (Dashboard) - Deprecated but kept for reference */
-  .v5-executive {
-    --color-corp-onyx: #0B1019;
-    --color-corp-platinum: #F5F5F7;
-    --color-corp-bg: #111827;
-    --color-corp-silver: #94A3B8;
-    --color-corp-border: rgba(197, 160, 89, 0.2);
-    background-color: #0B1019 !important;
-    color: #F5F5F7 !important;
+    min-height: 100vh;
   }
 }
 
-/* War Room Panel - Dark Glassmorphism REPAIRED */
+/* ===========================================
+   DASHBOARD-ONLY VIEWPORT LOCK
+   Apply this class on the dashboard container
+   to lock height to 100vh with internal scroll
+   =========================================== */
+.dashboard-viewport-lock {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+/* V5 EXECUTIVE THEME: MIDNIGHT NAVY (Deprecated) */
+.v5-executive {
+  --color-corp-onyx: #0B1019;
+  --color-corp-platinum: #F5F5F7;
+  --color-corp-bg: #111827;
+  --color-corp-silver: #94A3B8;
+  --color-corp-border: rgba(197, 160, 89, 0.2);
+  background-color: #0B1019 !important;
+  color: #F5F5F7 !important;
+}
+
+/* War Room Panel - Dark Glassmorphism */
 .war-room-panel {
   background: rgba(10, 10, 12, 0.7);
-  /* More transparent for glass effect */
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 }
 
-/* Luxury Input Field REPAIRED */
+/* Luxury Input Field */
 .luxury-input {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #E2E2E2;
-  /* Ensure text is visible */
 }
 
 .luxury-input::placeholder {
