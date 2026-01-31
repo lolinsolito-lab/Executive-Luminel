@@ -22,7 +22,14 @@ create table if not exists public.profiles (
   max_performance_xp integer default 100,
   max_political_capital integer default 100,
   streak_days integer default 0,
-  total_sessions integer default 0
+  total_sessions integer default 0,
+  
+  -- V5.1 Compliance & Admin
+  is_admin boolean default false,
+  marketing_consent boolean default false,
+  tos_accepted_at timestamp with time zone,
+  privacy_accepted_at timestamp with time zone,
+  onboarding_completed boolean default false
 );
 
 -- Enable RLS
@@ -33,17 +40,38 @@ create policy "Users can view own profile"
   on public.profiles for select
   using (auth.uid() = id);
 
+-- Admins can view all profiles
+create policy "Admins can view all profiles"
+  on public.profiles for select
+  using (
+    (select is_admin from public.profiles where id = auth.uid()) = true
+  );
+
 -- Users can update their own profile
 create policy "Users can update own profile"
   on public.profiles for update
   using (auth.uid() = id);
+  
+-- Admins can update any profile (God Mode)
+create policy "Admins can update any profile"
+  on public.profiles for update
+  using (
+    (select is_admin from public.profiles where id = auth.uid()) = true
+  );
 
 -- Auto-create profile on signup
 create or replace function public.handle_new_user()
 returns trigger as $$
 begin
-  insert into public.profiles (id, email, full_name)
-  values (new.id, new.email, new.raw_user_meta_data->>'full_name');
+  insert into public.profiles (id, email, full_name, marketing_consent, tos_accepted_at, privacy_accepted_at)
+  values (
+    new.id, 
+    new.email, 
+    new.raw_user_meta_data->>'full_name',
+    (new.raw_user_meta_data->>'marketing_consent')::boolean,
+    now(), -- Assumes ToS accepted at signup
+    now()  -- Assumes Privacy accepted at signup
+  );
   return new;
 end;
 $$ language plpgsql security definer;

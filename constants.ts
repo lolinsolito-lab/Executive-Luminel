@@ -1,10 +1,13 @@
 import { UserProfile } from './types';
 
 export const INITIAL_USER: UserProfile = {
+  id: "user-123",
+  email: "lolinsolito@gmail.com",
   name: "Michael Jara",
   level: 'B1',
   role: "Senior Consultant",
   subscription: 'EXECUTIVE',
+  isAdmin: true,
 
   performanceXP: 850,
   maxPerformanceXP: 1000,

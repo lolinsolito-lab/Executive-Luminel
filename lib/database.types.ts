@@ -24,6 +24,11 @@ export interface Database {
                     max_political_capital: number
                     streak_days: number
                     total_sessions: number
+                    is_admin: boolean
+                    marketing_consent: boolean
+                    tos_accepted_at: string | null
+                    privacy_accepted_at: string | null
+                    onboarding_completed: boolean
                 }
                 Insert: {
                     id: string
@@ -39,6 +44,11 @@ export interface Database {
                     max_political_capital?: number
                     streak_days?: number
                     total_sessions?: number
+                    is_admin?: boolean
+                    marketing_consent?: boolean
+                    tos_accepted_at?: string | null
+                    privacy_accepted_at?: string | null
+                    onboarding_completed?: boolean
                 }
                 Update: {
                     id?: string
@@ -54,6 +64,11 @@ export interface Database {
                     max_political_capital?: number
                     streak_days?: number
                     total_sessions?: number
+                    is_admin?: boolean
+                    marketing_consent?: boolean
+                    tos_accepted_at?: string | null
+                    privacy_accepted_at?: string | null
+                    onboarding_completed?: boolean
                 }
             }
             subscriptions: {

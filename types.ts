@@ -8,37 +8,27 @@ export enum TierPhase {
   PARTNER = "THE PARTNER"
 }
 
-export type SubscriptionTier = 'GUEST' | 'AGENT' | 'EXECUTIVE';
-
-export interface TierConfig {
-  id: GranularLevel; 
-  group: 'A' | 'B' | 'C' | 'D' | 'F'; 
-  phase: TierPhase;
-  roleName: string;
-  description: string;
-  mission: string;
-  legacy?: string; 
-  unlockReqs?: string[]; 
-  rewards?: string[]; 
-  status: 'COMPLETED' | 'ACTIVE' | 'LOCKED' | 'GOD_MODE';
-}
+export type SubscriptionTier = 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE';
 
 export interface UserProfile {
+  id?: string;
+  email?: string;
   name: string;
   level: GranularLevel;
   role: string;
   subscription: SubscriptionTier;
-  
+  isAdmin?: boolean;
+
   // Dual Metric System
-  performanceXP: number; 
+  performanceXP: number;
   maxPerformanceXP: number;
-  
-  politicalCapital: number; 
+
+  politicalCapital: number;
   maxPoliticalCapital: number;
-  
-  nextReviewDate: string; 
+
+  nextReviewDate: string;
   outOfCycleWindow: 'CLOSED' | 'OPEN' | 'PENDING';
-  
+
   skills: string[];
 }
 
