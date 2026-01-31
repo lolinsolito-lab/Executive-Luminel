@@ -16,19 +16,19 @@ const sourceIcons = {
 };
 
 const sourceColors = {
-    power: 'text-corp-gold',
-    habits: 'text-emerald-400',
-    psychology: 'text-red-400',
-    ceo: 'text-purple-400',
-    ikigai: 'text-cyan-400'
+    power: 'text-amber-600',
+    habits: 'text-emerald-600',
+    psychology: 'text-rose-500',
+    ceo: 'text-purple-600',
+    ikigai: 'text-cyan-600'
 };
 
 const sourceBgColors = {
-    power: 'from-corp-gold/20',
-    habits: 'from-emerald-500/20',
-    psychology: 'from-red-500/20',
-    ceo: 'from-purple-500/20',
-    ikigai: 'from-cyan-500/20'
+    power: 'from-amber-100',
+    habits: 'from-emerald-100',
+    psychology: 'from-rose-100',
+    ceo: 'from-purple-100',
+    ikigai: 'from-cyan-100'
 };
 
 export const StrategyCardComponent: React.FC<StrategyCardProps> = ({ card, onApply }) => {
@@ -39,21 +39,21 @@ export const StrategyCardComponent: React.FC<StrategyCardProps> = ({ card, onApp
     return (
         <div className={`
       relative overflow-hidden
-      bg-gradient-to-br ${bgGradient} to-transparent
-      border border-corp-border rounded-sm
-      p-6 space-y-4
-      hover:border-corp-gold/50 transition-all duration-300
-      hover:shadow-[0_0_30px_rgba(212,175,55,0.15)]
+      bg-gradient-to-br ${bgGradient} to-white
+      border border-amber-200 rounded-sm
+      p-5 space-y-4
+      hover:border-amber-400 transition-all duration-300
+      hover:shadow-lg
       animate-fade-in
     `}>
             {/* Source Badge */}
             <div className="flex justify-between items-start">
                 <div className="flex items-center gap-2">
-                    <div className={`p-2 bg-corp-bg border border-corp-border rounded-sm ${textColor}`}>
+                    <div className={`p-2 bg-white border border-gray-200 rounded-sm ${textColor} shadow-sm`}>
                         <Icon size={16} />
                     </div>
                     <div>
-                        <div className="text-[9px] font-mono text-corp-silver uppercase tracking-widest">
+                        <div className="text-[9px] font-mono text-gray-500 uppercase tracking-widest">
                             {card.sourceName}
                         </div>
                         {card.lawNumber && (
@@ -67,9 +67,9 @@ export const StrategyCardComponent: React.FC<StrategyCardProps> = ({ card, onApp
                 {/* Tier Badge */}
                 <span className={`
           text-[8px] font-mono px-2 py-1 rounded-sm uppercase tracking-widest
-          ${card.tier === 'EXECUTIVE' ? 'bg-corp-gold/20 text-corp-gold border border-corp-gold/30' :
-                        card.tier === 'STRATEGIST' ? 'bg-corp-blue/20 text-corp-blue border border-corp-blue/30' :
-                            'bg-corp-silver/20 text-corp-silver border border-corp-silver/30'}
+          ${card.tier === 'EXECUTIVE' ? 'bg-amber-100 text-amber-700 border border-amber-300' :
+                        card.tier === 'STRATEGIST' ? 'bg-blue-100 text-blue-700 border border-blue-300' :
+                            'bg-gray-100 text-gray-600 border border-gray-200'}
         `}>
                     {card.tier}
                 </span>
@@ -77,36 +77,36 @@ export const StrategyCardComponent: React.FC<StrategyCardProps> = ({ card, onApp
 
             {/* Card Content */}
             <div className="space-y-3">
-                <h3 className="text-lg font-display font-bold text-corp-platinum">
+                <h3 className="text-lg font-display font-bold text-gray-900">
                     {card.title}
                 </h3>
-                <p className="text-xs font-mono text-corp-silver italic">
+                <p className="text-xs font-mono text-gray-600 italic">
                     "{card.subtitle}"
                 </p>
 
                 {/* Action */}
-                <div className="bg-corp-bg/60 border-l-2 border-corp-gold p-4 rounded-r-sm">
-                    <div className="text-[9px] font-mono text-corp-gold uppercase tracking-widest mb-2">
+                <div className="bg-amber-50 border-l-2 border-amber-400 p-4 rounded-r-sm">
+                    <div className="text-[9px] font-mono text-amber-600 uppercase tracking-widest mb-2 font-bold">
                         AZIONE CONSIGLIATA
                     </div>
-                    <p className="text-sm text-corp-platinum/90 leading-relaxed">
+                    <p className="text-sm text-gray-800 leading-relaxed">
                         {card.action}
                     </p>
                 </div>
             </div>
 
             {/* Impact */}
-            <div className="flex gap-4 pt-2 border-t border-corp-border">
+            <div className="flex gap-4 pt-2 border-t border-amber-100">
                 {card.impact.performance && (
                     <div className="flex items-center gap-1 text-xs">
-                        <span className="text-corp-silver">Performance:</span>
-                        <span className="text-emerald-400 font-bold">+{card.impact.performance}</span>
+                        <span className="text-gray-500">Performance:</span>
+                        <span className="text-emerald-600 font-bold">+{card.impact.performance}</span>
                     </div>
                 )}
                 {card.impact.capital && (
                     <div className="flex items-center gap-1 text-xs">
-                        <span className="text-corp-silver">Capital:</span>
-                        <span className="text-corp-gold font-bold">+{card.impact.capital}</span>
+                        <span className="text-gray-500">Capital:</span>
+                        <span className="text-amber-600 font-bold">+{card.impact.capital}</span>
                     </div>
                 )}
             </div>
@@ -115,7 +115,7 @@ export const StrategyCardComponent: React.FC<StrategyCardProps> = ({ card, onApp
             {onApply && (
                 <button
                     onClick={onApply}
-                    className="w-full mt-2 py-2 bg-corp-gold/10 border border-corp-gold/30 text-corp-gold text-xs font-mono uppercase tracking-widest hover:bg-corp-gold/20 transition-colors"
+                    className="w-full mt-2 py-2.5 bg-amber-500 text-white text-xs font-mono uppercase tracking-widest hover:bg-amber-600 transition-colors rounded-sm shadow-md"
                 >
                     Applica Strategia
                 </button>

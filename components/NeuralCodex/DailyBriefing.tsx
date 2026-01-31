@@ -19,22 +19,22 @@ export const DailyBriefing: React.FC<DailyBriefingProps> = ({ userTier }) => {
     if (!card) return null;
 
     return (
-        <div className="space-y-3">
+        <div className="space-y-2">
             {/* Header */}
             <div
                 onClick={() => setIsExpanded(!isExpanded)}
                 className="flex items-center justify-between cursor-pointer group"
             >
-                <div className="flex items-center gap-2 text-[10px] font-mono text-corp-gold uppercase tracking-widest">
-                    <BookOpen size={12} />
+                <div className="flex items-center gap-1.5 text-[9px] font-mono text-amber-600 uppercase tracking-widest font-bold">
+                    <BookOpen size={10} />
                     <span>Daily Intel</span>
-                    <Sparkles size={10} className="animate-pulse" />
+                    <Sparkles size={9} className="animate-pulse text-amber-400" />
                 </div>
-                <button className="p-1 hover:bg-white/5 rounded transition-colors">
+                <button className="p-1 hover:bg-amber-50 rounded transition-colors">
                     {isExpanded ? (
-                        <ChevronUp size={14} className="text-corp-silver" />
+                        <ChevronUp size={12} className="text-gray-400" />
                     ) : (
-                        <ChevronDown size={14} className="text-corp-silver" />
+                        <ChevronDown size={12} className="text-gray-400" />
                     )}
                 </button>
             </div>
@@ -43,15 +43,15 @@ export const DailyBriefing: React.FC<DailyBriefingProps> = ({ userTier }) => {
             {!isExpanded && (
                 <div
                     onClick={() => setIsExpanded(true)}
-                    className="bg-gradient-to-r from-corp-gold/5 to-transparent border-l-2 border-corp-gold p-3 cursor-pointer hover:border-l-4 transition-all"
+                    className="bg-amber-50 border-l-2 border-amber-400 p-2 cursor-pointer hover:border-l-4 transition-all rounded-r-sm"
                 >
-                    <div className="text-[9px] font-mono text-corp-silver mb-1">
+                    <div className="text-[8px] font-mono text-gray-500 mb-0.5">
                         {card.sourceName} {card.lawNumber && `• Legge #${card.lawNumber}`}
                     </div>
-                    <p className="text-xs text-corp-platinum font-medium line-clamp-2">
+                    <p className="text-[10px] text-gray-800 font-medium line-clamp-2">
                         {card.title}
                     </p>
-                    <div className="text-[9px] text-corp-gold mt-2">
+                    <div className="text-[8px] text-amber-600 mt-1 font-bold">
                         Clicca per espandere →
                     </div>
                 </div>
@@ -59,7 +59,7 @@ export const DailyBriefing: React.FC<DailyBriefingProps> = ({ userTier }) => {
 
             {/* Expanded Card Modal Overlay */}
             {isExpanded && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in" onClick={() => setIsExpanded(false)}>
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-fade-in" onClick={() => setIsExpanded(false)}>
                     <div className="max-w-md w-full" onClick={e => e.stopPropagation()}>
                         <StrategyCardComponent
                             card={card}
@@ -70,7 +70,7 @@ export const DailyBriefing: React.FC<DailyBriefingProps> = ({ userTier }) => {
                         />
                         <button
                             onClick={() => setIsExpanded(false)}
-                            className="mt-4 w-full py-2 text-[10px] font-mono uppercase text-corp-silver hover:text-white transition-colors"
+                            className="mt-3 w-full py-2 text-[10px] font-mono uppercase text-gray-500 hover:text-gray-800 bg-white border border-gray-200 rounded-sm transition-colors shadow-sm"
                         >
                             Close Briefing
                         </button>

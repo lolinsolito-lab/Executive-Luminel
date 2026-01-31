@@ -12,8 +12,6 @@ interface UpgradeModalProps {
     userEmail?: string;
 }
 
-// Stripe Checkout handled via /api/create-checkout
-
 const TIERS = [
     {
         id: 'GRINDER',
@@ -33,7 +31,8 @@ const TIERS = [
         ],
         cta: 'Piano Attuale',
         disabled: true,
-        style: 'border-corp-silver/30 bg-corp-bg/50',
+        style: 'border-gray-200 bg-gray-50',
+        headerColor: 'text-gray-600',
     },
     {
         id: 'STRATEGIST',
@@ -53,7 +52,8 @@ const TIERS = [
         notIncluded: [],
         cta: 'Upgrade Now',
         disabled: false,
-        style: 'border-corp-blue/50 bg-corp-blue/5 shadow-[0_0_30px_rgba(0,122,255,0.15)]',
+        style: 'border-blue-300 bg-blue-50 shadow-lg',
+        headerColor: 'text-blue-600',
     },
     {
         id: 'EXECUTIVE',
@@ -72,7 +72,8 @@ const TIERS = [
         notIncluded: [],
         cta: 'Go Elite',
         disabled: false,
-        style: 'border-corp-gold/50 bg-gradient-to-br from-corp-gold/10 to-transparent shadow-[0_0_40px_rgba(212,175,55,0.2)]',
+        style: 'border-amber-300 bg-gradient-to-br from-amber-50 to-white shadow-xl',
+        headerColor: 'text-amber-600',
     },
 ];
 
@@ -124,25 +125,25 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-corp-onyx/95 backdrop-blur-xl"
+                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
                 onClick={onClose}
             ></div>
 
             {/* Modal */}
-            <div className="relative w-full max-w-4xl bg-[#0A0A0A] border border-corp-danger/30 shadow-[0_0_60px_rgba(255,59,48,0.2)] rounded-sm overflow-hidden animate-fade-in">
+            <div className="relative w-full max-w-4xl bg-white border border-amber-200 shadow-2xl rounded-sm overflow-hidden animate-fade-in">
 
-                {/* ACCESS DENIED Header */}
-                <div className="p-6 border-b border-corp-danger/30 bg-gradient-to-r from-corp-danger/10 to-transparent">
+                {/* Header - Amber instead of Red "ACCESS DENIED" */}
+                <div className="p-5 border-b border-amber-200 bg-gradient-to-r from-amber-50 to-white">
                     <div className="flex justify-between items-center">
                         <div className="flex items-center gap-3">
-                            <div className="p-2 bg-corp-danger/20 border border-corp-danger/30 rounded-sm">
-                                <Lock size={20} className="text-corp-danger" />
+                            <div className="p-2 bg-amber-100 border border-amber-300 rounded-sm">
+                                <Lock size={20} className="text-amber-600" />
                             </div>
                             <div>
-                                <h2 className="font-display font-bold text-lg tracking-widest text-corp-danger uppercase">
-                                    ACCESS DENIED
+                                <h2 className="font-display font-bold text-lg tracking-widest text-amber-700 uppercase">
+                                    UPGRADE REQUIRED
                                 </h2>
-                                <p className="text-[10px] font-mono text-corp-silver mt-1">
+                                <p className="text-[10px] font-mono text-gray-500 mt-1">
                                     {featureRequested
                                         ? `Feature richiesta: ${featureRequested}`
                                         : 'Questa funzionalità richiede un upgrade'}
@@ -151,7 +152,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
                         </div>
                         <button
                             onClick={onClose}
-                            className="p-2 hover:bg-white/5 rounded-full text-corp-silver hover:text-white transition-colors"
+                            className="p-2 hover:bg-gray-100 rounded text-gray-400 hover:text-gray-900 transition-colors"
                         >
                             <X size={20} />
                         </button>
@@ -159,54 +160,52 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
                 </div>
 
                 {/* Message */}
-                <div className="p-6 border-b border-corp-border bg-corp-bg/50">
-                    <p className="text-center text-corp-platinum font-mono text-sm">
-                        <span className="text-corp-gold">La massa aspetta Dicembre.</span>
+                <div className="p-4 border-b border-amber-100 bg-[#F9F8F2]">
+                    <p className="text-center text-gray-800 font-mono text-sm">
+                        <span className="text-amber-600 font-bold">La massa aspetta Dicembre.</span>
                         <br />
-                        <span className="text-corp-blue font-bold">L'Elite agisce ORA.</span>
+                        <span className="text-blue-600 font-bold">L'Elite agisce ORA.</span>
                     </p>
                 </div>
 
                 {/* Pricing Cards */}
-                <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-5 grid grid-cols-1 md:grid-cols-3 gap-4 bg-[#F9F8F2]">
                     {TIERS.map((tier) => (
                         <div
                             key={tier.id}
-                            className={`relative p-5 border rounded-sm transition-all duration-300 hover:scale-[1.02] ${tier.style} ${tier.id === currentTier ? 'ring-2 ring-corp-blue' : ''
+                            className={`relative p-5 border rounded-sm transition-all duration-300 hover:scale-[1.02] ${tier.style} ${tier.id === currentTier ? 'ring-2 ring-blue-400' : ''
                                 }`}
                         >
                             {/* Popular Badge */}
                             {tier.popular && (
-                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-corp-blue text-white text-[9px] font-bold uppercase tracking-widest rounded-sm">
+                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-blue-500 text-white text-[9px] font-bold uppercase tracking-widest rounded-sm shadow-md">
                                     Più Popolare
                                 </div>
                             )}
 
                             {/* Header */}
                             <div className="text-center mb-4">
-                                <h3 className={`font-display font-bold text-sm tracking-widest uppercase ${tier.id === 'EXECUTIVE' ? 'text-corp-gold' :
-                                    tier.id === 'STRATEGIST' ? 'text-corp-blue' : 'text-corp-silver'
-                                    }`}>
+                                <h3 className={`font-display font-bold text-sm tracking-widest uppercase ${tier.headerColor}`}>
                                     {tier.name}
                                 </h3>
                                 <div className="flex items-baseline justify-center gap-1 mt-2">
-                                    <span className="text-2xl font-bold text-corp-platinum">{tier.price}</span>
-                                    <span className="text-xs text-corp-silver">{tier.period}</span>
+                                    <span className="text-2xl font-bold text-gray-900">{tier.price}</span>
+                                    <span className="text-xs text-gray-500">{tier.period}</span>
                                 </div>
-                                <p className="text-[10px] text-corp-silver mt-1 italic">{tier.tagline}</p>
+                                <p className="text-[10px] text-gray-500 mt-1 italic">{tier.tagline}</p>
                             </div>
 
                             {/* Features */}
                             <div className="space-y-2 mb-4">
                                 {tier.features.map((feature, i) => (
-                                    <div key={i} className="flex items-center gap-2 text-xs text-corp-platinum/80">
+                                    <div key={i} className="flex items-center gap-2 text-xs text-gray-700">
                                         <Check size={12} className="text-emerald-500 shrink-0" />
                                         <span>{feature}</span>
                                     </div>
                                 ))}
                                 {tier.notIncluded.map((feature, i) => (
-                                    <div key={i} className="flex items-center gap-2 text-xs text-corp-silver/50 line-through">
-                                        <X size={12} className="text-corp-danger/50 shrink-0" />
+                                    <div key={i} className="flex items-center gap-2 text-xs text-gray-400 line-through">
+                                        <X size={12} className="text-gray-300 shrink-0" />
                                         <span>{feature}</span>
                                     </div>
                                 ))}
@@ -215,19 +214,25 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
                             {/* CTA */}
                             <button
                                 onClick={() => !tier.disabled && tier.id !== 'GRINDER' && handleUpgrade(tier.id as 'STRATEGIST' | 'EXECUTIVE')}
-                                disabled={tier.disabled || tier.id === currentTier}
-                                className={`w-full py-2.5 text-xs font-bold uppercase tracking-widest transition-all ${tier.id === currentTier
-                                    ? 'bg-corp-silver/20 text-corp-silver cursor-not-allowed'
+                                disabled={tier.disabled || tier.id === currentTier || isLoading === tier.id}
+                                className={`w-full py-2.5 text-xs font-bold uppercase tracking-widest transition-all rounded-sm ${tier.id === currentTier
+                                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
                                     : tier.disabled
-                                        ? 'bg-corp-bg border border-corp-silver/30 text-corp-silver cursor-not-allowed'
+                                        ? 'bg-gray-100 border border-gray-200 text-gray-400 cursor-not-allowed'
                                         : tier.id === 'EXECUTIVE'
-                                            ? 'bg-corp-gold text-corp-onyx hover:shadow-[0_0_20px_rgba(212,175,55,0.5)]'
-                                            : 'bg-corp-blue text-white hover:shadow-[0_0_20px_rgba(0,122,255,0.5)]'
+                                            ? 'bg-amber-500 text-white hover:bg-amber-600 shadow-md'
+                                            : 'bg-blue-500 text-white hover:bg-blue-600 shadow-md'
                                     }`}
                             >
-                                {tier.id === currentTier ? 'Piano Attuale' : tier.cta}
-                                {!tier.disabled && tier.id !== currentTier && (
-                                    <ArrowRight size={14} className="inline ml-2" />
+                                {isLoading === tier.id ? (
+                                    <Loader2 size={14} className="inline animate-spin" />
+                                ) : (
+                                    <>
+                                        {tier.id === currentTier ? 'Piano Attuale' : tier.cta}
+                                        {!tier.disabled && tier.id !== currentTier && (
+                                            <ArrowRight size={14} className="inline ml-2" />
+                                        )}
+                                    </>
                                 )}
                             </button>
                         </div>
@@ -235,8 +240,8 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-corp-border bg-black/40 text-center">
-                    <p className="text-[9px] font-mono text-corp-silver">
+                <div className="p-4 border-t border-amber-100 bg-white text-center">
+                    <p className="text-[9px] font-mono text-gray-500">
                         Pagamento sicuro via Stripe • Cancella quando vuoi • Fattura italiana disponibile
                     </p>
                 </div>
