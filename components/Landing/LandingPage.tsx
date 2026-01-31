@@ -109,8 +109,9 @@ const Navbar = ({ onEnterApp }: { onEnterApp: () => void }) => {
     return (
         <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'py-4 bg-corp-onyx/80 backdrop-blur-md shadow-sm border-b border-corp-gold/20' : 'py-6 bg-transparent'}`}>
             <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                    <img src="/luminel-brand.png" alt="LUMINEL EXECUTIVE" className="h-12 w-auto object-contain" />
+                <div className="flex items-center gap-3">
+                    <img src="/luminel-phoenix.png" alt="L" className="h-10 w-auto object-contain rounded-sm" />
+                    <span className="font-serif font-bold text-corp-platinum tracking-widest text-xl">LUMINEL</span>
                 </div>
 
                 <div className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-widest text-corp-silver">
@@ -444,7 +445,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end gap-12">
                     <div className="space-y-6">
                         <div className="flex items-center gap-3">
-                            <img src="/luminel-brand.png" alt="LUMINEL EXECUTIVE" className="h-10 w-auto object-contain" />
+                            <img src="/luminel-phoenix.png" alt="L" className="h-12 w-auto object-contain rounded-sm" />
+                            <span className="font-serif font-bold text-2xl text-corp-platinum tracking-widest">LUMINEL</span>
                         </div>
                         <p className="text-xs text-corp-silver max-w-xs leading-relaxed">
                             Piattaforma avanzata di intelligenza strategica per la carriera.
