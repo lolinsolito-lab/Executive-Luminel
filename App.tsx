@@ -317,7 +317,7 @@ const App: React.FC = () => {
         {/* Shows Rank, Status, Navigation. Essential for user orientation. */}
         {/* --- MOBILE SIDEBAR (Drawer) --- */}
         <div className={`
-          md:hidden fixed inset-y-0 left-0 z-50 w-[280px] bg-[#F9F8F2] transition-transform duration-300 border-r border-amber-200/50 shadow-xl
+          md:hidden fixed inset-y-0 left-0 z-50 w-[260px] bg-[#F9F8F2] transition-transform duration-300 border-r border-amber-200/50 shadow-xl overflow-hidden
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         `}>
           <Sidebar
@@ -339,7 +339,7 @@ const App: React.FC = () => {
 
         {/* --- DESKTOP SIDEBAR (Static Column) --- */}
         {/* Force flex display on medium screens and up. NEVER hidden. */}
-        <div className="hidden md:flex flex-col w-[280px] lg:w-[320px] flex-shrink-0 h-full bg-[#F9F8F2] border-r border-amber-200/50 relative z-30">
+        <div className="hidden md:flex flex-col w-[260px] lg:w-[300px] flex-shrink-0 h-full bg-[#F9F8F2] border-r border-amber-200/50 relative z-30 overflow-hidden">
           <Sidebar
             user={userProfile}
             onOpenMap={() => setIsMapOpen(true)}
