@@ -1,0 +1,5 @@
+{
+  "name": "CORP_LADDER",
+  "description": "An elite corporate career simulation and coaching engine utilizing the Gemini API to guide users through the hidden rules of corporate hierarchy.",
+  "requestFramePermissions": []
+}
