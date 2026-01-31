@@ -3,12 +3,14 @@ import { Sidebar } from './components/Sidebar';
 import { ChatConsole } from './components/ChatConsole';
 import { StrategicMapModal } from './components/StrategicMapModal';
 import { UpgradeModal } from './components/Paywall/UpgradeModal';
+import { LandingPage } from './components/Landing/LandingPage';
 import { UserProfile, Message } from './types';
 import { INITIAL_USER, WELCOME_MESSAGE } from './constants';
 import { sendMessageToCoach, initializeChat } from './services/geminiService';
 import { v4 as uuidv4 } from 'uuid';
 
 const App: React.FC = () => {
+  const [showLanding, setShowLanding] = useState(true); // Show landing by default
   const [userProfile, setUserProfile] = useState<UserProfile>(INITIAL_USER);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +18,11 @@ const App: React.FC = () => {
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
   const [upgradeFeature, setUpgradeFeature] = useState<string | undefined>();
+
+  // Handle entering the app from landing
+  const handleEnterApp = () => {
+    setShowLanding(false);
+  };
 
   // Open paywall with optional feature name
   const openUpgrade = (feature?: string) => {
@@ -99,6 +106,11 @@ const App: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  // Show Landing Page first
+  if (showLanding) {
+    return <LandingPage onEnterApp={handleEnterApp} />;
+  }
 
   if (!isInitialized) {
     return (
