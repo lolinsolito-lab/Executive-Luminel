@@ -231,8 +231,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                         </div>
 
                         {/* Users Table */}
-                        <div className="bg-corp-bg/50 border border-corp-border rounded-sm overflow-hidden">
-                            <table className="w-full">
+                        <div className="bg-corp-bg/50 border border-corp-border rounded-sm overflow-x-auto">
+                            <table className="w-full min-w-[800px]">
                                 <thead className="bg-corp-onyx/50">
                                     <tr className="text-left text-[10px] font-mono text-corp-silver uppercase tracking-wider">
                                         <th className="px-4 py-3">User</th>
