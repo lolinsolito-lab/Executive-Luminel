@@ -8,6 +8,7 @@ import { UserProfile, Message } from './types';
 import { INITIAL_USER, WELCOME_MESSAGE } from './constants';
 import { sendMessageToCoach, initializeChat } from './services/geminiService';
 import { v4 as uuidv4 } from 'uuid';
+import { Menu, X } from 'lucide-react';
 
 const App: React.FC = () => {
   const [showLanding, setShowLanding] = useState(true); // Show landing by default
@@ -18,6 +19,7 @@ const App: React.FC = () => {
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
   const [upgradeFeature, setUpgradeFeature] = useState<string | undefined>();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Mobile sidebar toggle
 
   // Handle entering the app from landing
   const handleEnterApp = () => {
@@ -123,16 +125,50 @@ const App: React.FC = () => {
 
   return (
     <div className="flex h-screen w-full overflow-hidden font-sans relative text-slate-200">
-      <Sidebar
-        user={userProfile}
-        onOpenMap={() => setIsMapOpen(true)}
-        onOpenUpgrade={openUpgrade}
-      />
-      <ChatConsole
-        messages={messages}
-        isLoading={isLoading}
-        onSendMessage={handleSendMessage}
-      />
+
+      {/* Mobile Header with Hamburger */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-corp-onyx border-b border-corp-border p-4 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <span className="font-display font-bold text-sm text-corp-platinum">LUMINEL</span>
+          <span className="text-corp-gold text-sm font-bold">EXECUTIVE</span>
+        </div>
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="p-2 text-corp-silver hover:text-corp-gold transition-colors"
+        >
+          {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div
+          className="md:hidden fixed inset-0 z-30 bg-black/70 backdrop-blur-sm"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar - Hidden on mobile unless open */}
+      <div className={`
+        fixed md:relative z-35 h-full transition-transform duration-300
+        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        md:block
+      `}>
+        <Sidebar
+          user={userProfile}
+          onOpenMap={() => { setIsMapOpen(true); setIsSidebarOpen(false); }}
+          onOpenUpgrade={(feature) => { openUpgrade(feature); setIsSidebarOpen(false); }}
+        />
+      </div>
+
+      {/* Chat Console - Full width on mobile, with top padding for header */}
+      <div className="flex-1 pt-16 md:pt-0">
+        <ChatConsole
+          messages={messages}
+          isLoading={isLoading}
+          onSendMessage={handleSendMessage}
+        />
+      </div>
 
       <StrategicMapModal
         isOpen={isMapOpen}
