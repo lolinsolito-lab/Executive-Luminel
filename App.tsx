@@ -3,7 +3,7 @@ import { supabase } from './lib/supabase';
 import { Analytics } from '@vercel/analytics/react';
 import { TacticalMenu } from './components/TacticalMenu';
 import { DataStream } from './components/DataStream';
-// import { Sidebar } from './components/Sidebar'; // Legacy V5 Sidebar removed for V6 Blueprint
+import { Sidebar } from './components/Sidebar'; // Restored per User Feedback
 import { ChatConsole } from './components/ChatConsole';
 import { StrategicMapModal } from './components/StrategicMapModal';
 import { UpgradeModal } from './components/Paywall/UpgradeModal';
@@ -310,29 +310,28 @@ const App: React.FC = () => {
           </button>
         </div>
 
-        {/* --- LEFT COLUMN: TACTICAL MENU --- */}
-        {/* Mobile: Fixed overlay. Desktop: Static sidebar. */}
+        {/* --- LEFT COLUMN: THE SIDEBAR (Restored per User Order) --- */}
+        {/* Shows Rank, Status, Navigation. Essential for user orientation. */}
         <div className={`
           fixed md:relative z-40 h-full transition-transform duration-300 bg-corp-onyx
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-          flex-shrink-0 border-r border-corp-border/30 w-20
+          flex-shrink-0 border-r border-corp-border/30 w-full md:w-[320px]
         `}>
-          <TacticalMenu
-            activeTab={activeTab}
-            onNavigate={(tab) => {
-              setActiveTab(tab);
-              if (tab === 'command' || tab === 'codex') {
-                // Logic for switching center view can go here
-              }
-              if (window.innerWidth < 768) setIsSidebarOpen(false);
-            }}
+          <Sidebar
+            user={userProfile}
+            onOpenMap={() => { setIsMapOpen(true); setIsSidebarOpen(false); }}
+            onOpenUpgrade={(feature) => { openUpgrade(feature); setIsSidebarOpen(false); }}
           />
 
-          {/* Admin Button within Tactical Menu Area or Mobile Drawer */}
+          {/* Admin Button (Only visible if admin) */}
           {isAdmin && (
-            <div className="absolute bottom-20 md:bottom-2 left-0 w-full p-2">
-              <button onClick={() => setCurrentPage('admin')} className="w-10 h-10 mx-auto flex items-center justify-center bg-red-900/20 text-red-500 rounded-sm hover:bg-red-900/40 border border-transparent hover:border-red-500/50 transition-all font-mono text-[10px]" title="GOD MODE">
-                <Crown size={14} />
+            <div className="absolute bottom-4 left-4 right-4 animate-fade-in z-50">
+              <button
+                onClick={() => setCurrentPage('admin')}
+                className="w-full py-2 bg-red-900/20 border border-red-500/30 text-red-400 text-[10px] font-mono uppercase tracking-widest hover:bg-red-900/40 transition-colors flex items-center justify-center gap-2"
+              >
+                <Crown size={12} />
+                GOD MODE ACTIVE
               </button>
             </div>
           )}
