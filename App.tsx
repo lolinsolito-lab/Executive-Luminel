@@ -76,231 +76,229 @@ const App: React.FC = () => {
       }
     };
     loadUser();
-  };
-  loadUser();
-}, []);
+  }, []);
 
-// BRAND SIGNATURE
-useEffect(() => {
-  console.log(
-    "%c LUMINEL EXECUTIVE %c V5.0 ",
-    "background: linear-gradient(to right, #C5A059, #E5D3B3); color: #1A1A1A; padding: 6px 10px; border-radius: 4px 0 0 4px; font-weight: 900; font-family: 'Cinzel', serif; letter-spacing: 2px;",
-    "background: #1A1A1A; color: #C5A059; padding: 6px 10px; border-radius: 0 4px 4px 0; font-family: 'JetBrains Mono', monospace; font-weight: bold;"
-  );
-  console.log(
-    "%c THE ELITE DOES NOT COMPETE. IT DOMINATES. ",
-    "color: #C5A059; font-style: italic; font-family: 'Cinzel', serif; font-size: 12px; margin-top: 5px;"
-  );
-}, []);
+  // BRAND SIGNATURE
+  useEffect(() => {
+    console.log(
+      "%c LUMINEL EXECUTIVE %c V5.0 ",
+      "background: linear-gradient(to right, #C5A059, #E5D3B3); color: #1A1A1A; padding: 6px 10px; border-radius: 4px 0 0 4px; font-weight: 900; font-family: 'Cinzel', serif; letter-spacing: 2px;",
+      "background: #1A1A1A; color: #C5A059; padding: 6px 10px; border-radius: 0 4px 4px 0; font-family: 'JetBrains Mono', monospace; font-weight: bold;"
+    );
+    console.log(
+      "%c THE ELITE DOES NOT COMPETE. IT DOMINATES. ",
+      "color: #C5A059; font-style: italic; font-family: 'Cinzel', serif; font-size: 12px; margin-top: 5px;"
+    );
+  }, []);
 
-useEffect(() => {
-  const init = async () => {
-    try {
-      await initializeChat();
-      setMessages([
-        {
-          id: uuidv4(),
-          role: 'model',
-          content: WELCOME_MESSAGE,
-          timestamp: new Date()
-        }
-      ]);
-      setIsInitialized(true);
-    } catch (e) {
-      console.error("Initialization failed", e);
-    }
-  };
-  init();
-}, []);
+  useEffect(() => {
+    const init = async () => {
+      try {
+        await initializeChat();
+        setMessages([
+          {
+            id: uuidv4(),
+            role: 'model',
+            content: WELCOME_MESSAGE,
+            timestamp: new Date()
+          }
+        ]);
+        setIsInitialized(true);
+      } catch (e) {
+        console.error("Initialization failed", e);
+      }
+    };
+    init();
+  }, []);
 
-const handleSendMessage = async (text: string) => {
-  const userMsg: Message = {
-    id: uuidv4(),
-    role: 'user',
-    content: text,
-    timestamp: new Date()
-  };
-
-  setMessages(prev => [...prev, userMsg]);
-  setIsLoading(true);
-
-  try {
-    const responseText = await sendMessageToCoach(text);
-
-    const botMsg: Message = {
+  const handleSendMessage = async (text: string) => {
+    const userMsg: Message = {
       id: uuidv4(),
-      role: 'model',
-      content: responseText,
+      role: 'user',
+      content: text,
       timestamp: new Date()
     };
 
-    setMessages(prev => [...prev, botMsg]);
+    setMessages(prev => [...prev, userMsg]);
+    setIsLoading(true);
 
-    // PARSING ENGINE v3.0
-    const perfMatch = responseText.match(/\[\[PERFORMANCE:\s*([+-]?\d+)\]\]/i);
-    const capMatch = responseText.match(/\[\[CAPITAL:\s*([+-]?\d+)\]\]/i);
+    try {
+      const responseText = await sendMessageToCoach(text);
 
-    if (perfMatch || capMatch) {
-      setUserProfile(prev => {
-        let newPerf = prev.performanceXP;
-        let newCap = prev.politicalCapital;
+      const botMsg: Message = {
+        id: uuidv4(),
+        role: 'model',
+        content: responseText,
+        timestamp: new Date()
+      };
 
-        if (perfMatch) {
-          const val = parseInt(perfMatch[1], 10);
-          if (!isNaN(val)) newPerf = Math.max(0, newPerf + val);
-        }
+      setMessages(prev => [...prev, botMsg]);
 
-        if (capMatch) {
-          const val = parseInt(capMatch[1], 10);
-          if (!isNaN(val)) newCap = Math.max(0, newCap + val);
-        }
+      // PARSING ENGINE v3.0
+      const perfMatch = responseText.match(/\[\[PERFORMANCE:\s*([+-]?\d+)\]\]/i);
+      const capMatch = responseText.match(/\[\[CAPITAL:\s*([+-]?\d+)\]\]/i);
 
-        return {
-          ...prev,
-          performanceXP: newPerf,
-          politicalCapital: newCap
-        };
-      });
+      if (perfMatch || capMatch) {
+        setUserProfile(prev => {
+          let newPerf = prev.performanceXP;
+          let newCap = prev.politicalCapital;
+
+          if (perfMatch) {
+            const val = parseInt(perfMatch[1], 10);
+            if (!isNaN(val)) newPerf = Math.max(0, newPerf + val);
+          }
+
+          if (capMatch) {
+            const val = parseInt(capMatch[1], 10);
+            if (!isNaN(val)) newCap = Math.max(0, newCap + val);
+          }
+
+          return {
+            ...prev,
+            performanceXP: newPerf,
+            politicalCapital: newCap
+          };
+        });
+      }
+
+    } catch (error) {
+      console.error("Error sending message", error);
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-  } catch (error) {
-    console.error("Error sending message", error);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  // RENDER LOGIC
 
-// RENDER LOGIC
-
-// 1. Loading State
-if (!isInitialized) {
-  return (
-    <div className="h-screen w-full bg-[#09090b] flex items-center justify-center flex-col gap-4">
-      <div className="w-16 h-16 border-t-2 border-b-2 border-corp-gold rounded-full animate-spin"></div>
-      <div className="font-mono text-corp-gold text-xs tracking-[0.2em] animate-pulse">LUMINEL V5.0 // INITIALIZING...</div>
-    </div>
-  );
-}
-
-// 2. Landing Page
-if (currentPage === 'landing') {
-  return (
-    <LandingPage
-      onEnterApp={handleEnterApp}
-    />
-  );
-}
-
-// 3. Thank You Page
-if (currentPage === 'thank-you') {
-  return (
-    <ThankYouPage
-      tier={userProfile.subscription as any}
-      userName={userProfile.name}
-      userEmail={userProfile.email || ''}
-      onEnterApp={() => setCurrentPage('app')}
-    />
-  );
-}
-
-// 4. Admin Dashboard (God Mode)
-if (currentPage === 'admin') {
-  return <AdminDashboard onClose={() => setCurrentPage('app')} />;
-}
-
-// 5. Legal Pages
-if (currentPage.startsWith('legal-')) {
-  const legalType = currentPage.replace('legal-', '') as any;
-  return <LegalPage type={legalType} onBack={() => setCurrentPage('landing')} />;
-}
-
-// 6. Main App
-return (
-  <div className="flex h-screen w-full overflow-hidden font-sans relative text-slate-200">
-
-    {/* Mobile Header with Hamburger */}
-    <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-corp-onyx border-b border-corp-border p-4 flex justify-between items-center">
-      <div className="flex items-center gap-2">
-        <span className="font-display font-bold text-sm text-corp-platinum">LUMINEL</span>
-        <span className="text-corp-gold text-sm font-bold">EXECUTIVE</span>
+  // 1. Loading State
+  if (!isInitialized) {
+    return (
+      <div className="h-screen w-full bg-[#09090b] flex items-center justify-center flex-col gap-4">
+        <div className="w-16 h-16 border-t-2 border-b-2 border-corp-gold rounded-full animate-spin"></div>
+        <div className="font-mono text-corp-gold text-xs tracking-[0.2em] animate-pulse">LUMINEL V5.0 // INITIALIZING...</div>
       </div>
-      <button
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className="p-2 text-corp-silver hover:text-corp-gold transition-colors"
-      >
-        {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
-    </div>
+    );
+  }
 
-    {/* Mobile Sidebar Overlay */}
-    {isSidebarOpen && (
-      <div
-        className="md:hidden fixed inset-0 z-30 bg-black/70 backdrop-blur-sm"
-        onClick={() => setIsSidebarOpen(false)}
+  // 2. Landing Page
+  if (currentPage === 'landing') {
+    return (
+      <LandingPage
+        onEnterApp={handleEnterApp}
       />
-    )}
+    );
+  }
 
-    {/* Sidebar - Hidden on mobile unless open */}
-    <div className={`
+  // 3. Thank You Page
+  if (currentPage === 'thank-you') {
+    return (
+      <ThankYouPage
+        tier={userProfile.subscription as any}
+        userName={userProfile.name}
+        userEmail={userProfile.email || ''}
+        onEnterApp={() => setCurrentPage('app')}
+      />
+    );
+  }
+
+  // 4. Admin Dashboard (God Mode)
+  if (currentPage === 'admin') {
+    return <AdminDashboard onClose={() => setCurrentPage('app')} />;
+  }
+
+  // 5. Legal Pages
+  if (currentPage.startsWith('legal-')) {
+    const legalType = currentPage.replace('legal-', '') as any;
+    return <LegalPage type={legalType} onBack={() => setCurrentPage('landing')} />;
+  }
+
+  // 6. Main App
+  return (
+    <div className="flex h-screen w-full overflow-hidden font-sans relative text-slate-200">
+
+      {/* Mobile Header with Hamburger */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-corp-onyx border-b border-corp-border p-4 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <span className="font-display font-bold text-sm text-corp-platinum">LUMINEL</span>
+          <span className="text-corp-gold text-sm font-bold">EXECUTIVE</span>
+        </div>
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="p-2 text-corp-silver hover:text-corp-gold transition-colors"
+        >
+          {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div
+          className="md:hidden fixed inset-0 z-30 bg-black/70 backdrop-blur-sm"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar - Hidden on mobile unless open */}
+      <div className={`
         fixed md:relative z-35 h-full transition-transform duration-300
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
         md:block
       `}>
-      <Sidebar
+        <Sidebar
+          user={userProfile}
+          onOpenMap={() => { setIsMapOpen(true); setIsSidebarOpen(false); }}
+          onOpenUpgrade={(feature) => { openUpgrade(feature); setIsSidebarOpen(false); }}
+        />
+
+        {/* Admin Button (Only visible if admin) */}
+        {isAdmin && (
+          <div className="absolute bottom-4 left-4 right-4 animate-fade-in">
+            <button
+              onClick={() => setCurrentPage('admin')}
+              className="w-full py-2 bg-red-900/20 border border-red-500/30 text-red-400 text-[10px] font-mono uppercase tracking-widest hover:bg-red-900/40 transition-colors flex items-center justify-center gap-2"
+            >
+              <Crown size={12} />
+              GOD MODE ACTIVE
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Chat Console - Full width on mobile, with top padding for header */}
+      <div className="flex-1 pt-16 md:pt-0">
+        <ChatConsole
+          messages={messages}
+          isLoading={isLoading}
+          onSendMessage={handleSendMessage}
+        />
+      </div>
+
+      <StrategicMapModal
+        isOpen={isMapOpen}
+        onClose={() => setIsMapOpen(false)}
         user={userProfile}
-        onOpenMap={() => { setIsMapOpen(true); setIsSidebarOpen(false); }}
-        onOpenUpgrade={(feature) => { openUpgrade(feature); setIsSidebarOpen(false); }}
       />
 
-      {/* Admin Button (Only visible if admin) */}
-      {isAdmin && (
-        <div className="absolute bottom-4 left-4 right-4 animate-fade-in">
-          <button
-            onClick={() => setCurrentPage('admin')}
-            className="w-full py-2 bg-red-900/20 border border-red-500/30 text-red-400 text-[10px] font-mono uppercase tracking-widest hover:bg-red-900/40 transition-colors flex items-center justify-center gap-2"
-          >
-            <Crown size={12} />
-            GOD MODE ACTIVE
-          </button>
-        </div>
-      )}
-    </div>
+      <UpgradeModal
+        isOpen={isUpgradeOpen}
+        onClose={() => setIsUpgradeOpen(false)}
+        currentTier={userProfile.subscription as 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE'}
+        featureRequested={upgradeFeature}
+        userId={userProfile.id}
+        userEmail={userProfile.email}
+      />
+      <Analytics />
 
-    {/* Chat Console - Full width on mobile, with top padding for header */}
-    <div className="flex-1 pt-16 md:pt-0">
-      <ChatConsole
-        messages={messages}
-        isLoading={isLoading}
-        onSendMessage={handleSendMessage}
+      <AuthModal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
+        onSuccess={() => {
+          // User loaded by useEffect, just need to enter app
+          setCurrentPage('app');
+        }}
       />
     </div>
-
-    <StrategicMapModal
-      isOpen={isMapOpen}
-      onClose={() => setIsMapOpen(false)}
-      user={userProfile}
-    />
-
-    <UpgradeModal
-      isOpen={isUpgradeOpen}
-      onClose={() => setIsUpgradeOpen(false)}
-      currentTier={userProfile.subscription as 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE'}
-      featureRequested={upgradeFeature}
-      userId={userProfile.id}
-      userEmail={userProfile.email}
-    />
-    <Analytics />
-
-    <AuthModal
-      isOpen={isAuthOpen}
-      onClose={() => setIsAuthOpen(false)}
-      onSuccess={() => {
-        // User loaded by useEffect, just need to enter app
-        setCurrentPage('app');
-      }}
-    />
-  </div>
-);
+  );
 };
 
 export default App;
