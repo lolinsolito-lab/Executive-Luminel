@@ -110,15 +110,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
                     </div>
 
                     <div className="bg-gradient-to-r from-corp-gold/5 to-transparent border-l-2 border-corp-gold p-4 space-y-3">
-                        <div className="flex items-center gap-3 text-xs text-corp-platinum/80 hover:text-corp-gold cursor-pointer transition-colors group">
+                        <div
+                            onClick={() => user.subscription === 'EXECUTIVE' ? alert('Access Granted: Opening Vault Resource...') : onOpenUpgrade?.('Salary Negotiation Script')}
+                            className="flex items-center gap-3 text-xs text-corp-platinum/80 hover:text-corp-gold cursor-pointer transition-colors group"
+                        >
                             <FileText size={14} className="text-corp-gold group-hover:scale-110 transition-transform" />
                             <span>Salary Negotiation Script v5.0</span>
                         </div>
-                        <div className="flex items-center gap-3 text-xs text-corp-platinum/80 hover:text-corp-gold cursor-pointer transition-colors group">
+                        <div
+                            onClick={() => user.subscription === 'EXECUTIVE' ? alert('Access Granted: Opening Vault Resource...') : onOpenUpgrade?.('Job Title Hack Protocol')}
+                            className="flex items-center gap-3 text-xs text-corp-platinum/80 hover:text-corp-gold cursor-pointer transition-colors group"
+                        >
                             <Briefcase size={14} className="text-corp-gold group-hover:scale-110 transition-transform" />
                             <span>Job Title Hack Protocol</span>
                         </div>
-                        <div className="flex items-center gap-3 text-xs text-corp-platinum/80 hover:text-corp-gold cursor-pointer transition-colors group">
+                        <div
+                            onClick={() => user.subscription === 'EXECUTIVE' ? alert('Access Granted: Opening Vault Resource...') : onOpenUpgrade?.('Exit Strategy Blueprint')}
+                            className="flex items-center gap-3 text-xs text-corp-platinum/80 hover:text-corp-gold cursor-pointer transition-colors group"
+                        >
                             <Gem size={14} className="text-corp-gold group-hover:scale-110 transition-transform" />
                             <span>Exit Strategy Blueprint</span>
                         </div>

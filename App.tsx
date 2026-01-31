@@ -238,6 +238,8 @@ const App: React.FC = () => {
         onClose={() => setIsUpgradeOpen(false)}
         currentTier={userProfile.subscription as 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE'}
         featureRequested={upgradeFeature}
+        userId={userProfile.id}
+        userEmail={userProfile.email}
       />
       <Analytics />
     </div>

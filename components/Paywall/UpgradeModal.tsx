@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { X, Lock, Zap, Crown, Check, ArrowRight, Loader2 } from 'lucide-react';
 import { isStripeConfigured, STRIPE_PRICES } from '../../lib/stripe';
 
+
 interface UpgradeModalProps {
     isOpen: boolean;
     onClose: () => void;
     currentTier: 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE';
     featureRequested?: string;
+    userId?: string;
+    userEmail?: string;
 }
 
 // Stripe Payment Links (created via API)
@@ -81,7 +84,9 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
     isOpen,
     onClose,
     currentTier,
-    featureRequested
+    featureRequested,
+    userId,
+    userEmail
 }) => {
     const [isLoading, setIsLoading] = useState<string | null>(null);
 
@@ -91,13 +96,17 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
         setIsLoading(tierId);
 
         // For now, open Stripe Payment Link (replace URLs when you create them)
-        const paymentLink = PAYMENT_LINKS[tierId];
+        let paymentLink = PAYMENT_LINKS[tierId];
 
         if (paymentLink.includes('PLACEHOLDER')) {
             alert(`⚠️ Stripe Payment Link non configurato per ${tierId}.\n\nCrea un Payment Link in Stripe Dashboard e aggiorna PAYMENT_LINKS nel codice.`);
             setIsLoading(null);
             return;
         }
+
+        // Add tracking params
+        if (userId) paymentLink += `?client_reference_id=${userId}`;
+        if (userEmail) paymentLink += `${userId ? '&' : '?'}prefilled_email=${encodeURIComponent(userEmail)}`;
 
         // Redirect to Stripe
         window.open(paymentLink, '_blank');
