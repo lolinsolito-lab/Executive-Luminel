@@ -295,7 +295,7 @@ const App: React.FC = () => {
 
     // 6. Main App
     return (
-      <div className="dashboard-viewport-lock flex h-screen w-full overflow-hidden font-sans relative z-0 bg-[#F9F8F2]">
+      <div className="phoenix-dashboard flex h-screen w-full overflow-hidden font-sans relative z-0 bg-phoenix-canvas">
         {/* Mobile Header */}
         <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-amber-200/50 p-3 flex justify-between items-center shadow-sm">
           <div className="flex items-center gap-2">

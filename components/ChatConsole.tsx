@@ -1,15 +1,26 @@
 import React, { useRef, useEffect } from 'react';
 import { Message } from '../types';
-import { Send, Terminal, Zap, Triangle, Crown, Activity } from 'lucide-react';
+import { Send, Crown, Activity } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
 interface ChatConsoleProps {
   messages: Message[];
   isLoading: boolean;
   onSendMessage: (text: string) => void;
+  tokenCount?: number;
+  maxTokens?: number;
+  userTier?: 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE';
 }
 
-export const ChatConsole: React.FC<ChatConsoleProps> = ({ messages, isLoading, onSendMessage }) => {
+// V7 PHOENIX - THE BATTLEFIELD
+export const ChatConsole: React.FC<ChatConsoleProps> = ({
+  messages,
+  isLoading,
+  onSendMessage,
+  tokenCount = 50,
+  maxTokens = 50,
+  userTier = 'STRATEGIST'
+}) => {
   const [input, setInput] = React.useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -30,83 +41,107 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({ messages, isLoading, o
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full relative overflow-hidden bg-[#F9F8F2]">
+    <div className="flex-1 flex flex-col h-full relative overflow-hidden bg-phoenix-canvas">
 
-      {/* 1. MORNING BRIEFING BOX (WHITE PEARL) */}
-      <div className="shrink-0 p-4 md:p-6 border-b border-amber-200/50 bg-white z-20 shadow-sm">
-        <h2 className="font-display font-bold text-gray-900 text-base md:text-lg mb-2 flex items-center gap-2">
+      {/* A. BRIEFING BOX (Fixed Top) */}
+      <div className="shrink-0 p-5 lg:p-6 border-b border-gray-100 bg-phoenix-cream phoenix-briefing z-20">
+        <h2 className="font-display font-bold text-phoenix-ink text-lg mb-2 flex items-center gap-2 tracking-widest">
           <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-          MORNING BRIEFING // 08:30 AM
+          PHOENIX BRIEFING // 08:30 AM
         </h2>
-        <div className="font-mono text-xs md:text-sm text-gray-600 leading-relaxed">
-          <p>Agente Jara. Mercati aperti. Il tuo Capitale Politico è al <span className="text-red-500 font-bold">32% (Critico)</span>.</p>
-          <p className="mt-1">Oggi hai un meeting con Stefano. <span className="text-amber-600 font-bold">Strategia consigliata: Silenzio Attivo.</span></p>
+        <div className="font-sans text-sm text-phoenix-ghost leading-relaxed">
+          <p>Agente Jara. Mercati aperti. Il tuo focus oggi è sul consolidamento della posizione strategica.</p>
+          <p className="mt-1 text-phoenix-gold font-semibold">Strategia consigliata: Silenzio Attivo.</p>
         </div>
       </div>
 
-      {/* 2. THE ARCHITECT CONSOLE */}
-      <div className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6 z-10 scroll-smooth relative bg-[#F9F8F2]">
+      {/* B. CHAT STREAM (Scrollable Center) */}
+      <div className="flex-1 overflow-y-auto p-5 lg:p-8 space-y-5 z-10 scroll-smooth bg-phoenix-canvas">
         {messages.map((msg) => (
           <div
             key={msg.id}
             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
-            <div className={`max-w-[90%] md:max-w-2xl flex gap-2 md:gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+            <div className={`max-w-[85%] lg:max-w-2xl flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
 
               {/* Avatar */}
-              <div className={`w-7 h-7 md:w-8 md:h-8 rounded-sm flex-shrink-0 flex items-center justify-center border ${msg.role === 'user'
-                ? 'bg-blue-100 border-blue-300 text-blue-600'
-                : 'bg-amber-100 border-amber-300 text-amber-600'
+              <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${msg.role === 'user'
+                  ? 'bg-phoenix-snow border border-gray-200 text-phoenix-ghost'
+                  : 'bg-phoenix-navy text-phoenix-gold'
                 }`}>
-                {msg.role === 'user' ? <span className="font-mono text-[8px] font-bold">YOU</span> : <Crown size={12} className="fill-current" />}
+                {msg.role === 'user'
+                  ? <span className="font-sans text-[10px] font-bold">YOU</span>
+                  : <Crown size={14} className="fill-current" />
+                }
               </div>
 
-              {/* Message Content */}
+              {/* Message Bubble */}
               <div className={`
-                    p-3 md:p-4 rounded-sm text-sm md:text-base font-mono leading-relaxed shadow-sm relative group
-                    ${msg.role === 'user'
-                  ? 'bg-white border border-gray-200 text-gray-800'
-                  : 'bg-amber-50 text-gray-800 border-l-2 border-amber-400 pl-4'
+                p-4 rounded-sm text-sm leading-relaxed
+                ${msg.role === 'user'
+                  ? 'bg-gray-100 text-phoenix-ink font-sans'
+                  : 'bg-phoenix-navy text-white font-sans'
                 }
-                `}>
-                <div className="prose prose-sm max-w-none font-mono text-gray-700">
+              `}>
+                <div className="prose prose-sm max-w-none">
                   <ReactMarkdown>{msg.content}</ReactMarkdown>
                 </div>
               </div>
             </div>
           </div>
         ))}
+
+        {/* Loading Indicator */}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="flex items-center gap-2 text-amber-600 font-mono text-sm animate-pulse pl-10">
-              <Activity size={14} />
-              <span>ARCHITECT_IS_TYPING...</span>
+            <div className="flex items-center gap-3 text-phoenix-gold font-sans text-sm animate-pulse pl-11">
+              <Activity size={16} />
+              <span>L'ARCHITETTO STA ELABORANDO...</span>
             </div>
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* 3. INPUT FIELD (Command Line - White Pearl) */}
-      <div className="p-3 md:p-4 bg-white border-t border-amber-200/50 z-30 shrink-0 shadow-sm">
-        <form onSubmit={handleSubmit} className="relative max-w-4xl mx-auto flex items-center gap-2 bg-[#F9F8F2] border border-amber-300 p-2 md:p-3 rounded-sm focus-within:border-amber-500 focus-within:shadow-md transition-all">
-          <span className="text-amber-600 font-mono pl-2 text-lg font-bold">{'>'}</span>
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Qual è la tua mossa strategica?"
-            className="flex-1 bg-transparent border-none focus:outline-none text-gray-800 font-mono text-sm md:text-base placeholder-gray-400"
-            disabled={isLoading}
-            autoFocus
-          />
-          <button
-            type="submit"
-            disabled={!input.trim() || isLoading}
-            className="p-2 text-amber-600 hover:text-amber-800 transition-colors disabled:opacity-30"
-          >
-            <Terminal size={18} />
-          </button>
+      {/* C. INPUT AREA (Anchored Bottom) */}
+      <div className="p-4 lg:p-5 bg-phoenix-canvas border-t border-gray-100 z-30 shrink-0">
+        <form onSubmit={handleSubmit} className="relative max-w-4xl mx-auto">
+          {/* Floating Input Container */}
+          <div className="flex items-center gap-3 bg-white border border-gray-200 p-3 lg:p-4 rounded-sm phoenix-input-float focus-within:border-phoenix-gold transition-all">
+            <span className="text-phoenix-gold font-display text-xl font-bold">{'>'}</span>
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Qual è la tua mossa strategica?"
+              className="flex-1 bg-transparent border-none focus:outline-none text-phoenix-ink font-sans text-sm placeholder-phoenix-ghost"
+              disabled={isLoading}
+              autoFocus
+            />
+
+            {/* Token Counter (Tier 2 only) */}
+            {userTier === 'STRATEGIST' && (
+              <span className="text-[11px] font-sans text-phoenix-ghost">
+                {tokenCount}/{maxTokens} Tokens
+              </span>
+            )}
+
+            {/* Unlimited Badge (Tier 3) */}
+            {userTier === 'EXECUTIVE' && (
+              <span className="text-[10px] font-sans text-phoenix-gold uppercase tracking-widest font-bold">
+                Unlimited
+              </span>
+            )}
+
+            {/* Execute Button */}
+            <button
+              type="submit"
+              disabled={!input.trim() || isLoading}
+              className="px-4 py-2 bg-phoenix-gold text-white font-sans text-sm font-bold uppercase tracking-widest hover:bg-amber-600 transition-colors disabled:opacity-30 disabled:cursor-not-allowed rounded-sm"
+            >
+              Execute
+            </button>
+          </div>
         </form>
       </div>
     </div>

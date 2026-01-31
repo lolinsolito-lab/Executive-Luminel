@@ -2,9 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =========================================
+   LUMINEL V7 PHOENIX - Design System
+   ========================================= */
+
 @layer base {
   :root {
-    /* DEFAULT THEME: PEARL WHITE */
+    /* LANDING PAGE THEME (Legacy - Pearl White) */
     --color-corp-onyx: #F9F8F2;
     --color-corp-platinum: #1A1A1A;
     --color-corp-bg: #FFFFFF;
@@ -12,7 +16,7 @@
     --color-corp-border: rgba(197, 160, 89, 0.3);
   }
 
-  /* Base reset - allows scrolling by default (for landing pages) */
+  /* Base reset */
   html,
   body {
     margin: 0;
@@ -24,24 +28,96 @@
     color: var(--color-corp-platinum);
   }
 
-  /* React root - natural height */
   #root {
     min-height: 100vh;
   }
 }
 
-/* ===========================================
-   DASHBOARD-ONLY VIEWPORT LOCK
-   Apply this class on the dashboard container
-   to lock height to 100vh with internal scroll
-   =========================================== */
-.dashboard-viewport-lock {
+/* =========================================
+   V7 PHOENIX DASHBOARD STYLES
+   Scoped to .phoenix-dashboard class
+   ========================================= */
+
+.phoenix-dashboard {
+  /* Lock viewport for dashboard */
   height: 100vh;
   max-height: 100vh;
   overflow: hidden;
+
+  /* V7 Canvas */
+  background-color: #FFFFFF;
+  color: #111827;
+  font-family: 'Inter', sans-serif;
 }
 
-/* V5 EXECUTIVE THEME: MIDNIGHT NAVY (Deprecated) */
+/* V7 Phoenix Headings */
+.phoenix-dashboard h1,
+.phoenix-dashboard h2,
+.phoenix-dashboard h3,
+.phoenix-dashboard .phoenix-heading {
+  font-family: 'Cinzel', 'Playfair Display', serif;
+  letter-spacing: 0.05em;
+}
+
+/* V7 Gold Border Accent */
+.phoenix-gold-border {
+  border: 1px solid #D4AF37;
+}
+
+/* V7 Navy Bubble (Architect Messages) */
+.phoenix-navy-bubble {
+  background-color: #0F172A;
+  color: #FFFFFF;
+}
+
+/* V7 User Bubble */
+.phoenix-user-bubble {
+  background-color: #F3F4F6;
+  color: #111827;
+}
+
+/* V7 Political Flame Gradient */
+.phoenix-flame-gradient {
+  background: linear-gradient(to top, #B45309, #F59E0B);
+}
+
+/* V7 Briefing Box */
+.phoenix-briefing {
+  background-color: #FFFEFA;
+  border: 1px solid #D4AF37;
+}
+
+/* V7 Input Float Shadow */
+.phoenix-input-float {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* V7 Executive Gold Glow (Tier 3) */
+.phoenix-executive-glow {
+  box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.1);
+}
+
+/* V7 Sidebar Hover Effect */
+.phoenix-nav-hover:hover {
+  background: linear-gradient(to right, #FFFCF5, transparent);
+  border-left: 3px solid #D4AF37;
+}
+
+/* V7 Flame Breathe Animation */
+.phoenix-flame-breathe {
+  animation: flameBreathe 2s ease-in-out infinite;
+}
+
+/* V7 Badge Gold Circle */
+.phoenix-badge {
+  border: 2px solid #D4AF37;
+  border-radius: 50%;
+}
+
+/* =========================================
+   LEGACY STYLES (Keep for Landing Page)
+   ========================================= */
+
 .v5-executive {
   --color-corp-onyx: #0B1019;
   --color-corp-platinum: #F5F5F7;
@@ -50,6 +126,13 @@
   --color-corp-border: rgba(197, 160, 89, 0.2);
   background-color: #0B1019 !important;
   color: #F5F5F7 !important;
+}
+
+/* Legacy dashboard viewport lock */
+.dashboard-viewport-lock {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 /* War Room Panel - Dark Glassmorphism */
