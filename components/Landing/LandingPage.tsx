@@ -115,11 +115,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
 
             {/* HERO SECTION */}
             <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-                {/* Background Grid */}
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+                {/* Deep Void Background - No Grid */}
+                <div className="absolute inset-0 bg-corp-onyx"></div>
 
-                {/* Golden Gradient */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-radial from-corp-gold/10 via-transparent to-transparent blur-3xl"></div>
+                {/* Subtle Ambient Light (Top Center Spotlight) */}
+                <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[120vw] h-[80vh] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-corp-gold/5 via-corp-onyx/50 to-transparent blur-[120px] pointer-events-none"></div>
 
                 <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
                     {/* Badge */}
