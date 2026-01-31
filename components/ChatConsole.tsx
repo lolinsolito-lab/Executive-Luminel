@@ -33,18 +33,18 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({ messages, isLoading, o
     <div className="flex-1 flex flex-col h-full relative overflow-hidden bg-transparent">
 
       {/* 1. WAR ROOM HEADER */}
-      <div className="h-20 war-room-panel border-b border-corp-border flex items-center px-8 justify-between z-10 shrink-0">
+      <div className="h-20 war-room-panel border-b border-corp-border/50 flex items-center px-8 justify-between z-10 shrink-0 shadow-[0_5px_20px_rgba(0,0,0,0.5)]">
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 bg-corp-bg border border-corp-border rounded-sm flex items-center justify-center shadow-inner">
-            <Activity className="text-corp-blue animate-pulse" size={20} />
+          <div className="w-10 h-10 bg-corp-bg/5 border border-corp-gold/30 rounded-sm flex items-center justify-center shadow-[0_0_15px_rgba(197,160,89,0.1)]">
+            <Activity className="text-corp-gold animate-pulse" size={20} />
           </div>
           <div>
-            <h1 className="font-display font-bold text-corp-platinum tracking-widest text-sm">WAR ROOM</h1>
-            <p className="text-[9px] text-corp-silver font-mono uppercase tracking-widest">SANDBOX: ACTIVE // ENCRYPTION: 256-BIT</p>
+            <h1 className="font-display font-bold text-corp-platinum tracking-widest text-sm drop-shadow-md">WAR ROOM</h1>
+            <p className="text-[9px] text-corp-silver font-mono uppercase tracking-widest text-shadow-sm">SANDBOX: ACTIVE // ENCRYPTION: 256-BIT</p>
           </div>
         </div>
-        <div className="flex items-center gap-3 bg-black/50 px-3 py-1.5 rounded-sm border border-corp-border">
-          <span className={`w-1.5 h-1.5 rounded-full ${isLoading ? 'bg-corp-gold animate-pulse' : 'bg-emerald-500'}`}></span>
+        <div className="flex items-center gap-3 bg-black/50 px-3 py-1.5 rounded-sm border border-corp-border shadow-inner">
+          <span className={`w-1.5 h-1.5 rounded-full ${isLoading ? 'bg-corp-gold animate-pulse' : 'bg-emerald-500 shadow-[0_0_8px_#10b981]'}`}></span>
           <span className="text-[10px] font-mono text-corp-silver">{isLoading ? 'ANALYZING SCENARIO...' : 'SYSTEM READY'}</span>
         </div>
       </div>
@@ -60,8 +60,8 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({ messages, isLoading, o
 
               {/* Avatar */}
               <div className={`w-8 h-8 rounded-sm flex-shrink-0 flex items-center justify-center border ${msg.role === 'user'
-                  ? 'bg-corp-blue/10 border-corp-blue/30 text-corp-blue'
-                  : 'bg-corp-gold/10 border-corp-gold/30 text-corp-gold shadow-[0_0_15px_rgba(212,175,55,0.15)]'
+                ? 'bg-corp-blue/10 border-corp-blue/30 text-corp-blue'
+                : 'bg-corp-gold/10 border-corp-gold/30 text-corp-gold shadow-[0_0_15px_rgba(212,175,55,0.15)]'
                 }`}>
                 {msg.role === 'user' ? <span className="font-mono text-xs font-bold">ME</span> : <Crown size={14} className="fill-current" />}
               </div>
@@ -110,7 +110,7 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({ messages, isLoading, o
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type mail draft or scenario (e.g., 'Draft raise request')..."
-              className="w-full bg-[#050505] border border-corp-border hover:border-corp-silver/30 focus:border-corp-blue rounded-sm p-4 pr-12 text-corp-platinum placeholder-corp-silver/30 focus:outline-none focus:ring-1 focus:ring-corp-blue/20 transition-all font-mono text-sm"
+              className="w-full luxury-input rounded-sm p-4 pr-12 text-corp-platinum placeholder-corp-silver/30 focus:outline-none transition-all font-mono text-sm"
               disabled={isLoading}
             />
           </div>
