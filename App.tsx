@@ -315,7 +315,7 @@ const App: React.FC = () => {
         <div className={`
           fixed md:relative z-40 h-full transition-transform duration-300 bg-corp-onyx
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-          flex-shrink-0 border-r border-corp-border/30
+          flex-shrink-0 border-r border-corp-border/30 w-20
         `}>
           <TacticalMenu
             activeTab={activeTab}
