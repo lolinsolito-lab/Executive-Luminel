@@ -57,16 +57,24 @@ export const DailyBriefing: React.FC<DailyBriefingProps> = ({ userTier }) => {
                 </div>
             )}
 
-            {/* Expanded Card */}
+            {/* Expanded Card Modal Overlay */}
             {isExpanded && (
-                <div className="animate-fade-in">
-                    <StrategyCardComponent
-                        card={card}
-                        onApply={() => {
-                            console.log('Strategy applied:', card.id);
-                            // TODO: Track application in database
-                        }}
-                    />
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in" onClick={() => setIsExpanded(false)}>
+                    <div className="max-w-md w-full" onClick={e => e.stopPropagation()}>
+                        <StrategyCardComponent
+                            card={card}
+                            onApply={() => {
+                                console.log('Strategy applied:', card.id);
+                                setIsExpanded(false);
+                            }}
+                        />
+                        <button
+                            onClick={() => setIsExpanded(false)}
+                            className="mt-4 w-full py-2 text-[10px] font-mono uppercase text-corp-silver hover:text-white transition-colors"
+                        >
+                            Close Briefing
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

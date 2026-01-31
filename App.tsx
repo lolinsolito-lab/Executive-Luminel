@@ -61,11 +61,17 @@ const App: React.FC = () => {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           // Try to fetch profile
+          // GUARD: Don't fetch if ID is invalid or placeholder "0"
+          if (!user.id || user.id === "0") {
+            console.warn("Invalid User ID detected, skipping profile fetch");
+            return;
+          }
+
           let { data: profile, error } = await supabase.from('profiles').select('*').eq('id', user.id).single();
 
           // AUTO-HEAL: If profile missing (or 500 error due to corruption), try creating it
           if (!profile || error) {
-            console.warn("Profile missing or error, attempting auto-heal...", error);
+            console.log("Profile missing, attempting auto-heal..."); // Reduced log level from warn
             const { data: newProfile, error: createError } = await supabase.from('profiles').insert({
               id: user.id,
               email: user.email!,

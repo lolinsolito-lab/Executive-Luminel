@@ -35,16 +35,29 @@ create table if not exists public.profiles (
 -- Enable RLS
 alter table public.profiles enable row level security;
 
--- Users can only see their own profile
+-- Helper function to avoid infinite recursion in RLS
+create or replace function public.is_admin()
+returns boolean as $$
+begin
+  return exists (
+    select 1
+    from public.profiles
+    where id = auth.uid()
+    and is_admin = true
+  );
+end;
+$$ language plpgsql security definer;
+
+-- Users can view own profile
 create policy "Users can view own profile"
   on public.profiles for select
   using (auth.uid() = id);
 
--- Admins can view all profiles
+-- Admins can view all profiles (Non-Recursive)
 create policy "Admins can view all profiles"
   on public.profiles for select
   using (
-    (select is_admin from public.profiles where id = auth.uid()) = true
+    public.is_admin()
   );
 
 -- Users can update their own profile
@@ -56,7 +69,7 @@ create policy "Users can update own profile"
 create policy "Admins can update any profile"
   on public.profiles for update
   using (
-    (select is_admin from public.profiles where id = auth.uid()) = true
+    public.is_admin()
   );
 
 -- Auto-create profile on signup
