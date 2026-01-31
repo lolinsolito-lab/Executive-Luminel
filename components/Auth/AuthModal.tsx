@@ -11,11 +11,13 @@ interface AuthModalProps {
 
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => {
     const [isLogin, setIsLogin] = useState(true);
+    const [isRecover, setIsRecover] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [message, setMessage] = useState<string | null>(null);
 
     if (!isOpen) return null;
 
@@ -23,14 +25,23 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
         e.preventDefault();
         setLoading(true);
         setError(null);
+        setMessage(null);
 
         try {
-            if (isLogin) {
+            if (isRecover) {
+                const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: window.location.origin
+                });
+                if (error) throw error;
+                setMessage("Link di recupero inviato. Controlla la tua email.");
+            } else if (isLogin) {
                 const { error } = await supabase.auth.signInWithPassword({
                     email,
                     password
                 });
                 if (error) throw error;
+                onSuccess();
+                onClose();
             } else {
                 const { error } = await supabase.auth.signUp({
                     email,
@@ -42,9 +53,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                     }
                 });
                 if (error) throw error;
+                onSuccess();
+                onClose();
             }
-            onSuccess();
-            onClose();
         } catch (err: any) {
             setError(err.message || "Authentication failed");
         } finally {
@@ -66,14 +77,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
 
                 <div className="p-8">
                     <h2 className="text-2xl font-display font-bold text-center text-corp-platinum mb-2">
-                        {isLogin ? 'Bentornato, Executive' : 'inizia la scalata'}
+                        {isRecover ? 'Recupero Password' : (isLogin ? 'Bentornato, Executive' : 'Inizia la scalata')}
                     </h2>
                     <p className="text-center text-corp-silver/60 text-sm mb-8">
-                        {isLogin ? 'Accedi al tuo terminale strategico' : 'Crea il tuo profilo e accedi al vault'}
+                        {isRecover ? 'Inserisci la tua email aziendale' : (isLogin ? 'Accedi al tuo terminale strategico' : 'Crea il tuo profilo e accedi al vault')}
                     </p>
 
                     <form onSubmit={handleAuth} className="space-y-4">
-                        {!isLogin && (
+                        {!isLogin && !isRecover && (
                             <div className="space-y-1">
                                 <label className="text-xs font-mono text-corp-silver uppercase tracking-wider">Nome Completo</label>
                                 <div className="relative">
@@ -82,9 +93,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                                         type="text"
                                         value={fullName}
                                         onChange={(e) => setFullName(e.target.value)}
-                                        className="w-full bg-black/40 border border-corp-border rounded p-2 pl-10 text-corp-platinum focus:border-corp-gold focus:outline-none transition-colors"
+                                        className="w-full bg-white border border-corp-border/30 rounded p-2 pl-10 text-corp-platinum placeholder:text-corp-silver/40 focus:border-corp-gold focus:outline-none transition-colors"
                                         placeholder="John Doe"
-                                        required={!isLogin}
+                                        required={!isLogin && !isRecover}
                                     />
                                 </div>
                             </div>
@@ -98,31 +109,39 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-black/40 border border-corp-border rounded p-2 pl-10 text-corp-platinum focus:border-corp-gold focus:outline-none transition-colors"
+                                    className="w-full bg-white border border-corp-border/30 rounded p-2 pl-10 text-corp-platinum placeholder:text-corp-silver/40 focus:border-corp-gold focus:outline-none transition-colors"
                                     placeholder="name@company.com"
                                     required
                                 />
                             </div>
                         </div>
 
-                        <div className="space-y-1">
-                            <label className="text-xs font-mono text-corp-silver uppercase tracking-wider">Password</label>
-                            <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-corp-silver/50" size={16} />
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-black/40 border border-corp-border rounded p-2 pl-10 text-corp-platinum focus:border-corp-gold focus:outline-none transition-colors"
-                                    placeholder="••••••••"
-                                    required
-                                />
+                        {!isRecover && (
+                            <div className="space-y-1">
+                                <label className="text-xs font-mono text-corp-silver uppercase tracking-wider">Password</label>
+                                <div className="relative">
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-corp-silver/50" size={16} />
+                                    <input
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        className="w-full bg-white border border-corp-border/30 rounded p-2 pl-10 text-corp-platinum placeholder:text-corp-silver/40 focus:border-corp-gold focus:outline-none transition-colors"
+                                        placeholder="••••••••"
+                                        required
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         {error && (
-                            <div className="p-3 bg-red-900/20 border border-red-500/30 rounded text-red-400 text-xs text-center">
+                            <div className="p-3 bg-red-900/20 border border-red-500/30 rounded text-red-600 text-xs text-center font-medium">
                                 {error}
+                            </div>
+                        )}
+
+                        {message && (
+                            <div className="p-3 bg-emerald-900/10 border border-emerald-500/30 rounded text-emerald-600 text-xs text-center font-medium">
+                                {message}
                             </div>
                         )}
 
@@ -133,23 +152,45 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                         >
                             {loading ? <Loader className="animate-spin" size={18} /> : (
                                 <>
-                                    {isLogin ? 'ACCEDI AL SISTEMA' : 'REGISTRA ACCOUNT'}
-                                    <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                                    {isRecover ? 'INVIA LINK DI RECUPERO' : (isLogin ? 'ACCEDI AL SISTEMA' : 'REGISTRA ACCOUNT')}
+                                    {!isRecover && <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />}
                                 </>
                             )}
                         </button>
                     </form>
 
-                    <div className="mt-6 text-center">
-                        <button
-                            onClick={() => setIsLogin(!isLogin)}
-                            className="text-xs text-corp-silver hover:text-corp-gold transition-colors underline decoration-dotted"
-                        >
-                            {isLogin ? 'Non hai un account? Registrati' : 'Hai già un account? Accedi'}
-                        </button>
+                    <div className="mt-6 flex flex-col gap-2 text-center">
+                        {!isRecover ? (
+                            <>
+                                <button
+                                    onClick={() => setIsLogin(!isLogin)}
+                                    className="text-xs text-corp-silver hover:text-corp-gold transition-colors underline decoration-dotted"
+                                >
+                                    {isLogin ? 'Non hai un account? Registrati' : 'Hai già un account? Accedi'}
+                                </button>
+                                {isLogin && (
+                                    <button
+                                        onClick={() => setIsRecover(true)}
+                                        className="text-[10px] text-corp-silver/60 hover:text-corp-platinum transition-colors"
+                                    >
+                                        Password dimenticata?
+                                    </button>
+                                )}
+                            </>
+                        ) : (
+                            <button
+                                onClick={() => { setIsRecover(false); setIsLogin(true); }}
+                                className="text-xs text-corp-silver hover:text-corp-gold transition-colors"
+                            >
+                                Torna al login
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
         </div>
+    );
+            </div >
+        </div >
     );
 };

@@ -122,8 +122,36 @@ const App: React.FC = () => {
     setMessages(prev => [...prev, userMsg]);
     setIsLoading(true);
 
+    // CHECK TIER LIMITS
+    const today = new Date().toISOString().split('T')[0];
+    const usageKey = `luminel_usage_${today}_${userProfile.id}`;
+    const currentUsage = parseInt(localStorage.getItem(usageKey) || '0', 10);
+    const LIMIT = 3;
+
+    if (userProfile.subscription === 'GRINDER' && currentUsage >= LIMIT) {
+      setIsUpgradeOpen(true);
+      setUpgradeFeature('DAILY_LIMIT_REACHED');
+
+      // Add system message about limit
+      const limitMsg: Message = {
+        id: uuidv4(),
+        role: 'model',
+        content: "⛔ **SYSTEM HALT**: Tier GRINDER limit reached (3/3 daily analysis).\n\nUpgrade to **STRATEGIST** for unlimited neural processing.",
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, limitMsg]);
+
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const responseText = await sendMessageToCoach(text);
+
+      // Increment usage if successful
+      if (userProfile.subscription === 'GRINDER') {
+        localStorage.setItem(usageKey, (currentUsage + 1).toString());
+      }
 
       const botMsg: Message = {
         id: uuidv4(),
@@ -139,6 +167,7 @@ const App: React.FC = () => {
       const capMatch = responseText.match(/\[\[CAPITAL:\s*([+-]?\d+)\]\]/i);
 
       if (perfMatch || capMatch) {
+        // ... existing parsing logic ...
         setUserProfile(prev => {
           let newPerf = prev.performanceXP;
           let newCap = prev.politicalCapital;
@@ -163,6 +192,7 @@ const App: React.FC = () => {
 
     } catch (error) {
       console.error("Error sending message", error);
+      // Optional: Add error message to chat
     } finally {
       setIsLoading(false);
     }
