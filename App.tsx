@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from './lib/supabase';
 import { Analytics } from '@vercel/analytics/react';
-import { Sidebar } from './components/Sidebar';
+import { TacticalMenu } from './components/TacticalMenu';
+import { DataStream } from './components/DataStream';
+// import { Sidebar } from './components/Sidebar'; // Legacy V5 Sidebar removed for V6 Blueprint
 import { ChatConsole } from './components/ChatConsole';
 import { StrategicMapModal } from './components/StrategicMapModal';
 import { UpgradeModal } from './components/Paywall/UpgradeModal';
@@ -15,6 +17,7 @@ import { INITIAL_USER, WELCOME_MESSAGE } from './constants';
 import { sendMessageToCoach, initializeChat } from './services/geminiService';
 import { v4 as uuidv4 } from 'uuid';
 import { Menu, X, Crown } from 'lucide-react';
+import { Session } from '@supabase/supabase-js';
 
 // Admin emails - add your email here
 const ADMIN_EMAILS = ['lolinsolito@gmail.com'];
@@ -22,7 +25,9 @@ const ADMIN_EMAILS = ['lolinsolito@gmail.com'];
 type AppPage = 'landing' | 'app' | 'thank-you' | 'admin' | 'legal-terms' | 'legal-privacy' | 'legal-cookies' | 'legal-disclaimer';
 
 const App: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<AppPage>('landing');
+  // State
+  const [session, setSession] = useState<Session | null>(null);
+  const [currentPage, setCurrentPage] = useState<string>('landing');
   const [userProfile, setUserProfile] = useState<UserProfile>(INITIAL_USER);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);

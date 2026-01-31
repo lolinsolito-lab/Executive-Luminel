@@ -20,15 +20,19 @@
     --color-corp-silver: #94A3B8;
     --color-corp-border: rgba(197, 160, 89, 0.2);
 
-    /* Tactical Grid Pattern for V5 */
-    background-color: var(--color-corp-onyx);
+    /* FORCE MIDNIGHT NAVY BACKGROUND */
+    background-color: #0B1019 !important;
     background-image:
       linear-gradient(rgba(197, 160, 89, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(197, 160, 89, 0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    background-position: center center;
-    background-attachment: fixed;
-    color: var(--color-corp-platinum);
+      linear-gradient(90deg, rgba(197, 160, 89, 0.03) 1px, transparent 1px) !important;
+    background-size: 40px 40px !important;
+    background-position: center center !important;
+    background-attachment: fixed !important;
+    color: #F5F5F7 !important;
+
+    /* Ensure opacity is 100% to hide body background */
+    opacity: 1;
+    isolation: isolate;
   }
 
   body {
