@@ -111,7 +111,7 @@ const Navbar = ({ onEnterApp }: { onEnterApp: () => void }) => {
             <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <img src="/luminel-phoenix.png" alt="L" className="h-10 w-auto object-contain rounded-sm" />
-                    <span className="font-serif font-bold text-corp-platinum tracking-widest text-xl">LUMINEL</span>
+                    <span className="font-serif font-bold text-corp-platinum tracking-widest text-lg md:text-xl">EXECUTIVE LUMINEL</span>
                 </div>
 
                 <div className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-widest text-corp-silver">
@@ -446,7 +446,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                     <div className="space-y-6">
                         <div className="flex items-center gap-3">
                             <img src="/luminel-phoenix.png" alt="L" className="h-12 w-auto object-contain rounded-sm" />
-                            <span className="font-serif font-bold text-2xl text-corp-platinum tracking-widest">LUMINEL</span>
+                            <span className="font-serif font-bold text-2xl text-corp-platinum tracking-widest">EXECUTIVE LUMINEL</span>
                         </div>
                         <p className="text-xs text-corp-silver max-w-xs leading-relaxed">
                             Piattaforma avanzata di intelligenza strategica per la carriera.
