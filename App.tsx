@@ -80,14 +80,14 @@ const App: React.FC = () => {
 
   // BRAND SIGNATURE
   useEffect(() => {
+    const gold = 'color: #C5A059';
+    const bgDark = 'background: #0A0A0A';
+
     console.log(
-      "%c LUMINEL EXECUTIVE %c V5.0 ",
-      "background: linear-gradient(to right, #C5A059, #E5D3B3); color: #1A1A1A; padding: 6px 10px; border-radius: 4px 0 0 4px; font-weight: 900; font-family: 'Cinzel', serif; letter-spacing: 2px;",
-      "background: #1A1A1A; color: #C5A059; padding: 6px 10px; border-radius: 0 4px 4px 0; font-family: 'JetBrains Mono', monospace; font-weight: bold;"
-    );
-    console.log(
-      "%c THE ELITE DOES NOT COMPETE. IT DOMINATES. ",
-      "color: #C5A059; font-style: italic; font-family: 'Cinzel', serif; font-size: 12px; margin-top: 5px;"
+      "%c EXECUTIVE LUMINEL %c V5.0 \n%c THE ELITE DOES NOT COMPETE. IT DOMINATES. ",
+      "background: linear-gradient(90deg, #C5A059 0%, #E5D3B3 100%); color: #000; padding: 5px 10px; font-weight: 900; font-family: sans-serif; font-size: 14px; border-radius: 2px;",
+      "background: #1A1A1A; color: #C5A059; padding: 5px 10px; border-radius: 2px; font-family: monospace; font-weight: bold; border: 1px solid #C5A059;",
+      "color: #C5A059; font-style: italic; font-family: serif; font-size: 12px; padding-top: 10px; display: block;"
     );
   }, []);
 
