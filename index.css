@@ -8,11 +8,12 @@
     /* True Black Foundation */
     color: #E2E2E2;
     /* High Contrast Platinum */
+    /* Tactical Grid Pattern (V4 Legacy x V5 Elite) */
     background-image:
-      radial-gradient(rgba(197, 160, 89, 0.15) 1px, transparent 1px),
-      radial-gradient(rgba(197, 160, 89, 0.1) 1px, transparent 1px);
-    background-size: 50px 50px, 25px 25px;
-    background-position: 0 0, 12.5px 12.5px;
+      linear-gradient(rgba(197, 160, 89, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(197, 160, 89, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center center;
     background-attachment: fixed;
   }
 }
