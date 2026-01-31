@@ -37,25 +37,25 @@ const TESTIMONIALS = [
 const FEATURES = [
     {
         icon: Brain,
-        title: "Neural Codex™",
+        title: "Mind Decoding",
         description: "18 strategie da 48 Leggi del Potere, Atomic Habits, Psicologia Oscura. Applicate al tuo caso specifico.",
         tier: "STRATEGIST+"
     },
     {
         icon: Target,
-        title: "Career War Room",
+        title: "Simulation Engine",
         description: "Simulatore AI che calcola probabilità di successo di ogni mossa. Prima di agire, testa.",
         tier: "ALL TIERS"
     },
     {
         icon: TrendingUp,
-        title: "Out-of-Cycle Window",
+        title: "Political Leverage",
         description: "La massa aspetta Dicembre. L'elite negozia a Marzo. Timing strategico per promozioni.",
         tier: "STRATEGIST+"
     },
     {
         icon: Lock,
-        title: "The Vault",
+        title: "Execution Directives",
         description: "Script di negoziazione, template email, protocolli testati. Valore €5,000+.",
         tier: "EXECUTIVE"
     }
@@ -182,9 +182,31 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                     </div>
                 </div>
 
-                {/* Scroll Indicator */}
                 <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
                     <ChevronRight size={24} className="text-corp-silver rotate-90" />
+                </div>
+            </section>
+
+            {/* MANIFESTO SECTION (VIRAL HOOK) */}
+            <section className="py-20 px-6 bg-corp-platinum text-corp-onyx border-y border-corp-gold/30">
+                <div className="max-w-4xl mx-auto text-center">
+                    <h2 className="text-xs font-mono uppercase tracking-[0.3em] text-corp-gold mb-8">The Rules of the Game</h2>
+                    <div className="space-y-12">
+                        <div className="group">
+                            <h3 className="text-2xl md:text-4xl font-serif font-bold mb-2 group-hover:text-corp-gold transition-colors duration-300">"Competence is the baseline. Politics is the multiplier."</h3>
+                            <p className="text-corp-silver font-mono text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Rule No. 1</p>
+                        </div>
+                        <div className="w-12 h-px bg-corp-gold/30 mx-auto"></div>
+                        <div className="group">
+                            <h3 className="text-2xl md:text-4xl font-serif font-bold mb-2 group-hover:text-corp-gold transition-colors duration-300">"Don't ask for permission. Create leverage."</h3>
+                            <p className="text-corp-silver font-mono text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Rule No. 2</p>
+                        </div>
+                        <div className="w-12 h-px bg-corp-gold/30 mx-auto"></div>
+                        <div className="group">
+                            <h3 className="text-2xl md:text-4xl font-serif font-bold mb-2 group-hover:text-corp-gold transition-colors duration-300">"Nice guys finish last. Architects define the finish line."</h3>
+                            <p className="text-corp-silver font-mono text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Rule No. 3</p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -213,6 +235,67 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                         <div className="p-6 border border-corp-danger/30 bg-corp-danger/5 rounded-sm">
                             <X size={24} className="text-corp-danger mx-auto mb-4" />
                             <div className="text-sm text-corp-silver">Ignori la politica aziendale</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* TRAP VS ESCAPE (EDUCATION) */}
+            <section className="py-24 px-6 bg-corp-bg">
+                <div className="max-w-5xl mx-auto">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
+                            Scegli il tuo <span className="text-corp-gold">Ruolo</span>
+                        </h2>
+                        <p className="text-corp-silver">Ci sono due modi di giocare. Solo uno vince.</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-0 border border-corp-border/50 rounded-lg overflow-hidden shadow-2xl">
+                        {/* THE TRAP */}
+                        <div className="p-10 bg-corp-platinum/5 border-r border-corp-border/30">
+                            <h3 className="text-xl font-mono text-corp-silver uppercase tracking-widest mb-8 text-center">The Employee</h3>
+                            <div className="space-y-6">
+                                <div className="flex items-center gap-4 text-corp-silver/70">
+                                    <X size={20} className="text-corp-silver" />
+                                    <span>Aspetta la "Performance Review"</span>
+                                </div>
+                                <div className="flex items-center gap-4 text-corp-silver/70">
+                                    <X size={20} className="text-corp-silver" />
+                                    <span>Crede che HR sia amico</span>
+                                </div>
+                                <div className="flex items-center gap-4 text-corp-silver/70">
+                                    <X size={20} className="text-corp-silver" />
+                                    <span>Lavora 10h/giorno sperando notino</span>
+                                </div>
+                                <div className="flex items-center gap-4 text-corp-silver/70">
+                                    <X size={20} className="text-corp-silver" />
+                                    <span>Chiede permesso</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* THE ESCAPE */}
+                        <div className="p-10 bg-corp-onyx relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-corp-gold/10 to-transparent pointer-events-none"></div>
+                            <h3 className="text-xl font-mono text-corp-gold uppercase tracking-widest mb-8 text-center font-bold">The Architect</h3>
+                            <div className="space-y-6 relative z-10">
+                                <div className="flex items-center gap-4 text-corp-platinum font-medium">
+                                    <Check size={20} className="text-corp-gold" />
+                                    <span>Negozia Off-Cycle (Marzo/Settembre)</span>
+                                </div>
+                                <div className="flex items-center gap-4 text-corp-platinum font-medium">
+                                    <Check size={20} className="text-corp-gold" />
+                                    <span>Usa HR come leva tattica</span>
+                                </div>
+                                <div className="flex items-center gap-4 text-corp-platinum font-medium">
+                                    <Check size={20} className="text-corp-gold" />
+                                    <span>Crea asset strategici visibili</span>
+                                </div>
+                                <div className="flex items-center gap-4 text-corp-platinum font-medium">
+                                    <Check size={20} className="text-corp-gold" />
+                                    <span>Crea opzioni</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -378,8 +461,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 </div>
             </section>
 
-            {/* FOOTER */}
-            <footer className="py-12 px-6 border-t border-corp-border bg-black/50">
+            {/* FOOTER - FIXED CONTRAST */}
+            <footer className="py-12 px-6 border-t border-corp-border bg-corp-platinum text-corp-onyx">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-2">
                         <Crown size={16} className="text-corp-gold" />
