@@ -1,14 +1,15 @@
 import React from 'react';
 import { UserProfile } from '../types';
-import { Shield, Lock, Crown, ChevronRight, LayoutGrid, Clock, Gem, FileText, Briefcase, BookOpen } from 'lucide-react';
+import { Shield, Lock, Crown, ChevronRight, LayoutGrid, Clock, Gem, FileText, Briefcase, BookOpen, Sparkles } from 'lucide-react';
 import { DailyBriefing } from './NeuralCodex/DailyBriefing';
 
 interface SidebarProps {
     user: UserProfile;
     onOpenMap: () => void;
+    onOpenUpgrade?: (feature?: string) => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade }) => {
     return (
         <div className="w-full md:w-[350px] war-room-panel border-r border-corp-border flex flex-col h-full font-sans relative z-20">
 
@@ -23,7 +24,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap }) => {
                             Career Intelligence for the 1%
                         </p>
                     </div>
-                    <div className="px-2 py-1 bg-corp-gold text-corp-onyx rounded-sm text-[9px] font-bold font-mono tracking-widest flex items-center gap-1">
+                    <div
+                        onClick={() => onOpenUpgrade?.()}
+                        className="px-2 py-1 bg-corp-gold text-corp-onyx rounded-sm text-[9px] font-bold font-mono tracking-widest flex items-center gap-1 cursor-pointer hover:bg-corp-gold/80 transition-colors"
+                        title="Click to upgrade"
+                    >
                         <Crown size={10} />
                         {user.subscription}
                     </div>
