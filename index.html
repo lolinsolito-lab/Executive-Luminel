@@ -8,153 +8,10 @@
   <meta name="description"
     content="Elite AI-powered career coaching and simulation platform. Strategic advancement for ambitious professionals." />
   <link rel="icon" type="image/png" href="/favicon.png" />
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/png" href="/favicon.png" />
   <link
     href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&family=Cinzel:wght@400;700&display=swap"
     rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            display: ['Montserrat', 'sans-serif'], // Brand Font
-            mono: ['JetBrains Mono', 'monospace'],
-            serif: ['Cinzel', 'serif'],
-          },
-          colors: {
-            corp: {
-              onyx: '#F9F8F2', // Pearl White (Main BG)
-              platinum: '#1A1A1A', // Deep Charcoal (Primary Text)
-              bg: '#FFFFFF', // Pure White
-              glass: 'rgba(255, 255, 255, 0.8)', // Frosted White Glass
-              border: 'rgba(197, 160, 89, 0.3)', // Gold Border
-              gold: '#C5A059', // Champagne Gold
-              'gold-light': '#E5D3B3',
-              blue: '#2A5C82',
-              danger: '#8B0000',
-              silver: '#666666', // Darker Silver for readability on white
-            }
-          },
-          animation: {
-            'shake': 'shake 0.5s ease-in-out',
-            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'fade-in': 'fadeIn 0.4s ease-out forwards',
-            'glow': 'glow 2s ease-in-out infinite alternate',
-            'float': 'float 3s ease-in-out infinite',
-            'shimmer': 'shimmer 2.5s linear infinite',
-            'tremble': 'tremble 0.15s ease-in-out infinite',
-            'golden-pulse': 'goldenPulse 2s ease-in-out infinite',
-          },
-          keyframes: {
-            shake: {
-              '0%, 100%': { transform: 'translateX(0)' },
-              '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-2px)' },
-              '20%, 40%, 60%, 80%': { transform: 'translateX(2px)' }
-            },
-            fadeIn: {
-              '0%': { opacity: '0', transform: 'scale(0.95) translateY(10px)' },
-              '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
-            },
-            glow: {
-              'from': { boxShadow: '0 0 5px rgba(197, 160, 89, 0.2)' },
-              'to': { boxShadow: '0 0 30px rgba(197, 160, 89, 0.6)' },
-            },
-            float: {
-              '0%, 100%': { transform: 'translateY(0)' },
-              '50%': { transform: 'translateY(-5px)' },
-            },
-            shimmer: {
-              '0%': { backgroundPosition: '-200% 0' },
-              '100%': { backgroundPosition: '200% 0' },
-            },
-            tremble: {
-              '0%, 100%': { transform: 'rotate(0deg)' },
-              '25%': { transform: 'rotate(-3deg)' },
-              '75%': { transform: 'rotate(3deg)' },
-            },
-            goldenPulse: {
-              '0%, 100%': { opacity: '0.8', boxShadow: '0 0 15px rgba(197,160,89,0.2)' },
-              '50%': { opacity: '1', boxShadow: '0 0 30px rgba(197,160,89,0.5)' },
-            }
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    body {
-      background-color: #F9F8F2;
-      /* Pearl White */
-      color: #1A1A1A;
-      /* Golden Drops Pattern */
-      background-image:
-        radial-gradient(#C5A059 1.5px, transparent 1.5px),
-        radial-gradient(#C5A059 1px, transparent 1px);
-      background-size: 60px 60px, 40px 40px;
-      background-position: 0 0, 30px 30px;
-      background-attachment: fixed;
-    }
-
-    /* Make scrollbar elegant for light mode */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #F9F8F2;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #C5A059;
-      border-radius: 3px;
-    }
-
-    .war-room-panel {
-      background: rgba(10, 10, 10, 0.85);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(229, 229, 229, 0.08);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    }
-
-    .holographic-border {
-      box-shadow: 0 0 15px rgba(0, 122, 255, 0.15);
-      border: 1px solid rgba(0, 122, 255, 0.3);
-    }
-
-    .gold-fog {
-      background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.2) 0%, rgba(10, 10, 10, 0) 60%);
-      animation: goldenPulse 3s ease-in-out infinite;
-    }
-
-    .gold-fog::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
-      background-size: 200% 100%;
-      animation: shimmer 3s linear infinite;
-    }
-
-    .lock-tremble:hover {
-      animation: tremble 0.15s ease-in-out infinite;
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #333;
-      border-radius: 2px;
-    }
-  </style>
   <script type="importmap">
 {
   "imports": {
@@ -168,7 +25,7 @@
   }
 }
 </script>
-  <link rel="stylesheet" href="/index.css">
+
 </head>
 
 <body>

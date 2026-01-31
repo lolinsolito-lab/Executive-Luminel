@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #F9F8F2; /* Pearl White */
+    color: #1A1A1A;
+    /* Golden Drops Pattern */
+    background-image: 
+      radial-gradient(#C5A059 1.5px, transparent 1.5px), 
+      radial-gradient(#C5A059 1px, transparent 1px);
+    background-size: 60px 60px, 40px 40px;
+    background-position: 0 0, 30px 30px;
+    background-attachment: fixed;
+  }
+}
+
+/* Custom Utilities that were in HTML script */
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-pulse-slow {
+  animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-golden-pulse {
+  animation: goldenPulse 2s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes goldenPulse {
+  0%, 100% { opacity: 0.8; box-shadow: 0 0 15px rgba(197,160,89,0.2); }
+  50% { opacity: 1; box-shadow: 0 0 30px rgba(197,160,89,0.5); }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F9F8F2;
+}
+::-webkit-scrollbar-thumb {
+  background: #C5A059;
+  border-radius: 3px;
+}
