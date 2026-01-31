@@ -3,17 +3,43 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    background-color: #050505;
-    /* True Black Foundation */
-    color: #E2E2E2;
-    /* High Contrast Platinum */
-    /* Tactical Grid Pattern (V4 Legacy x V5 Elite) */
+  :root {
+    /* DEFAULT THEME: PEARL WHITE (Landing Page) */
+    --color-corp-onyx: #F9F8F2;
+    --color-corp-platinum: #1A1A1A;
+    --color-corp-bg: #FFFFFF;
+    --color-corp-silver: #666666;
+    --color-corp-border: rgba(197, 160, 89, 0.3);
+  }
+
+  /* V5 EXECUTIVE THEME: MIDNIGHT NAVY (Dashboard) */
+  .v5-executive {
+    --color-corp-onyx: #0B1019;
+    --color-corp-platinum: #F5F5F7;
+    --color-corp-bg: #111827;
+    --color-corp-silver: #94A3B8;
+    --color-corp-border: rgba(197, 160, 89, 0.2);
+
+    /* Tactical Grid Pattern for V5 */
+    background-color: var(--color-corp-onyx);
     background-image:
       linear-gradient(rgba(197, 160, 89, 0.03) 1px, transparent 1px),
       linear-gradient(90deg, rgba(197, 160, 89, 0.03) 1px, transparent 1px);
     background-size: 40px 40px;
     background-position: center center;
+    background-attachment: fixed;
+    color: var(--color-corp-platinum);
+  }
+
+  body {
+    background-color: var(--color-corp-onyx);
+    color: var(--color-corp-platinum);
+    /* Golden Drops Pattern for Landing */
+    background-image:
+      radial-gradient(#C5A059 1.5px, transparent 1.5px),
+      radial-gradient(#C5A059 1px, transparent 1px);
+    background-size: 60px 60px, 40px 40px;
+    background-position: 0 0, 30px 30px;
     background-attachment: fixed;
   }
 }

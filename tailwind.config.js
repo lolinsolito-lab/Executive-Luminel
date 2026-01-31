@@ -9,22 +9,21 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Inter', 'sans-serif'],
-                display: ['Montserrat', 'sans-serif'],
-                mono: ['JetBrains Mono', 'monospace'],
-                serif: ['Cinzel', 'serif'],
+                display: ['Playfair Display', 'serif'], // V5.0 Authority
+                mono: ['Space Mono', 'monospace'], // V5.0 Precision
             },
             colors: {
                 corp: {
-                    onyx: '#09090b', // Deep Black (Main BG)
-                    platinum: '#E2E2E2', // Platinum White (Primary Text)
-                    bg: '#141416', // Slightly lighter black for cards
-                    glass: 'rgba(255, 255, 255, 0.05)', // Frosted Glass
-                    border: 'rgba(197, 160, 89, 0.2)', // Gold Border
-                    gold: '#C5A059', // Champagne Gold
-                    'gold-light': '#E5D3B3',
-                    blue: '#3B82F6', // Brighter Blue for Dark Mode
-                    danger: '#EF4444', // Brighter Red
-                    silver: '#A1A1AA', // Zinc 400 for secondary text
+                    onyx: 'var(--color-corp-onyx)', // Dynamic: Pearl or Navy
+                    platinum: 'var(--color-corp-platinum)', // Dynamic: Dark or Light
+                    bg: 'var(--color-corp-bg)', // Dynamic
+                    glass: 'rgba(255, 255, 255, 0.05)', // Keep generic or make dynamic if needed
+                    border: 'var(--color-corp-border)',
+                    gold: '#C5A059', // Constant
+                    'gold-light': '#E5D3B3', // Constant
+                    blue: '#3B82F6',
+                    danger: '#EF4444',
+                    silver: 'var(--color-corp-silver)',
                 }
             },
             animation: {

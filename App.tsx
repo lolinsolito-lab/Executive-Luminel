@@ -287,9 +287,8 @@ const App: React.FC = () => {
 
     // 6. Main App
     return (
-      <div className="flex h-screen w-full overflow-hidden font-sans relative text-slate-200 bg-[#09090b] z-0">
-        {/* Cover the Pearl White fixed background from body */}
-        <div className="absolute inset-0 bg-[#09090b] z-[-1]" />
+      <div className="v5-executive flex h-screen w-full overflow-hidden font-sans relative z-0">
+        {/* V5 Background is handled by CSS class now */}
         {/* Mobile Header with Hamburger */}
         <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-corp-onyx border-b border-corp-border p-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
