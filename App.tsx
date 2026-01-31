@@ -54,24 +54,48 @@ const App: React.FC = () => {
   };
 
   // Load User Profile from DB
+  // Load User Profile from DB
   useEffect(() => {
     const loadUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
-        if (profile) {
-          setUserProfile(prev => ({
-            ...prev,
-            id: user.id,
-            email: user.email,
-            name: profile.full_name || user.email?.split('@')[0] || 'Executive',
-            subscription: profile.subscription_tier as any,
-            isAdmin: profile.is_admin,
-            performanceXP: profile.performance_xp,
-            politicalCapital: profile.political_capital,
-            ...prev
-          }));
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          // Try to fetch profile
+          let { data: profile, error } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+
+          // AUTO-HEAL: If profile missing (or 500 error due to corruption), try creating it
+          if (!profile || error) {
+            console.warn("Profile missing or error, attempting auto-heal...", error);
+            const { data: newProfile, error: createError } = await supabase.from('profiles').insert({
+              id: user.id,
+              email: user.email!,
+              full_name: user.user_metadata?.full_name || 'Executive',
+              subscription_tier: 'GRINDER'
+            }).select().single();
+
+            if (!createError) {
+              profile = newProfile;
+            } else {
+              console.error("Auto-heal failed:", createError);
+            }
+          }
+
+          if (profile) {
+            setUserProfile(prev => ({
+              ...prev,
+              id: user.id,
+              email: user.email,
+              name: profile.full_name || user.email?.split('@')[0] || 'Executive',
+              subscription: profile.subscription_tier as any,
+              isAdmin: profile.is_admin,
+              performanceXP: profile.performance_xp,
+              politicalCapital: profile.political_capital,
+              ...prev
+            }));
+          }
         }
+      } catch (err) {
+        console.error("Critical User Load Error:", err);
       }
     };
     loadUser();
@@ -257,7 +281,9 @@ const App: React.FC = () => {
 
     // 6. Main App
     return (
-      <div className="flex h-screen w-full overflow-hidden font-sans relative text-slate-200 bg-[#09090b]">
+      <div className="flex h-screen w-full overflow-hidden font-sans relative text-slate-200 bg-[#09090b] z-0">
+        {/* Cover the Pearl White fixed background from body */}
+        <div className="absolute inset-0 bg-[#09090b] z-[-1]" />
         {/* Mobile Header with Hamburger */}
         <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-corp-onyx border-b border-corp-border p-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
