@@ -87,20 +87,7 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({ messages, isLoading, o
         <div ref={messagesEndRef} />
       </div>
 
-      {/* 3. DAILY INTEL CARD (Bottom Overlay) */}
-      {messages.length < 3 && (
-        <div className="absolute bottom-24 left-6 right-6 md:left-20 md:right-20 bg-corp-bg/90 backdrop-blur-md border border-corp-border p-4 rounded-sm shadow-2xl z-20 animate-slide-up">
-          <div className="flex items-start gap-4">
-            <div className="p-2 bg-corp-gold/10 rounded-sm">
-              <Crown size={20} className="text-corp-gold" />
-            </div>
-            <div>
-              <h3 className="font-display font-bold text-corp-platinum text-sm tracking-wide">LAW 28: ENTER ACTION WITH BOLDNESS</h3>
-              <p className="font-mono text-xs text-corp-silver mt-1">If you are unsure of a course of action, do not attempt it. Your doubts and hesitations will infect your execution.</p>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* 3. DAILY INTEL CARD (Moved to DataStream V6) */}
 
       {/* 4. INPUT FIELD (Command Line) */}
       <div className="p-4 bg-corp-onyx border-t border-corp-border/30 z-30 shrink-0">

@@ -33,6 +33,7 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [isMapOpen, setIsMapOpen] = useState(false);
+  const [isHierarchyOpen, setIsHierarchyOpen] = useState(false);
   const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
   const [upgradeFeature, setUpgradeFeature] = useState<string | undefined>();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -365,7 +366,7 @@ const App: React.FC = () => {
 
         {/* --- RIGHT COLUMN: DATA STREAM --- */}
         {/* Hidden on mobile, visible on lg screens */}
-        <DataStream user={userProfile} />
+        <DataStream user={userProfile} onOpenHierarchy={() => setIsHierarchyOpen(true)} />
 
       </div>
     );
@@ -380,6 +381,12 @@ const App: React.FC = () => {
         isOpen={isMapOpen}
         onClose={() => setIsMapOpen(false)}
         user={userProfile}
+      />
+
+      <HierarchyModal
+        isOpen={isHierarchyOpen}
+        onClose={() => setIsHierarchyOpen(false)}
+        currentTier={userProfile.level}
       />
 
       <UpgradeModal
