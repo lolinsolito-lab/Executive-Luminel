@@ -4,10 +4,10 @@ import {
     ChevronRight, Star, ArrowRight, Check, X,
     TrendingUp, Users, Award, Sparkles
 } from 'lucide-react';
+import { LegalModal } from '../Legal/LegalModal';
 
 interface LandingPageProps {
     onEnterApp: () => void;
-    onOpenLegal?: (page: string) => void;
 }
 
 const TESTIMONIALS = [
@@ -95,7 +95,11 @@ const PRICING = [
     }
 ];
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onOpenLegal }) => {
+// Imports moved to top
+
+export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
+    const [legalType, setLegalType] = useState<'privacy' | 'terms' | 'cookies' | 'disclaimer' | null>(null);
+
     const [email, setEmail] = useState('');
     const [scrollY, setScrollY] = useState(0);
 
@@ -385,14 +389,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onOpenLega
                     <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-corp-silver/60">
                         <p>&copy; 2026 LUMINEL EXECUTIVE. Tutti i diritti riservati.</p>
                         <div className="flex gap-6">
-                            <button onClick={() => onOpenLegal?.('privacy')} className="hover:text-corp-gold transition-colors">Privacy Policy</button>
-                            <button onClick={() => onOpenLegal?.('terms')} className="hover:text-corp-gold transition-colors">Termini di Servizio</button>
-                            <button onClick={() => onOpenLegal?.('cookies')} className="hover:text-corp-gold transition-colors">Cookie Policy</button>
-                            <button onClick={() => onOpenLegal?.('disclaimer')} className="hover:text-corp-gold transition-colors">Disclaimer</button>
+                            <button onClick={() => setLegalType('privacy')} className="hover:text-corp-gold transition-colors">Privacy Policy</button>
+                            <button onClick={() => setLegalType('terms')} className="hover:text-corp-gold transition-colors">Termini di Servizio</button>
+                            <button onClick={() => setLegalType('cookies')} className="hover:text-corp-gold transition-colors">Cookie Policy</button>
+                            <button onClick={() => setLegalType('disclaimer')} className="hover:text-corp-gold transition-colors">Disclaimer</button>
                         </div>
                     </div>
                 </div>
             </footer>
+
+            <LegalModal
+                isOpen={!!legalType}
+                type={legalType}
+                onClose={() => setLegalType(null)}
+            />
         </div>
     );
 };

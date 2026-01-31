@@ -1,22 +1,22 @@
 import { UserProfile } from './types';
 
 export const INITIAL_USER: UserProfile = {
-  id: "user-123",
-  email: "lolinsolito@gmail.com",
-  name: "Michael Jara",
+  id: "",
+  email: "",
+  name: "Ospite",
   level: 'B1',
-  role: "Senior Consultant",
-  subscription: 'EXECUTIVE',
-  isAdmin: true,
+  role: "Consultant",
+  subscription: 'GRINDER', // Default to lowest tier
+  isAdmin: false,
 
-  performanceXP: 850,
+  performanceXP: 0,
   maxPerformanceXP: 1000,
 
-  politicalCapital: 320,
+  politicalCapital: 0,
   maxPoliticalCapital: 1000,
 
-  nextReviewDate: "Dec 2026",
-  outOfCycleWindow: 'OPEN',
+  nextReviewDate: "TBD",
+  outOfCycleWindow: 'CLOSED',
 
   skills: ["Cloud Arch", "Shadow Strategy", "Crisis Mgmt"]
 };

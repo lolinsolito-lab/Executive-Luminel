@@ -12,11 +12,7 @@ interface UpgradeModalProps {
     userEmail?: string;
 }
 
-// Stripe Payment Links (created via API)
-const PAYMENT_LINKS = {
-    STRATEGIST: 'https://buy.stripe.com/test_eVq00ievT88MgE10GkeLv0YZe7m01',
-    EXECUTIVE: 'https://buy.stripe.com/test_aFacN4gE10GkeLv0YZe7m01'
-};
+// Stripe Checkout handled via /api/create-checkout
 
 const TIERS = [
     {
@@ -95,22 +91,33 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
     const handleUpgrade = async (tierId: 'STRATEGIST' | 'EXECUTIVE') => {
         setIsLoading(tierId);
 
-        // For now, open Stripe Payment Link (replace URLs when you create them)
-        let paymentLink = PAYMENT_LINKS[tierId];
+        try {
+            const response = await fetch('/api/create-checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    tier: tierId,
+                    userId: userId,
+                    userEmail: userEmail
+                }),
+            });
 
-        if (paymentLink.includes('PLACEHOLDER')) {
-            alert(`⚠️ Stripe Payment Link non configurato per ${tierId}.\n\nCrea un Payment Link in Stripe Dashboard e aggiorna PAYMENT_LINKS nel codice.`);
+            const data = await response.json();
+
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                console.error('Checkout creation failed:', data.error);
+                alert('Errore inizializzazione checkout: ' + data.error);
+                setIsLoading(null);
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+            alert('Errore di connessione. Riprova.');
             setIsLoading(null);
-            return;
         }
-
-        // Add tracking params
-        if (userId) paymentLink += `?client_reference_id=${userId}`;
-        if (userEmail) paymentLink += `${userId ? '&' : '?'}prefilled_email=${encodeURIComponent(userEmail)}`;
-
-        // Redirect to Stripe
-        window.open(paymentLink, '_blank');
-        setIsLoading(null);
     };
 
     return (

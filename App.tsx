@@ -7,7 +7,8 @@ import { StrategicMapModal } from './components/StrategicMapModal';
 import { UpgradeModal } from './components/Paywall/UpgradeModal';
 import { LandingPage } from './components/Landing/LandingPage';
 import { AdminDashboard } from './components/Admin/AdminDashboard';
-import { LegalPage } from './components/Legal/LegalPage';
+import { LegalPage } from './components/Legal/LegalPage'; // Keep for structure but mostly unused now
+import { AuthModal } from './components/Auth/AuthModal';
 import { ThankYouPage } from './components/ThankYou/ThankYouPage';
 import { UserProfile, Message } from './types';
 import { INITIAL_USER, WELCOME_MESSAGE } from './constants';
@@ -30,13 +31,19 @@ const App: React.FC = () => {
   const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
   const [upgradeFeature, setUpgradeFeature] = useState<string | undefined>();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   // Check if current user is admin (DB flag or hardcoded list)
   const isAdmin = userProfile.isAdmin || ADMIN_EMAILS.includes(userProfile.email || '');
 
   // Handle entering the app from landing
+  // Handle entering the app from landing
   const handleEnterApp = () => {
-    setCurrentPage('app');
+    if (!userProfile.id || userProfile.id === "") {
+      setIsAuthOpen(true);
+    } else {
+      setCurrentPage('app');
+    }
   };
 
   // Open paywall with optional feature name
@@ -165,7 +172,6 @@ const App: React.FC = () => {
     return (
       <LandingPage
         onEnterApp={handleEnterApp}
-        onOpenLegal={(page) => setCurrentPage(`legal-${page}` as AppPage)}
       />
     );
   }
@@ -269,6 +275,15 @@ const App: React.FC = () => {
         userEmail={userProfile.email}
       />
       <Analytics />
+
+      <AuthModal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
+        onSuccess={() => {
+          // User loaded by useEffect, just need to enter app
+          setCurrentPage('app');
+        }}
+      />
     </div>
   );
 };
