@@ -258,7 +258,7 @@ const App: React.FC = () => {
 
     // 6. Main App
     return (
-      <div className="flex h-screen w-full overflow-hidden font-sans relative text-slate-200">
+      <div className="flex h-screen w-full overflow-hidden font-sans relative text-slate-200 bg-[#09090b]">
         {/* Mobile Header with Hamburger */}
         <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-corp-onyx border-b border-corp-border p-4 flex justify-between items-center">
           <div className="flex items-center gap-2">

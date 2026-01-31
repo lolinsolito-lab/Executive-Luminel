@@ -11,7 +11,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade }) => {
     return (
-        <div className="w-full md:w-[350px] war-room-panel border-r border-corp-border flex flex-col h-full font-sans relative z-20">
+        <div className="w-full md:w-[350px] flex-shrink-0 war-room-panel border-r border-corp-border flex flex-col h-full font-sans relative z-20">
 
             {/* 1. BRAND HEADER - V5.0 */}
             <div className="p-8 border-b border-corp-border bg-corp-onyx">
