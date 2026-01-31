@@ -69,7 +69,7 @@ const PRICING = [
         period: 'forever',
         description: 'Per chi inizia la scalata',
         features: ['Dashboard View', 'Strategic Map', '3 AI chat/giorno'],
-        cta: 'Start Free',
+        cta: 'Accesso Grinder',
         style: 'border-corp-silver/30'
     },
     {
@@ -80,7 +80,7 @@ const PRICING = [
         description: 'Per chi accelera',
         popular: true,
         features: ['AI illimitata', 'Neural Codex', 'Out-of-Cycle', 'Sandbox Simulator', 'Vault Base'],
-        cta: 'Upgrade Now',
+        cta: 'Diventa Strategist',
         style: 'border-corp-blue/50 bg-corp-blue/5 scale-105 shadow-[0_0_40px_rgba(0,122,255,0.2)]'
     },
     {
@@ -90,7 +90,7 @@ const PRICING = [
         period: '/mese',
         description: 'Per chi gioca per vincere',
         features: ['Priority AI', 'Full Vault', 'WhatsApp Direct', 'Email 4h response', '1-on-1 Strategy'],
-        cta: 'Go Elite',
+        cta: 'Richiedi Status Executive',
         style: 'border-corp-gold/50 bg-gradient-to-br from-corp-gold/10 to-transparent'
     }
 ];
@@ -129,9 +129,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                     </div>
 
                     {/* Main Headline */}
-                    <h1 className="text-5xl md:text-7xl font-display font-bold tracking-tight mb-6 animate-fade-in">
+                    <h1 className="text-5xl md:text-7xl font-serif font-bold tracking-tight mb-6 animate-fade-in drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]">
                         <span className="text-corp-platinum">LUMINEL</span>
-                        <span className="text-corp-gold"> EXECUTIVE</span>
+                        <span className="text-corp-gold font-serif italic"> EXECUTIVE</span>
                     </h1>
 
                     {/* Tagline */}
@@ -140,19 +140,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                     </p>
 
                     {/* Sub-headline */}
-                    <p className="text-lg text-corp-silver max-w-2xl mx-auto mb-12 animate-fade-in">
-                        L'AI che trasforma professionisti ambiziosi in leader.
+                    <p className="text-lg text-corp-silver max-w-2xl mx-auto mb-12 animate-fade-in font-light leading-relaxed">
+                        L'Intelligence che trasforma professionisti in <span className="text-white font-medium">Architetti del Potere</span>.
                         <br />
-                        <span className="text-corp-gold">Non lavori di più. Giochi meglio.</span>
+                        <span className="text-corp-gold italic">L'Elite non compete. Domina.</span>
                     </p>
 
                     {/* CTA Buttons */}
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in">
                         <button
                             onClick={onEnterApp}
-                            className="group px-8 py-4 bg-corp-gold text-corp-onyx font-bold uppercase tracking-widest text-sm hover:shadow-[0_0_30px_rgba(212,175,55,0.5)] transition-all"
+                            className="group px-8 py-4 bg-corp-gold text-corp-onyx font-serif font-bold uppercase tracking-[0.2em] text-sm hover:shadow-[0_0_40px_rgba(197,160,89,0.6)] hover:bg-white transition-all duration-500"
                         >
-                            Entra nella War Room
+                            Accedi al Vault
                             <ArrowRight size={16} className="inline ml-2 group-hover:translate-x-1 transition-transform" />
                         </button>
                         <a
@@ -197,9 +197,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                     <p className="text-lg text-corp-silver leading-relaxed mb-12">
                         Lavori 60 ore. Eccelli tecnicamente. Eppure la promozione va sempre a <span className="text-corp-gold">quello che sa giocare</span>.
                         <br /><br />
-                        Non è il merito che conta. È la <span className="text-corp-blue font-bold">strategia politica</span>.
+                        La Meritocrazia è una favola. La <span className="text-corp-gold font-serif italic">Strategia Politica</span> è la realtà.
                         <br /><br />
-                        La buona notizia? <span className="text-corp-platinum font-bold">Si può imparare.</span>
+                        Il sistema è truccato. <span className="text-corp-platinum font-bold">Impara a barare con classe.</span>
                     </p>
                     <div className="grid md:grid-cols-3 gap-6">
                         <div className="p-6 border border-corp-danger/30 bg-corp-danger/5 rounded-sm">
@@ -366,9 +366,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
 
                     <button
                         onClick={onEnterApp}
-                        className="group px-12 py-5 bg-corp-gold text-corp-onyx font-bold uppercase tracking-widest text-lg hover:shadow-[0_0_50px_rgba(212,175,55,0.5)] transition-all animate-golden-pulse"
+                        className="group px-12 py-5 bg-corp-gold text-corp-onyx font-serif font-bold uppercase tracking-[0.25em] text-lg hover:shadow-[0_0_60px_rgba(197,160,89,0.8)] hover:scale-105 transition-all duration-500 animate-golden-pulse"
                     >
-                        Inizia Ora — Gratis
+                        Richiedi Accesso
                         <Sparkles size={20} className="inline ml-3" />
                     </button>
 

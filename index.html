@@ -24,15 +24,16 @@
           },
           colors: {
             corp: {
-              onyx: '#0A0A0A', // Deep Onyx (Background)
-              platinum: '#E5E5E5', // Primary Text
-              bg: '#050505', // Slightly darker for contrast
-              glass: 'rgba(10, 10, 10, 0.9)', // High opacity dark glass
-              border: 'rgba(229, 229, 229, 0.1)', // Platinum border low opacity
-              gold: '#D4AF37', // Signal Gold (Luxury)
-              blue: '#007AFF', // Electric Blue (Action)
-              danger: '#FF3B30', // Signal Red
-              silver: '#8E8E93', // Metal
+              onyx: '#080808', // Darker, richer black
+              platinum: '#F0F0F0', // Brighter, cleaner white
+              bg: '#040404', // Deepest void
+              glass: 'rgba(5, 5, 5, 0.95)', // Premium heavy glass
+              border: 'rgba(197, 160, 89, 0.2)', // Subtle Gold border instead of white
+              gold: '#C5A059', // Champagne Gold (More elegant than #D4AF37)
+              'gold-light': '#E5D3B3', // Highlight Gold
+              blue: '#2A5C82', // Muted Royal Blue (instead of electric)
+              danger: '#8B0000', // Deep Crimson
+              silver: '#A0A0A0', // True Silver
             }
           },
           animation: {
@@ -83,14 +84,13 @@
   </script>
   <style>
     body {
-      background-color: #0A0A0A;
-      /* Onyx */
-      color: #E5E5E5;
-      /* Platinum */
+      background-color: #050505;
+      color: #F0F0F0;
       background-image:
-        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-      background-size: 50px 50px;
+        radial-gradient(circle at 50% 0%, rgba(197, 160, 89, 0.08) 0%, transparent 60%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 40px 40px, 40px 40px;
       background-attachment: fixed;
     }
 
