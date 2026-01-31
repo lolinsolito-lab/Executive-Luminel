@@ -33,7 +33,6 @@ const App: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isAuthModalMode, setIsAuthModalMode] = useState<'login' | 'signup' | 'recover' | 'update'>('login');
-  const [authModalMode, setAuthModalMode] = useState<'login' | 'signup' | 'recover' | 'update'>('login');
 
   // Check if current user is admin (DB flag or hardcoded list)
   const isAdmin = userProfile.isAdmin || ADMIN_EMAILS.includes(userProfile.email || '');
