@@ -4,14 +4,22 @@ import { ChatConsole } from './components/ChatConsole';
 import { StrategicMapModal } from './components/StrategicMapModal';
 import { UpgradeModal } from './components/Paywall/UpgradeModal';
 import { LandingPage } from './components/Landing/LandingPage';
+import { AdminDashboard } from './components/Admin/AdminDashboard';
+import { LegalPage } from './components/Legal/LegalPage';
+import { ThankYouPage } from './components/ThankYou/ThankYouPage';
 import { UserProfile, Message } from './types';
 import { INITIAL_USER, WELCOME_MESSAGE } from './constants';
 import { sendMessageToCoach, initializeChat } from './services/geminiService';
 import { v4 as uuidv4 } from 'uuid';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Crown } from 'lucide-react';
+
+// Admin emails - add your email here
+const ADMIN_EMAILS = ['lolinsolito@gmail.com'];
+
+type AppPage = 'landing' | 'app' | 'thank-you' | 'admin' | 'legal-terms' | 'legal-privacy' | 'legal-cookies' | 'legal-disclaimer';
 
 const App: React.FC = () => {
-  const [showLanding, setShowLanding] = useState(true); // Show landing by default
+  const [currentPage, setCurrentPage] = useState<AppPage>('landing');
   const [userProfile, setUserProfile] = useState<UserProfile>(INITIAL_USER);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -19,11 +27,14 @@ const App: React.FC = () => {
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
   const [upgradeFeature, setUpgradeFeature] = useState<string | undefined>();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Mobile sidebar toggle
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Check if current user is admin
+  const isAdmin = ADMIN_EMAILS.includes(userProfile.email || '');
 
   // Handle entering the app from landing
   const handleEnterApp = () => {
-    setShowLanding(false);
+    setCurrentPage('app');
   };
 
   // Open paywall with optional feature name
@@ -109,11 +120,9 @@ const App: React.FC = () => {
     }
   };
 
-  // Show Landing Page first
-  if (showLanding) {
-    return <LandingPage onEnterApp={handleEnterApp} />;
-  }
+  // RENDER LOGIC
 
+  // 1. Loading State
   if (!isInitialized) {
     return (
       <div className="h-screen w-full bg-[#09090b] flex items-center justify-center flex-col gap-4">
@@ -123,6 +132,40 @@ const App: React.FC = () => {
     );
   }
 
+  // 2. Landing Page
+  if (currentPage === 'landing') {
+    return (
+      <LandingPage
+        onEnterApp={handleEnterApp}
+        onOpenLegal={(page) => setCurrentPage(`legal-${page}` as AppPage)}
+      />
+    );
+  }
+
+  // 3. Thank You Page
+  if (currentPage === 'thank-you') {
+    return (
+      <ThankYouPage
+        tier={userProfile.subscription as any}
+        userName={userProfile.name}
+        userEmail={userProfile.email || ''}
+        onEnterApp={() => setCurrentPage('app')}
+      />
+    );
+  }
+
+  // 4. Admin Dashboard (God Mode)
+  if (currentPage === 'admin') {
+    return <AdminDashboard onClose={() => setCurrentPage('app')} />;
+  }
+
+  // 5. Legal Pages
+  if (currentPage.startsWith('legal-')) {
+    const legalType = currentPage.replace('legal-', '') as any;
+    return <LegalPage type={legalType} onBack={() => setCurrentPage('landing')} />;
+  }
+
+  // 6. Main App
   return (
     <div className="flex h-screen w-full overflow-hidden font-sans relative text-slate-200">
 
@@ -159,6 +202,19 @@ const App: React.FC = () => {
           onOpenMap={() => { setIsMapOpen(true); setIsSidebarOpen(false); }}
           onOpenUpgrade={(feature) => { openUpgrade(feature); setIsSidebarOpen(false); }}
         />
+
+        {/* Admin Button (Only visible if admin) */}
+        {isAdmin && (
+          <div className="absolute bottom-4 left-4 right-4 animate-fade-in">
+            <button
+              onClick={() => setCurrentPage('admin')}
+              className="w-full py-2 bg-red-900/20 border border-red-500/30 text-red-400 text-[10px] font-mono uppercase tracking-widest hover:bg-red-900/40 transition-colors flex items-center justify-center gap-2"
+            >
+              <Crown size={12} />
+              GOD MODE ACTIVE
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Chat Console - Full width on mobile, with top padding for header */}

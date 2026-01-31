@@ -94,8 +94,9 @@ const PRICING = [
     }
 ];
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onOpenLegal }) => {
     const [email, setEmail] = useState('');
+    const [scrollY, setScrollY] = useState(0);
 
     const handleWaitlist = (e: React.FormEvent) => {
         e.preventDefault();
@@ -308,7 +309,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
 
                                 <div className="text-center mb-6">
                                     <h3 className={`font-display font-bold text-sm tracking-widest uppercase mb-2 ${tier.id === 'EXECUTIVE' ? 'text-corp-gold' :
-                                            tier.id === 'STRATEGIST' ? 'text-corp-blue' : 'text-corp-silver'
+                                        tier.id === 'STRATEGIST' ? 'text-corp-blue' : 'text-corp-silver'
                                         }`}>
                                         {tier.name}
                                     </h3>
@@ -331,10 +332,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                                 <button
                                     onClick={onEnterApp}
                                     className={`w-full py-3 text-xs font-bold uppercase tracking-widest transition-all ${tier.id === 'EXECUTIVE'
-                                            ? 'bg-corp-gold text-corp-onyx hover:shadow-[0_0_20px_rgba(212,175,55,0.5)]'
-                                            : tier.id === 'STRATEGIST'
-                                                ? 'bg-corp-blue text-white hover:shadow-[0_0_20px_rgba(0,122,255,0.5)]'
-                                                : 'bg-corp-bg border border-corp-silver/30 text-corp-silver hover:border-corp-gold hover:text-corp-gold'
+                                        ? 'bg-corp-gold text-corp-onyx hover:shadow-[0_0_20px_rgba(212,175,55,0.5)]'
+                                        : tier.id === 'STRATEGIST'
+                                            ? 'bg-corp-blue text-white hover:shadow-[0_0_20px_rgba(0,122,255,0.5)]'
+                                            : 'bg-corp-bg border border-corp-silver/30 text-corp-silver hover:border-corp-gold hover:text-corp-gold'
                                         }`}
                                 >
                                     {tier.cta}
@@ -380,13 +381,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                         <span className="font-display font-bold text-corp-platinum">LUMINEL EXECUTIVE</span>
                         <span className="text-[10px] font-mono text-corp-silver">V5.0</span>
                     </div>
-                    <div className="flex items-center gap-6 text-xs text-corp-silver">
-                        <a href="#" className="hover:text-corp-gold transition-colors">Privacy Policy</a>
-                        <a href="#" className="hover:text-corp-gold transition-colors">Terms of Service</a>
-                        <a href="#" className="hover:text-corp-gold transition-colors">Contact</a>
-                    </div>
-                    <div className="text-[10px] font-mono text-corp-silver">
-                        © 2026 Luminel Executive. All rights reserved.
+                    <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-corp-silver/60">
+                        <p>&copy; 2026 LUMINEL EXECUTIVE. Tutti i diritti riservati.</p>
+                        <div className="flex gap-6">
+                            <button onClick={() => onOpenLegal?.('privacy')} className="hover:text-corp-gold transition-colors">Privacy Policy</button>
+                            <button onClick={() => onOpenLegal?.('terms')} className="hover:text-corp-gold transition-colors">Termini di Servizio</button>
+                            <button onClick={() => onOpenLegal?.('cookies')} className="hover:text-corp-gold transition-colors">Cookie Policy</button>
+                            <button onClick={() => onOpenLegal?.('disclaimer')} className="hover:text-corp-gold transition-colors">Disclaimer</button>
+                        </div>
                     </div>
                 </div>
             </footer>
