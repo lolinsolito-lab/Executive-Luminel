@@ -292,64 +292,64 @@ const App: React.FC = () => {
 
     // 6. Main App
     return (
-      <div className="v5-executive flex h-screen w-full overflow-hidden font-sans relative z-0">
-        {/* V5 Background is handled by CSS class now */}
-        {/* Mobile Header with Hamburger */}
-        <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-corp-onyx border-b border-corp-border p-4 flex justify-between items-center">
+      <div className="v5-executive flex h-screen w-full overflow-hidden font-sans relative z-0 bg-corp-onyx">
+        {/* Mobile Header (Simplified for V6) */}
+        <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-corp-onyx border-b border-corp-border p-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <span className="font-display font-bold text-sm text-corp-platinum">LUMINEL</span>
-            <span className="text-corp-gold text-sm font-bold">EXECUTIVE</span>
+            <div className="w-8 h-8 bg-corp-gold/10 border border-corp-gold/50 rounded-sm flex items-center justify-center">
+              <span className="font-display font-bold text-lg text-corp-gold">L</span>
+            </div>
           </div>
-          <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="p-2 text-corp-silver hover:text-corp-gold transition-colors"
-          >
-            {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-corp-gold">
+            {/* Hamburger Icon */}
+            <div className="space-y-1.5">
+              <div className="w-6 h-0.5 bg-corp-gold"></div>
+              <div className="w-4 h-0.5 bg-corp-gold ml-auto"></div>
+            </div>
           </button>
         </div>
 
-        {/* Mobile Sidebar Overlay */}
-        {isSidebarOpen && (
-          <div
-            className="md:hidden fixed inset-0 z-30 bg-black/70 backdrop-blur-sm"
-            onClick={() => setIsSidebarOpen(false)}
-          />
-        )}
-
-        {/* Sidebar - Hidden on mobile unless open */}
+        {/* --- LEFT COLUMN: TACTICAL MENU --- */}
+        {/* Mobile: Fixed overlay. Desktop: Static sidebar. */}
         <div className={`
-          fixed md:relative z-40 h-full transition-transform duration-300
+          fixed md:relative z-40 h-full transition-transform duration-300 bg-corp-onyx
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-          md:block flex-shrink-0 md:w-[320px]
+          flex-shrink-0 border-r border-corp-border/30
         `}>
-          <Sidebar
-            user={userProfile}
-            onOpenMap={() => { setIsMapOpen(true); setIsSidebarOpen(false); }}
-            onOpenUpgrade={(feature) => { openUpgrade(feature); setIsSidebarOpen(false); }}
+          <TacticalMenu
+            activeTab={activeTab}
+            onNavigate={(tab) => {
+              setActiveTab(tab);
+              if (tab === 'command' || tab === 'codex') {
+                // Logic for switching center view can go here
+              }
+              if (window.innerWidth < 768) setIsSidebarOpen(false);
+            }}
           />
 
-          {/* Admin Button (Only visible if admin) */}
+          {/* Admin Button within Tactical Menu Area or Mobile Drawer */}
           {isAdmin && (
-            <div className="absolute bottom-4 left-4 right-4 animate-fade-in">
-              <button
-                onClick={() => setCurrentPage('admin')}
-                className="w-full py-2 bg-red-900/20 border border-red-500/30 text-red-400 text-[10px] font-mono uppercase tracking-widest hover:bg-red-900/40 transition-colors flex items-center justify-center gap-2"
-              >
-                <Crown size={12} />
-                GOD MODE ACTIVE
+            <div className="absolute bottom-20 md:bottom-2 left-0 w-full p-2">
+              <button onClick={() => setCurrentPage('admin')} className="w-10 h-10 mx-auto flex items-center justify-center bg-red-900/20 text-red-500 rounded-sm hover:bg-red-900/40 border border-transparent hover:border-red-500/50 transition-all font-mono text-[10px]" title="GOD MODE">
+                <Crown size={14} />
               </button>
             </div>
           )}
         </div>
 
-        {/* Chat Console - Flex 1 fills remaining space */}
-        <div className="flex-1 pt-16 md:pt-0 relative w-full md:w-auto overflow-hidden">
+        {/* --- CENTER COLUMN: WAR ROOM (Chat Console) --- */}
+        <div className="flex-1 pt-16 md:pt-0 relative w-full overflow-hidden flex flex-col bg-corp-onyx">
           <ChatConsole
             messages={messages}
             isLoading={isLoading}
             onSendMessage={handleSendMessage}
           />
         </div>
+
+        {/* --- RIGHT COLUMN: DATA STREAM --- */}
+        {/* Hidden on mobile, visible on lg screens */}
+        <DataStream user={userProfile} />
+
       </div>
     );
   };
