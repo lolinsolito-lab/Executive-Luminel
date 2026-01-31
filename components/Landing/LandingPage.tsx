@@ -440,71 +440,49 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 </div>
             </section>
 
-            {/* FOOTER - LUMINEL MAGAZINE ELITE STYLE */}
-            <footer className="pt-24 pb-12 px-6 bg-white border-t border-corp-platinum/10 font-sans text-corp-platinum relative overflow-hidden">
-                {/* Background Pattern */}
+            {/* FOOTER - ULTRA COMPACT ELITE STYLE */}
+            <footer className="py-6 px-4 bg-white border-t border-corp-platinum/10 font-sans text-corp-platinum relative overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(#C5A059_0.5px,transparent_0.5px)] [background-size:20px_20px] opacity-10 pointer-events-none"></div>
 
-                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 relative z-10">
+                <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
 
-                    {/* COL 1: BRAND IDENTITY (4 cols) */}
-                    <div className="md:col-span-4 space-y-8">
-                        <div className="flex items-center gap-3">
-                            <img src="/luminel-phoenix.png" alt="L" className="h-12 w-auto object-contain rounded-sm" />
-                            <span className="font-serif font-bold text-2xl text-corp-platinum tracking-widest">EXECUTIVE LUMINEL</span>
+                    {/* BRAND (Compact Row) */}
+                    <div className="flex items-center gap-3 md:w-auto w-full justify-between md:justify-start">
+                        <div className="flex items-center gap-2">
+                            <img src="/luminel-phoenix.png" alt="L" className="h-6 w-auto object-contain rounded-sm" />
+                            <span className="font-serif font-bold text-sm text-corp-platinum tracking-widest">EXECUTIVE LUMINEL</span>
                         </div>
-                        <p className="text-sm text-corp-silver leading-relaxed font-light">
-                            L'intelligenza strategica per chi plasma il mercato, non per chi lo subisce.
-                            <br />
-                            <span className="italic text-corp-gold font-serif mt-2 block">"Dominare è una scelta."</span>
-                        </p>
-                        <div className="flex gap-4">
-                            {/* Social Placeholders - Clean minimal icons */}
-                            {['LinkedIn', 'Instagram', 'Twitter'].map((social) => (
-                                <a key={social} href="#" className="w-8 h-8 flex items-center justify-center rounded-full border border-corp-platinum/20 text-corp-platinum/60 hover:text-corp-gold hover:border-corp-gold transition-all duration-300">
-                                    <span className="sr-only">{social}</span>
-                                    <div className="w-3 h-3 bg-current rounded-full"></div>
-                                </a>
+                        {/* Mobile Socials (Inline) */}
+                        <div className="flex md:hidden gap-3 text-[10px] text-corp-silver/50 font-mono">
+                            {['Ln', 'Ig', 'X'].map((s) => (
+                                <a key={s} href="#" className="hover:text-corp-gold transition-colors">{s}</a>
                             ))}
                         </div>
                     </div>
 
-                    {/* COL 2: PIATTAFORMA (2 cols) */}
-                    <div className="md:col-span-2 md:col-start-6 space-y-6">
-                        <h4 className="font-mono text-xs font-bold uppercase tracking-widest text-corp-gold">Piattaforma</h4>
-                        <ul className="space-y-4 text-xs font-medium text-corp-silver uppercase tracking-wider">
-                            <li><a href="#manifesto" className="hover:text-corp-platinum transition-colors">Manifesto</a></li>
-                            <li><a href="#features" className="hover:text-corp-platinum transition-colors">Arsenale</a></li>
-                            <li><a href="#pricing" className="hover:text-corp-platinum transition-colors">Status</a></li>
-                            <li><a href="#" onClick={onEnterApp} className="hover:text-corp-platinum transition-colors">Login</a></li>
-                        </ul>
+                    {/* LINKS GRID (2 cols mobile, row desktop) */}
+                    <div className="w-full md:w-auto grid grid-cols-2 md:flex gap-x-8 gap-y-2 md:gap-8 text-[9px] uppercase tracking-widest font-mono text-corp-silver">
+                        <a href="#manifesto" className="hover:text-corp-platinum">Manifesto</a>
+                        <button onClick={() => setLegalType('privacy')} className="hover:text-corp-platinum text-left">Privacy</button>
+                        <a href="#pricing" className="hover:text-corp-platinum">Status</a>
+                        <button onClick={() => setLegalType('terms')} className="hover:text-corp-platinum text-left">Termini</button>
+                        <a href="#" onClick={onEnterApp} className="hover:text-corp-platinum col-span-2 md:col-span-1 text-center md:text-left text-corp-gold font-bold">Login</a>
                     </div>
 
-                    {/* COL 3: RISORSE (2 cols) */}
-                    <div className="md:col-span-2 space-y-6">
-                        <h4 className="font-mono text-xs font-bold uppercase tracking-widest text-corp-gold">Risorse</h4>
-                        <ul className="space-y-4 text-xs font-medium text-corp-silver uppercase tracking-wider">
-                            <li><a href="#" className="hover:text-corp-platinum transition-colors">Journal</a></li>
-                            <li><a href="#" className="hover:text-corp-platinum transition-colors">Casi Studio</a></li>
-                            <li><a href="#" className="hover:text-corp-platinum transition-colors">Carrera Report</a></li>
-                        </ul>
+                    {/* DESKTOP SOCIALS & COPYRIGHT */}
+                    <div className="hidden md:flex flex-col items-end gap-1 text-[9px] text-corp-silver/50 font-mono">
+                        <div className="flex gap-3">
+                            {['Ln', 'Ig', 'X'].map((s) => (
+                                <a key={s} href="#" className="hover:text-corp-gold transition-colors">{s}</a>
+                            ))}
+                        </div>
+                        <p>&copy; 2026 LUMINEL EXECUTIVE</p>
                     </div>
 
-                    {/* COL 4: LEGAL (2 cols) */}
-                    <div className="md:col-span-2 space-y-6">
-                        <h4 className="font-mono text-xs font-bold uppercase tracking-widest text-corp-gold">Legale</h4>
-                        <ul className="space-y-4 text-xs font-medium text-corp-silver uppercase tracking-wider">
-                            <li><button onClick={() => setLegalType('privacy')} className="hover:text-corp-platinum transition-colors text-left">Privacy Policy</button></li>
-                            <li><button onClick={() => setLegalType('terms')} className="hover:text-corp-platinum transition-colors text-left">Termini</button></li>
-                            <li><button onClick={() => setLegalType('cookies')} className="hover:text-corp-platinum transition-colors text-left">Cookie Policy</button></li>
-                        </ul>
-                    </div>
-                </div>
-
-                {/* BOTTOM BAR */}
-                <div className="max-w-7xl mx-auto mt-20 pt-8 border-t border-corp-platinum/5 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-corp-silver/40 font-mono uppercase tracking-widest">
-                    <p>&copy; 2026 LUMINEL EXECUTIVE. Tutti i diritti riservati.</p>
-                    <p>Milan &bull; Dubai &bull; New York</p>
+                    {/* MOBILE COPYRIGHT */}
+                    <p className="md:hidden text-[8px] text-corp-silver/30 text-center w-full font-mono">
+                        &copy; 2026 LUMINEL EXECUTIVE • MILAN NY DUBAI
+                    </p>
                 </div>
             </footer>
 
