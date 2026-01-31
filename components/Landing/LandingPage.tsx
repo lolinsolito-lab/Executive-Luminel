@@ -110,8 +110,7 @@ const Navbar = ({ onEnterApp }: { onEnterApp: () => void }) => {
         <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'py-4 bg-corp-onyx/80 backdrop-blur-md shadow-sm border-b border-corp-gold/20' : 'py-6 bg-transparent'}`}>
             <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <Crown size={20} className="text-corp-gold" />
-                    <span className="font-serif font-bold text-corp-platinum tracking-widest">LUMINEL</span>
+                    <img src="/luminel-logo.png" alt="LUMINEL EXECUTIVE" className="h-8 md:h-10 w-auto object-contain" />
                 </div>
 
                 <div className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-widest text-corp-silver">
@@ -373,7 +372,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                             <div
                                 key={tier.id}
                                 className={`relative p-8 rounded-sm transition-all duration-500 group ${tier.id === 'STRATEGIST' ? 'bg-corp-platinum text-white scale-110 shadow-2xl z-10 border-0' :
-                                        'bg-white border border-corp-platinum/10 hover:border-corp-gold/30'
+                                    'bg-white border border-corp-platinum/10 hover:border-corp-gold/30'
                                     }`}
                             >
                                 <div className="text-center mb-8">
@@ -404,8 +403,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                                 <button
                                     onClick={onEnterApp}
                                     className={`w-full py-4 text-xs font-bold uppercase tracking-[0.2em] transition-all border ${tier.id === 'STRATEGIST'
-                                            ? 'bg-corp-gold border-corp-gold text-corp-onyx hover:bg-white hover:text-corp-platinum'
-                                            : 'bg-transparent border-corp-platinum/20 text-corp-platinum hover:border-corp-platinum hover:bg-corp-platinum hover:text-white'
+                                        ? 'bg-corp-gold border-corp-gold text-corp-onyx hover:bg-white hover:text-corp-platinum'
+                                        : 'bg-transparent border-corp-platinum/20 text-corp-platinum hover:border-corp-platinum hover:bg-corp-platinum hover:text-white'
                                         }`}
                                 >
                                     {tier.cta}
@@ -445,8 +444,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end gap-12">
                     <div className="space-y-6">
                         <div className="flex items-center gap-3">
-                            <Crown size={24} className="text-corp-gold" />
-                            <span className="font-serif font-bold text-2xl text-corp-platinum tracking-widest">LUMINEL</span>
+                            <img src="/luminel-logo.png" alt="LUMINEL EXECUTIVE" className="h-8 w-auto object-contain" />
                         </div>
                         <p className="text-xs text-corp-silver max-w-xs leading-relaxed">
                             Piattaforma avanzata di intelligenza strategica per la carriera.
