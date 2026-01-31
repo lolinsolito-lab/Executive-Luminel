@@ -33,7 +33,7 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({ messages, isLoading, o
     <div className="flex-1 flex flex-col h-full relative overflow-hidden bg-transparent">
 
       {/* 1. WAR ROOM HEADER */}
-      <div className="h-16 war-room-panel border-b border-white/5 flex items-center px-6 justify-between z-10 shrink-0 shadow-lg relative bg-black/40">
+      <div className="h-16 war-room-panel border-b border-white/5 flex items-center px-6 justify-between z-10 shrink-0 shadow-lg relative bg-corp-onyx/40">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-corp-gold/10 border border-corp-gold/40 rounded-sm flex items-center justify-center shadow-[0_0_15px_rgba(197,160,89,0.15)]">
             <Crown className="text-corp-gold animate-pulse-slow" size={16} />
@@ -43,7 +43,7 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({ messages, isLoading, o
             <p className="text-[8px] text-corp-silver font-mono uppercase tracking-widest opacity-70">ENCRYPTED CHANNEL</p>
           </div>
         </div>
-        <div className="flex items-center gap-3 bg-black/50 px-3 py-1.5 rounded-sm border border-corp-border shadow-inner">
+        <div className="flex items-center gap-3 bg-corp-bg/50 px-3 py-1.5 rounded-sm border border-corp-border shadow-inner">
           <span className={`w-1.5 h-1.5 rounded-full ${isLoading ? 'bg-corp-gold animate-pulse' : 'bg-emerald-500 shadow-[0_0_8px_#10b981]'}`}></span>
           <span className="text-[10px] font-mono text-corp-silver">{isLoading ? 'ANALYZING SCENARIO...' : 'SYSTEM READY'}</span>
         </div>
@@ -70,8 +70,8 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({ messages, isLoading, o
               <div className={`
                     p-5 rounded-sm text-sm leading-relaxed font-light shadow-xl backdrop-blur-md relative overflow-hidden group
                     ${msg.role === 'user'
-                  ? 'bg-corp-onyx/80 border border-white/10 text-gray-200'
-                  : 'bg-[#0A0A0B]/90 border-l-2 border-l-corp-gold text-gray-300'
+                  ? 'bg-corp-onyx/80 border border-white/10 text-corp-platinum'
+                  : 'bg-corp-onyx/90 border-l-2 border-l-corp-gold text-corp-platinum'
                 }
                 `}>
                 {/* Golden sheen effect on hover */}
