@@ -314,9 +314,9 @@ const App: React.FC = () => {
 
         {/* Sidebar - Hidden on mobile unless open */}
         <div className={`
-          fixed md:relative z-35 h-full transition-transform duration-300
+          fixed md:relative z-40 h-full transition-transform duration-300
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-          md:block
+          md:block flex-shrink-0 md:w-[320px]
         `}>
           <Sidebar
             user={userProfile}
@@ -338,8 +338,8 @@ const App: React.FC = () => {
           )}
         </div>
 
-        {/* Chat Console - Full width on mobile, with top padding for header */}
-        <div className="flex-1 pt-16 md:pt-0">
+        {/* Chat Console - Flex 1 fills remaining space */}
+        <div className="flex-1 pt-16 md:pt-0 relative w-full md:w-auto overflow-hidden">
           <ChatConsole
             messages={messages}
             isLoading={isLoading}

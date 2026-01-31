@@ -15,16 +15,16 @@ export default {
             },
             colors: {
                 corp: {
-                    onyx: '#F9F8F2', // Pearl White (Main BG)
-                    platinum: '#1A1A1A', // Deep Charcoal (Primary Text)
-                    bg: '#FFFFFF', // Pure White
-                    glass: 'rgba(255, 255, 255, 0.8)', // Frosted White Glass
-                    border: 'rgba(197, 160, 89, 0.3)', // Gold Border
+                    onyx: '#09090b', // Deep Black (Main BG)
+                    platinum: '#E2E2E2', // Platinum White (Primary Text)
+                    bg: '#141416', // Slightly lighter black for cards
+                    glass: 'rgba(255, 255, 255, 0.05)', // Frosted Glass
+                    border: 'rgba(197, 160, 89, 0.2)', // Gold Border
                     gold: '#C5A059', // Champagne Gold
                     'gold-light': '#E5D3B3',
-                    blue: '#2A5C82',
-                    danger: '#8B0000',
-                    silver: '#666666', // Silver
+                    blue: '#3B82F6', // Brighter Blue for Dark Mode
+                    danger: '#EF4444', // Brighter Red
+                    silver: '#A1A1AA', // Zinc 400 for secondary text
                 }
             },
             animation: {
