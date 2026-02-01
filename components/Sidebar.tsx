@@ -156,18 +156,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
                 <DailyMission />
             </div>
 
-            {/* V7.7 DAILY MANTRA - Fixed Bottom */}
-            <div className="mt-auto px-4 pb-4">
-                <div className="bg-phoenix-canvas border border-gray-200 p-4 rounded-sm shadow-sm relative overflow-hidden group hover:border-phoenix-gold transition-colors">
-                    <div className="absolute top-0 right-0 w-16 h-16 bg-phoenix-gold/5 blur-xl rounded-full"></div>
-                    <h4 className="font-sans text-[9px] font-bold text-phoenix-ghost uppercase tracking-widest mb-2 flex items-center gap-2">
-                        Daily Mantra
-                    </h4>
-                    <p className="font-display font-medium text-phoenix-ink text-sm leading-relaxed italic">
-                        "True power happens when you stop asking for permission and start issuing commands."
-                    </p>
-                </div>
-            </div>
+
 
             {/* C. FOOTER - Profile */}
             <div className="shrink-0 mt-auto p-4 border-t border-gray-100 bg-phoenix-snow">

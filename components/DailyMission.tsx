@@ -40,10 +40,10 @@ export const DailyMission: React.FC = () => {
 
     return (
         <div className={`
-            mt-auto mb-4 p-4 rounded-lg border transition-all duration-500 relative overflow-hidden group
+            mt-auto mb-4 p-4 rounded-lg transition-all duration-500 relative overflow-hidden group
             ${completed
                 ? 'bg-phoenix-gold-gradient border-transparent shadow-phoenix-glow'
-                : 'bg-white border-gray-100 hover:border-phoenix-gold shadow-sm'}
+                : 'border border-[#D4AF37]/40 bg-gradient-to-br from-white to-[#FFFBF0] shadow-md shadow-[#D4AF37]/5'}
         `}>
             {/* Background Pattern */}
             <div className="absolute top-0 right-0 p-4 opacity-10">
@@ -60,14 +60,14 @@ export const DailyMission: React.FC = () => {
 
                 <h3 className={`
                     font-sans text-sm font-bold mb-1
-                    ${completed ? 'text-phoenix-navy' : 'text-phoenix-ink'}
+                    ${completed ? 'text-phoenix-navy line-through decoration-[#D4AF37]' : 'text-phoenix-ink'}
                 `}>
                     {mission.title}
                 </h3>
 
                 <p className={`
                     font-sans text-[11px] leading-snug mb-3
-                    ${completed ? 'text-phoenix-navy/80' : 'text-phoenix-ghost'}
+                    ${completed ? 'text-phoenix-navy/80 line-through decoration-[#D4AF37]' : 'text-phoenix-ghost'}
                 `}>
                     {mission.desc}
                 </p>
@@ -84,11 +84,11 @@ export const DailyMission: React.FC = () => {
                 >
                     {completed ? (
                         <>
-                            <Check size={12} /> Mission Accomplished
+                            <Check size={16} /> Mission Accomplished
                         </>
                     ) : (
                         <>
-                            <div className="w-3 h-3 border border-gray-400 rounded-sm"></div> Mark Complete
+                            <div className="w-5 h-5 border border-gray-400 rounded-sm flex-shrink-0"></div> Mark Complete
                         </>
                     )}
                 </button>
