@@ -41,14 +41,36 @@ const App: React.FC = () => {
   // STARTUP & AUTH LISTENER
   useEffect(() => {
     // 1. Check Session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        setSession(session);
-        loadUserProfile(session.user.id);
-      } else {
+    // 1. Check Session
+    const initSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          setSession(session);
+          await loadUserProfile(session.user.id);
+        } else {
+          setLoading(false);
+        }
+      } catch (e) {
+        console.error("Auth Init Error", e);
         setLoading(false);
       }
-    });
+    };
+
+    initSession();
+
+    // Safety Timeout (5s) to preventing infinite loading
+    const timer = setTimeout(() => {
+      setLoading(prev => {
+        if (prev) {
+          console.warn("Forcing App Load due to timeout");
+          return false;
+        }
+        return prev;
+      });
+    }, 5000);
+
+    return () => clearTimeout(timer);
 
     // 2. Listen for Auth Changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
