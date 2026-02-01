@@ -41,6 +41,10 @@ const App: React.FC = () => {
   // STARTUP & AUTH LISTENER
   useEffect(() => {
     // 0. SYSTEM SIGNATURE
+    const styleTitle = 'color: #D4AF37; font-weight: bold; text-shadow: 0 0 10px rgba(212,175,55,0.2); font-family: sans-serif;';
+    const styleBadge = 'background: #0F172A; color: #D4AF37; padding: 4px 8px; border-radius: 4px; font-family: monospace; font-weight: bold; border: 1px solid #D4AF37;';
+    const styleLog = 'font-family: monospace; font-weight: bold;';
+
     console.log(
       `%c
       ██╗     ██╗   ██╗███╗   ███╗██╗███╗   ██╗███████╗██╗     
@@ -52,9 +56,13 @@ const App: React.FC = () => {
       
       %c V7.9 PHOENIX PROTOCOL // SYSTEM ONLINE 
       `,
-      'color: #D4AF37; font-weight: bold; text-shadow: 0 0 10px rgba(212,175,55,0.2);',
-      'background: #0F172A; color: #D4AF37; padding: 4px 8px; border-radius: 4px; font-family: monospace; font-weight: bold;'
+      styleTitle,
+      styleBadge
     );
+    console.log(`%c > CONTROL SYSTEM....... ACTIVATED`, `color: #10B981; ${styleLog}`);
+    console.log(`%c > RAT TRAP............. DETECTED`, `color: #EF4444; ${styleLog}`);
+    console.log(`%c > EVASION MODE......... O CI SEI, O CI FAI`, `color: #D4AF37; ${styleLog}`);
+    console.log(`%c > WELCOME EXECUTIVE.`, `color: #F8FAFC; ${styleLog}`);
 
     // 1. Check Session
     // 1. Check Session
