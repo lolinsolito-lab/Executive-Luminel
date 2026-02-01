@@ -153,6 +153,8 @@ const App: React.FC = () => {
           level: (profile.tier_level as any) || 'B1',
           role: 'Consultant',
           companyName: profile.company_name || undefined,
+          location: profile.location || undefined,
+          genesisCompleted: profile.onboarding_completed,
           permissions: profile.permissions as any,
           subscription: profile.subscription_tier,
           isAdmin: profile.email === 'admin@luminel.com' || ADMIN_EMAILS.includes(profile.email),
