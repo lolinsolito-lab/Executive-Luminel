@@ -11,10 +11,12 @@ interface SidebarProps {
     onNavigate?: (page: string) => void;
     onOpenMap: () => void;
     onOpenUpgrade?: (feature?: string) => void;
+    isAdmin?: boolean;
+    onOpenAdmin?: () => void;
 }
 
 // V7 PHOENIX - THE ARSENAL
-export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade, onNavigate, activePage }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade, onNavigate, activePage, isAdmin, onOpenAdmin }) => {
 
     const [expandedItem, setExpandedItem] = useState<string | null>(null);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -85,6 +87,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
                         </p>
                     </div>
                 </div>
+
+                {/* GOD MODE (Admin Only) - Moved here per request */}
+                {isAdmin && (
+                    <button
+                        onClick={onOpenAdmin}
+                        className="mt-4 w-full py-2 bg-red-50 text-red-600 text-[10px] font-sans font-bold uppercase tracking-widest border border-red-200 hover:bg-red-100 transition-colors flex items-center justify-center gap-2 rounded-sm"
+                    >
+                        <Crown size={12} /> GOD MODE
+                    </button>
+                )}
             </div>
 
             {/* B. NAVIGATION */}
@@ -116,21 +128,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
                 <div className="mb-6">
                     <h3 className="px-2 mb-2 font-display text-[10px] font-bold text-phoenix-gold uppercase tracking-[0.2em]">Panic Mode</h3>
                     <div className="space-y-2">
-                        <button className="w-full flex items-center gap-3 px-3 py-2 bg-red-50/50 border border-red-100 rounded-sm hover:bg-red-50 hover:border-red-200 transition-all text-left group">
+                        <button onClick={() => alert('WIP: Script Logic')} className="w-full flex items-center gap-3 px-3 py-2 bg-red-50/50 border border-red-100 rounded-sm hover:bg-red-50 hover:border-red-200 transition-all text-left group">
                             <span className="text-lg">🆘</span>
                             <div>
                                 <div className="font-sans text-xs font-bold text-red-800">Toxic Reply</div>
                                 <div className="font-sans text-[9px] text-red-500">Instant Script</div>
                             </div>
                         </button>
-                        <button className="w-full flex items-center gap-3 px-3 py-2 bg-amber-50/50 border border-amber-100 rounded-sm hover:bg-amber-50 hover:border-amber-200 transition-all text-left group">
+                        <button onClick={() => alert('WIP: Excuse Generator')} className="w-full flex items-center gap-3 px-3 py-2 bg-amber-50/50 border border-amber-100 rounded-sm hover:bg-amber-50 hover:border-amber-200 transition-all text-left group">
                             <span className="text-lg">📅</span>
                             <div>
                                 <div className="font-sans text-xs font-bold text-amber-800">Meeting Escape</div>
                                 <div className="font-sans text-[9px] text-amber-600">Excuse Generator</div>
                             </div>
                         </button>
-                        <button className="w-full flex items-center gap-3 px-3 py-2 bg-slate-50 border border-slate-100 rounded-sm hover:bg-slate-100 transition-all text-left group">
+                        <button onClick={() => alert('WIP: RAG System')} className="w-full flex items-center gap-3 px-3 py-2 bg-slate-50 border border-slate-100 rounded-sm hover:bg-slate-100 transition-all text-left group">
                             <span className="text-lg">🛡️</span>
                             <div>
                                 <div className="font-sans text-xs font-bold text-slate-700">Raise Defense</div>

@@ -239,18 +239,9 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
                         onNavigate={setActiveTab}
                         onOpenMap={() => setIsMapOpen(true)}
                         onOpenUpgrade={(feature) => { setUpgradeFeature(feature); setIsUpgradeOpen(true); }}
+                        isAdmin={isAdmin}
+                        onOpenAdmin={onOpenAdmin}
                     />
-                    {/* Admin Button Desktop */}
-                    {isAdmin && (
-                        <div className="absolute bottom-4 left-4 right-4 z-50">
-                            <button
-                                onClick={onOpenAdmin}
-                                className="w-full py-2 bg-red-50 text-red-600 text-[10px] font-sans font-bold uppercase tracking-widest border border-red-200 hover:bg-red-100 transition-colors flex items-center justify-center gap-2 rounded-sm"
-                            >
-                                <Crown size={12} /> GOD MODE
-                            </button>
-                        </div>
-                    )}
                 </div>
 
                 {/* CENTER: THE BATTLEFIELD (Chat) */}
