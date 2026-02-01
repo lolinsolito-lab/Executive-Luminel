@@ -77,7 +77,7 @@ export const TierSection: React.FC<TierSectionProps> = ({ onEnterApp }) => {
                             <li className="flex gap-2"><Check size={16} className="text-phoenix-gold" /> <strong>Priority Coaching</strong></li>
                         </ul>
 
-                        <button className="w-full py-4 bg-phoenix-gold-gradient text-white font-bold text-sm rounded-sm shadow-phoenix-glow hover:scale-105 transition-transform uppercase tracking-widest relative overflow-hidden group">
+                        <button onClick={onEnterApp} className="w-full py-4 bg-phoenix-gold-gradient text-white font-bold text-sm rounded-sm shadow-phoenix-glow hover:scale-105 transition-transform uppercase tracking-widest relative overflow-hidden group">
                             <span className="relative z-10">Richiedi Accesso Elitario</span>
                             <div className="absolute top-0 -left-full w-full h-full bg-white/30 transform skew-x-12 group-hover:animate-shine"></div>
                         </button>

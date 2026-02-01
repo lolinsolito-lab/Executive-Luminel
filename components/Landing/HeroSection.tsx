@@ -39,7 +39,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onEnterApp }) => {
 
                 {/* CTA: Gold Button */}
                 <div className="animate-fadeInUp delay-1000 opacity-0 pt-8">
-                    <button onClick={() => window.location.href = '/dashboard'} className="group relative px-8 py-5 bg-phoenix-gold-gradient text-white rounded-sm font-sans font-bold tracking-widest uppercase shadow-phoenix-shadow-levitate hover:shadow-phoenix-glow transition-all transform hover:-translate-y-1 overflow-hidden">
+                    <button onClick={onEnterApp} className="group relative px-8 py-5 bg-phoenix-gold-gradient text-white rounded-sm font-sans font-bold tracking-widest uppercase shadow-phoenix-shadow-levitate hover:shadow-phoenix-glow transition-all transform hover:-translate-y-1 overflow-hidden">
                         <span className="relative z-10 flex items-center gap-3">
                             Calcola il tuo Gap Salariale <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                         </span>
