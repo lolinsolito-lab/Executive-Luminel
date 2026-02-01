@@ -50,6 +50,7 @@ export const AdminDashboard: React.FC = () => {
         partnerCount: 0,
         mercenaryCount: 0,
         avgGap: 0,
+        arpu: 0,
         conversionRate: 0
     });
 
@@ -86,6 +87,12 @@ export const AdminDashboard: React.FC = () => {
             const totalGap = adminProfiles.reduce((acc, curr) => acc + (curr.gap_value || 0), 0);
             const avgGap = total > 0 ? Math.round(totalGap / total) : 0;
 
+            // ARPU (Average Revenue Per User) -> Revenue / Total Active Paid Users
+            // If strictly per "User" (including tourists), div by total. Usually ARPU is per paid user or total user depending on def.
+            // Request says: "Total Rev / Active Users". Let's use Total Users for broad ARPU or Paid for ARPPU.
+            // Using Total Users as requested "How valuable is a user?".
+            const arpu = total > 0 ? Math.round(mrr / total) : 0;
+
             // Chart Data: Tiers
             const tiers = [
                 { name: 'Tourist', value: total - paidUsers },
@@ -112,6 +119,7 @@ export const AdminDashboard: React.FC = () => {
                 partnerCount: partners,
                 mercenaryCount: mercenaries,
                 avgGap,
+                arpu,
                 conversionRate: total > 0 ? Number(((paidUsers / total) * 100).toFixed(1)) : 0
             });
 
@@ -140,7 +148,7 @@ export const AdminDashboard: React.FC = () => {
     );
 
     return (
-        <div className="min-h-screen bg-corp-onyx text-corp-white font-sans selection:bg-corp-gold selection:text-black">
+        <div className="min-h-screen bg-gray-50 text-corp-onyx font-sans selection:bg-corp-gold selection:text-black">
             {/* ADMIN HEADER */}
             <div className="border-b border-corp-border bg-[#FFFBF0] text-corp-onyx shadow-md sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -188,90 +196,104 @@ export const AdminDashboard: React.FC = () => {
                 {/* OVERVIEW TAB (THE COCKPIT) */}
                 {activeTab === 'overview' && (
                     <div className="space-y-8 animate-fade-in">
-                        {/* ROW 1: KPI CARDS */}
+                        {/* ROW 1: KPI CARDS (METRICS GRID) */}
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <StatsCard
-                                label="Monthly Recurring Revenue"
+                                label="Total Revenue (MRR)"
                                 value={formatCurrency(kpi.mrr)}
-                                icon={<DollarSign className="text-emerald-500" />}
+                                icon={<DollarSign size={18} />}
                                 trend="+12% (30d)"
                                 isGold
+                                sparkline
+                            />
+                            <StatsCard
+                                label="ARPU (User Value)"
+                                value={formatCurrency(kpi.arpu)}
+                                icon={<Activity size={18} />} // Activity icon for value/efficiency
+                                subValue="Avg Rev / User"
+                            />
+                            <StatsCard
+                                label="Pain Index (Avg Gap)"
+                                value={formatCurrency(kpi.avgGap)}
+                                icon={<AlertTriangle size={18} />}
+                                subValue="Market Desperation"
+                                isDanger
                             />
                             <StatsCard
                                 label="Total Active Users"
                                 value={kpi.totalUsers.toString()}
-                                icon={<Users className="text-blue-500" />}
+                                icon={<Users size={18} />}
                                 subValue={`${kpi.partnerCount} Executive • ${kpi.mercenaryCount} Strat.`}
-                            />
-                            <StatsCard
-                                label="Conversion Rate"
-                                value={`${kpi.conversionRate}%`}
-                                icon={<TrendingUp className="text-purple-500" />}
-                                trend="Top 5% Industry"
-                            />
-                            <StatsCard
-                                label="Avg. User Pain (Gap)"
-                                value={formatCurrency(kpi.avgGap)}
-                                icon={<AlertTriangle className="text-red-500" />}
-                                subValue="High Upsell Potential"
-                                isDanger
                             />
                         </div>
 
                         {/* ROW 2: CHARTS */}
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-80">
                             {/* Chart A: Revenue */}
-                            <div className="bg-[#1E293B] border border-white/10 p-5 rounded-sm shadow-xl col-span-2 relative overlow-hidden">
-                                <h3 className="text-corp-silver text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
-                                    <BarChart3 size={14} /> Revenue Growth (30 Days)
-                                </h3>
-                                <ResponsiveContainer width="100%" height="85%">
+                            {/* Chart A: Capital Inflow */}
+                            <div className="bg-white border border-[#D4AF37]/30 shadow-xl shadow-[#D4AF37]/5 p-6 rounded-sm col-span-2 relative">
+                                <div className="flex justify-between items-center mb-6">
+                                    <h3 className="text-[#0F172A]/60 text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2">
+                                        <BarChart3 size={14} /> Capital Inflow
+                                    </h3>
+                                    <div className="flex gap-1 bg-gray-100 p-0.5 rounded-sm">
+                                        {['24H', '7D', '30D', 'YTD'].map(t => (
+                                            <button key={t} className={`px-2 py-1 text-[9px] font-bold rounded-sm transition-all ${t === '30D' ? 'bg-white shadow-sm text-[#0F172A]' : 'text-gray-400 hover:text-gray-600'}`}>
+                                                {t}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <ResponsiveContainer width="100%" height="80%">
                                     <LineChart data={REVENUE_DATA}>
-                                        <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
-                                        <XAxis dataKey="day" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
-                                        <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} tickFormatter={(val) => `€${val}`} />
                                         <Tooltip
-                                            contentStyle={{ backgroundColor: '#0F172A', borderColor: '#D4AF37', color: '#FFF' }}
-                                            itemStyle={{ color: '#D4AF37' }}
+                                            contentStyle={{ backgroundColor: '#FFF', borderColor: '#D4AF37', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                            itemStyle={{ color: '#D4AF37', fontSize: '12px', fontWeight: 'bold' }}
                                         />
-                                        <Line type="monotone" dataKey="value" stroke="#D4AF37" strokeWidth={3} dot={{ r: 4, fill: '#D4AF37' }} activeDot={{ r: 8 }} />
+                                        <Line type="monotone" dataKey="value" stroke="#D4AF37" strokeWidth={2} dot={false} activeDot={{ r: 6, fill: '#D4AF37', stroke: '#FFF', strokeWidth: 2 }} />
                                     </LineChart>
                                 </ResponsiveContainer>
                             </div>
 
                             {/* Chart B: Tier Distribution */}
-                            <div className="bg-[#1E293B] border border-white/10 p-5 rounded-sm shadow-xl flex flex-col items-center justify-center relative">
-                                <h3 className="absolute top-5 left-5 text-corp-silver text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-                                    <PieChart size={14} /> Tier Distribution
+                            {/* Chart B: Hierarchy Distribution */}
+                            <div className="bg-white border border-[#D4AF37]/30 shadow-xl shadow-[#D4AF37]/5 p-6 rounded-sm flex flex-col items-center justify-center relative">
+                                <h3 className="absolute top-5 left-6 text-[#0F172A]/60 text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2">
+                                    <PieChart size={14} /> Hierarchy
                                 </h3>
+                                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pt-4">
+                                    <span className="text-3xl font-display font-bold text-[#0F172A]">{kpi.totalUsers}</span>
+                                    <span className="text-[9px] text-gray-400 uppercase tracking-widest">Active Agents</span>
+                                </div>
                                 <ResponsiveContainer width="100%" height="80%">
                                     <RePieChart>
                                         <Pie
                                             data={chartData.tierDist}
-                                            innerRadius={60}
-                                            outerRadius={80}
-                                            paddingAngle={5}
+                                            innerRadius={75}
+                                            outerRadius={90}
+                                            paddingAngle={4}
                                             dataKey="value"
+                                            stroke="none"
                                         >
                                             {chartData.tierDist.map((entry, index) => (
                                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                             ))}
                                         </Pie>
-                                        <Tooltip contentStyle={{ backgroundColor: '#0F172A', borderColor: '#334155' }} />
+                                        <Tooltip contentStyle={{ backgroundColor: '#FFF', borderColor: '#E2E8F0', borderRadius: '4px', fontSize: '12px' }} itemStyle={{ color: '#0F172A' }} />
                                     </RePieChart>
                                 </ResponsiveContainer>
-                                <div className="flex gap-4 text-[10px] text-gray-400 uppercase tracking-wider">
-                                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-gray-400" /> Analyst</div>
-                                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-blue-500" /> Strategist</div>
-                                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-yellow-500" /> Executive</div>
+                                <div className="flex gap-3 text-[9px] text-gray-500 uppercase tracking-wider font-bold">
+                                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-gray-400" /> Analyst</div>
+                                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-blue-500" /> Strategist</div>
+                                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-yellow-500" /> Executive</div>
                                 </div>
                             </div>
                         </div>
 
                         {/* Chart C: Top Companies (Bar) */}
                         <div className="grid grid-cols-1 gap-6">
-                            <div className="bg-[#1E293B] border border-white/10 p-5 rounded-sm shadow-xl">
-                                <h3 className="text-corp-silver text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
+                            <div className="bg-white border border-[#D4AF37]/30 shadow-xl shadow-[#D4AF37]/5 p-6 rounded-sm">
+                                <h3 className="text-[#0F172A]/60 text-[10px] font-bold uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
                                     <Briefcase size={14} /> Top Companies Identified
                                 </h3>
                                 <div className="h-40">
@@ -280,7 +302,7 @@ export const AdminDashboard: React.FC = () => {
                                             <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#334155" />
                                             <XAxis type="number" hide />
                                             <YAxis dataKey="name" type="category" width={100} tick={{ fill: '#94a3b8', fontSize: 10 }} tickLine={false} axisLine={false} />
-                                            <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ backgroundColor: '#0F172A', borderColor: '#334155' }} />
+                                            <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ backgroundColor: '#FFF', borderColor: '#E2E8F0', borderRadius: '4px', fontSize: '12px' }} itemStyle={{ color: '#0F172A' }} />
                                             <Bar dataKey="count" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={20} />
                                         </BarChart>
                                     </ResponsiveContainer>
@@ -429,27 +451,37 @@ export const AdminDashboard: React.FC = () => {
 
 // --- SUB-COMPONENTS ---
 
-const StatsCard = ({ label, value, icon, subValue, trend, isGold, isDanger }: any) => (
-    <div className={`p-6 border rounded-sm shadow-lg relative overflow-hidden group transition-all ${isGold ? 'bg-gradient-to-br from-[#FFFBF0] to-white border-[#D4AF37] text-[#0F172A]' :
-        'bg-[#1E293B] border-white/10 text-white hover:border-gray-600'
-        }`}>
+// --- SUB-COMPONENTS ---
+
+const StatsCard = ({ label, value, icon, subValue, trend, isGold, isDanger, sparkline }: any) => (
+    <div className={`p-6 border rounded-sm shadow-xl relative overflow-hidden group transition-all bg-white border-[#D4AF37]/30 shadow-[#D4AF37]/5`}>
         <div className="flex justify-between items-start mb-4">
-            <h3 className={`text-[10px] font-bold uppercase tracking-[0.2em] ${isGold ? 'text-[#D4AF37]' : 'text-gray-400'}`}>
+            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#0F172A]/60">
                 {label}
             </h3>
-            <div className={`p-2 rounded-full ${isGold ? 'bg-[#D4AF37]/10' : 'bg-white/5'}`}>
+            <div className={`p-2 rounded-full ${isGold ? 'bg-[#D4AF37]/10 text-[#D4AF37]' : isDanger ? 'bg-red-500/10 text-red-500' : 'bg-gray-100 text-gray-400'}`}>
                 {icon}
             </div>
         </div>
-        <div className={`text-3xl font-display font-bold tracking-tight mb-2 ${isDanger ? 'text-red-500' : ''}`}>
+        <div className="text-3xl font-display font-bold tracking-tight mb-2 text-[#0F172A]">
             {value}
         </div>
-        {(subValue || trend) && (
-            <div className="flex items-center gap-2 text-[10px] font-mono">
-                {trend && <span className="text-emerald-500 font-bold">{trend}</span>}
-                {subValue && <span className={`${isGold ? 'text-gray-500' : 'text-gray-500'}`}>{subValue}</span>}
-            </div>
-        )}
+
+        {/* Sparkline & Subvalues */}
+        <div className="flex flex-col gap-1">
+            {(subValue || trend) && (
+                <div className="flex items-center gap-2 text-[10px] font-mono">
+                    {trend && <span className="text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-sm">{trend}</span>}
+                    {subValue && <span className="text-gray-400">{subValue}</span>}
+                </div>
+            )}
+            {sparkline && (
+                <div className="mt-2 text-[9px] text-gray-400 font-mono border-t border-gray-100 pt-2 flex justify-between">
+                    <span>€1.2k Today</span>
+                    <span>€8.5k This Week</span>
+                </div>
+            )}
+        </div>
     </div>
 );
 
@@ -472,6 +504,7 @@ const EditUserButton = ({ user, onUpdate }: { user: AdminProfile, onUpdate: () =
                 updates.custom_token_limit = Number(tokens);
             }
 
+            // @ts-ignore
             const { error } = await supabase
                 .from('profiles')
                 .update(updates)
