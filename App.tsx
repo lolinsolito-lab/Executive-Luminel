@@ -214,7 +214,16 @@ const App: React.FC = () => {
         <AuthPage
           mode={authMode}
           onSwitchMode={setAuthMode}
-          onSuccess={() => {/* Handled by onAuthStateChange */ }}
+          onSuccess={async () => {
+            // FORCE NAVIGATION ON SUCCESS (Fallback if listener lags)
+            console.log("Login Success: Forcing Navigation");
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+              setSession(session);
+              await loadUserProfile(session.user.id);
+              setCurrentPage('app');
+            }
+          }}
           genesisData={genesisData}
         />
       );
