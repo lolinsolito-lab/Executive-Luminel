@@ -32,7 +32,7 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
 
   const firstName = userProfile.name?.split(' ')[0] || 'Agente';
   const enemyName = userProfile.mainEnemy || 'Il Mercato';
-  const tierLabel = userProfile.subscription === 'EXECUTIVE' ? 'Partner' : userProfile.subscription === 'STRATEGIST' ? 'Strategist' : 'Analyst';
+  const tierLabel = userProfile.subscription === 'EXECUTIVE' ? 'Executive' : userProfile.subscription === 'STRATEGIST' ? 'Strategist' : 'Analyst';
 
   const userTier = userProfile.subscription as 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE';
 

@@ -512,6 +512,10 @@ const EditUserButton = ({ user, onUpdate, customTrigger }: { user: AdminProfile,
     const [isOpen, setIsOpen] = useState(false);
     const [tier, setTier] = useState<'GRINDER' | 'STRATEGIST' | 'EXECUTIVE'>(user.subscription_tier || 'GRINDER');
     const [tokens, setTokens] = useState<number | string>(user.custom_token_limit || '');
+    // GENESIS DATA
+    const [currentSalary, setCurrentSalary] = useState<number | string>(user.current_salary || '');
+    const [targetSalary, setTargetSalary] = useState<number | string>(user.target_salary || '');
+
     const [loading, setLoading] = useState(false);
 
     const handleSave = async () => {
@@ -522,9 +526,9 @@ const EditUserButton = ({ user, onUpdate, customTrigger }: { user: AdminProfile,
                 updated_at: new Date().toISOString()
             };
 
-            if (tokens !== '') {
-                updates.custom_token_limit = Number(tokens);
-            }
+            if (tokens !== '') updates.custom_token_limit = Number(tokens);
+            if (currentSalary !== '') updates.current_salary = Number(currentSalary);
+            if (targetSalary !== '') updates.target_salary = Number(targetSalary);
 
             // @ts-ignore
             const { error } = await supabase
@@ -562,7 +566,7 @@ const EditUserButton = ({ user, onUpdate, customTrigger }: { user: AdminProfile,
 
             {isOpen && (
                 <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-                    <div className="bg-white border border-[#D4AF37] p-8 max-w-md w-full shadow-[0_0_50px_rgba(212,175,55,0.2)] rounded-sm relative">
+                    <div className="bg-white border border-[#D4AF37] p-8 max-w-md w-full shadow-[0_0_50px_rgba(212,175,55,0.2)] rounded-sm relative max-h-[90vh] overflow-y-auto">
                         <button
                             onClick={() => setIsOpen(false)}
                             className="absolute top-4 right-4 text-gray-400 hover:text-black transition-colors"
@@ -575,29 +579,53 @@ const EditUserButton = ({ user, onUpdate, customTrigger }: { user: AdminProfile,
                             <h3 className="font-display font-bold text-xl uppercase tracking-widest text-[#0F172A]">Modify User Protocol</h3>
                         </div>
 
-                        <div className="space-y-6">
+                        <div className="space-y-4">
                             {/* USER INFO */}
-                            <div className="p-3 bg-gray-50 rounded-sm mb-4 border border-gray-100">
+                            <div className="p-3 bg-gray-50 rounded-sm border border-gray-100">
                                 <div className="text-sm font-bold text-[#0F172A]">{user.full_name}</div>
                                 <div className="text-xs text-gray-400 font-mono">{user.email}</div>
                             </div>
 
                             {/* TIER SELECTOR */}
-                            <div className="space-y-2">
+                            <div className="space-y-1">
                                 <label className="text-[10px] uppercase font-bold text-[#D4AF37] tracking-widest block">Start Protocol (Tier)</label>
                                 <select
                                     value={tier || 'GRINDER'}
                                     onChange={(e) => setTier(e.target.value as any)}
-                                    className="w-full bg-white border border-gray-200 p-3 text-[#0F172A] focus:ring-2 focus:ring-[#D4AF37] rounded-sm font-serif outline-none"
+                                    className="w-full bg-white border border-gray-200 p-2 text-[#0F172A] focus:ring-1 focus:ring-[#D4AF37] rounded-sm font-serif outline-none text-sm"
                                 >
-                                    <option value="GRINDER">THE ANALYST (Tourist)</option>
-                                    <option value="STRATEGIST">THE STRATEGIST (Mercenary)</option>
-                                    <option value="EXECUTIVE">THE EXECUTIVE (Partner)</option>
+                                    <option value="GRINDER">THE ANALYST</option>
+                                    <option value="STRATEGIST">THE STRATEGIST</option>
+                                    <option value="EXECUTIVE">THE EXECUTIVE</option>
                                 </select>
                             </div>
 
+                            {/* GENESIS DATA (Salary Pain) */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                    <label className="text-[10px] uppercase font-bold text-gray-500 tracking-widest block">Current Salary (€)</label>
+                                    <input
+                                        type="number"
+                                        placeholder="45000"
+                                        value={currentSalary}
+                                        onChange={(e) => setCurrentSalary(e.target.value)}
+                                        className="w-full bg-white border border-gray-200 p-2 text-[#0F172A] focus:ring-1 focus:ring-[#D4AF37] rounded-sm font-mono text-sm"
+                                    />
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-[10px] uppercase font-bold text-gray-500 tracking-widest block">Target Salary (€)</label>
+                                    <input
+                                        type="number"
+                                        placeholder="70000"
+                                        value={targetSalary}
+                                        onChange={(e) => setTargetSalary(e.target.value)}
+                                        className="w-full bg-white border border-gray-200 p-2 text-[#0F172A] focus:ring-1 focus:ring-[#D4AF37] rounded-sm font-mono text-sm"
+                                    />
+                                </div>
+                            </div>
+
                             {/* TOKEN GRANT */}
-                            <div className="space-y-2">
+                            <div className="space-y-1">
                                 <label className="text-[10px] uppercase font-bold text-[#D4AF37] tracking-widest block">Grant AI Tokens (Override)</label>
                                 <input
                                     type="number"
