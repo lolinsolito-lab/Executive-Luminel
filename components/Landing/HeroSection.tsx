@@ -1,7 +1,11 @@
 import React from 'react';
 import { Crown, ArrowRight } from 'lucide-react';
 
-export const HeroSection: React.FC = () => {
+interface HeroSectionProps {
+    onEnterApp: () => void;
+}
+
+export const HeroSection: React.FC<HeroSectionProps> = ({ onEnterApp }) => {
     return (
         <section className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden bg-white">
 

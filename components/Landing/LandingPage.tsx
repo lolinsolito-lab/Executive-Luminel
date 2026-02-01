@@ -6,14 +6,18 @@ import { BlackMarketSection } from './BlackMarketSection';
 import { TierSection } from './TierSection';
 import { FooterSection } from './FooterSection';
 
-export const LandingPage: React.FC = () => {
+interface LandingPageProps {
+    onEnterApp: () => void;
+}
+
+export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
     return (
         <div className="w-full bg-white text-phoenix-ink overflow-x-hidden">
-            <HeroSection />
+            <HeroSection onEnterApp={onEnterApp} />
             <AwakeningSection />
             <WeaponSection />
             <BlackMarketSection />
-            <TierSection />
+            <TierSection onEnterApp={onEnterApp} />
             <FooterSection />
         </div>
     );

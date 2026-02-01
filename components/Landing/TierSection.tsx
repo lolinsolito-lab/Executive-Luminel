@@ -1,7 +1,11 @@
 import React from 'react';
 import { Check, X } from 'lucide-react';
 
-export const TierSection: React.FC = () => {
+interface TierSectionProps {
+    onEnterApp: () => void;
+}
+
+export const TierSection: React.FC<TierSectionProps> = ({ onEnterApp }) => {
     return (
         <section className="py-32 bg-white">
             <div className="max-w-6xl mx-auto px-6">
@@ -30,8 +34,8 @@ export const TierSection: React.FC = () => {
                             <li className="flex gap-2 text-gray-300"><X size={16} /> No AI Persona</li>
                         </ul>
 
-                        <button className="w-full py-3 bg-white border border-gray-300 text-gray-400 font-bold text-xs rounded-sm hover:bg-gray-50 transition-colors">
-                            RESTA POVARO
+                        <button onClick={onEnterApp} className="w-full py-3 bg-white border border-gray-300 text-gray-400 font-bold text-xs rounded-sm hover:bg-gray-50 transition-colors">
+                            RESTA POVORO
                         </button>
                     </div>
 
@@ -49,7 +53,7 @@ export const TierSection: React.FC = () => {
                             <li className="flex gap-2 text-gray-400"><X size={16} /> No WhatsApp Line</li>
                         </ul>
 
-                        <button className="w-full py-3 bg-slate-800 text-white font-bold text-xs rounded-sm hover:bg-slate-900 transition-colors uppercase tracking-wider">
+                        <button onClick={onEnterApp} className="w-full py-3 bg-slate-800 text-white font-bold text-xs rounded-sm hover:bg-slate-900 transition-colors uppercase tracking-wider">
                             Diventa Operativo
                         </button>
                     </div>
