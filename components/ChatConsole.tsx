@@ -107,9 +107,9 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
             <div className={`max-w-[85%] lg:max-w-2xl flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
 
               {/* Avatar */}
-              <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${msg.role === 'user'
-                ? 'bg-phoenix-snow border border-gray-200 text-phoenix-ghost'
-                : 'bg-phoenix-navy text-phoenix-gold'
+              <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center border ${msg.role === 'user'
+                ? 'bg-phoenix-snow border-gray-200 text-phoenix-ghost'
+                : 'bg-white border-phoenix-gold/30 text-phoenix-gold shadow-sm'
                 }`}>
                 {msg.role === 'user'
                   ? <span className="font-sans text-[10px] font-bold">YOU</span>
@@ -119,13 +119,13 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
 
               {/* Message Bubble */}
               <div className={`
-                p-4 rounded-sm text-sm leading-relaxed
+                p-4 rounded-sm text-sm leading-relaxed shadow-sm border
                 ${msg.role === 'user'
-                  ? 'bg-gray-100 text-phoenix-ink font-sans'
-                  : 'bg-phoenix-navy text-white font-sans'
+                  ? 'bg-gray-50 border-gray-200 text-phoenix-ink font-sans'
+                  : 'bg-white border-phoenix-gold/20 text-phoenix-navy font-sans'
                 }
               `}>
-                <div className="prose prose-sm max-w-none">
+                <div className="prose prose-sm max-w-none prose-p:my-1 prose-headings:text-phoenix-ink prose-strong:text-phoenix-ink">
                   <ReactMarkdown>{msg.content}</ReactMarkdown>
                 </div>
               </div>

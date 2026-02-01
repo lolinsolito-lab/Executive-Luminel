@@ -1,24 +1,24 @@
 import { UserProfile } from './types';
 
 export const INITIAL_USER: UserProfile = {
-  id: "",
-  email: "",
-  name: "Ospite",
-  level: 'B1',
-  role: "Consultant",
-  subscription: 'GRINDER', // Default to lowest tier
-  isAdmin: false,
+   id: "",
+   email: "",
+   name: "Ospite",
+   level: 'B1',
+   role: "Consultant",
+   subscription: 'GRINDER', // Default to lowest tier
+   isAdmin: false,
 
-  performanceXP: 0,
-  maxPerformanceXP: 1000,
+   performanceXP: 0,
+   maxPerformanceXP: 1000,
 
-  politicalCapital: 0,
-  maxPoliticalCapital: 1000,
+   politicalCapital: 0,
+   maxPoliticalCapital: 1000,
 
-  nextReviewDate: "TBD",
-  outOfCycleWindow: 'CLOSED',
+   nextReviewDate: "TBD",
+   outOfCycleWindow: 'CLOSED',
 
-  skills: ["Cloud Arch", "Shadow Strategy", "Crisis Mgmt"]
+   skills: ["Cloud Arch", "Shadow Strategy", "Crisis Mgmt"]
 };
 
 export const SYSTEM_PROMPT = `
@@ -55,7 +55,7 @@ Se lo fai gratis, il tuo costo opportunità sale a -20k/anno. Non farlo."
 
 export const WELCOME_MESSAGE = `**MORNING BRIEFING // 08:30 AM**
 
-Agente Jara, benvenuto nella War Room. I mercati si muovono. La tua posizione attuale è **Tier B1 (Specialist)**.
+Agente, benvenuto nella War Room. I mercati si muovono. La tua posizione attuale è **Tier B1 (Specialist)**.
 
 **STATUS REPORT:**
 *   📊 **Performance:** 85% (Optimal).

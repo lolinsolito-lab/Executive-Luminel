@@ -67,7 +67,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
     ];
 
     return (
-        <div className="w-full h-full flex flex-col bg-phoenix-canvas overflow-hidden border-r border-gray-100">
+        <div className="w-full h-full flex flex-col bg-phoenix-canvas overflow-hidden border-r border-gray-100 min-h-0">
 
             {/* A. HEADER - Logo */}
             <div className="shrink-0 p-5 lg:p-6 border-b border-gray-100">
@@ -88,7 +88,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
             </div>
 
             {/* B. NAVIGATION */}
-            <div className="flex-1 overflow-y-auto p-4 lg:p-5 space-y-1 min-h-0">
+            <div className="flex-1 overflow-y-auto p-4 lg:p-5 space-y-1 min-h-0 custom-scrollbar relative pb-24">
                 {navItems.map((item) => (
                     <div key={item.id}>
                         <div
