@@ -13,10 +13,11 @@ interface SidebarProps {
     onOpenUpgrade?: (feature?: string) => void;
     isAdmin?: boolean;
     onOpenAdmin?: () => void;
+    onPanic: (mode: 'toxic' | 'escape' | 'defense') => void;
 }
 
 // V7 PHOENIX - THE ARSENAL
-export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade, onNavigate, activePage, isAdmin, onOpenAdmin }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade, onNavigate, activePage, isAdmin, onOpenAdmin, onPanic }) => {
 
     const [expandedItem, setExpandedItem] = useState<string | null>(null);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -128,21 +129,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
                 <div className="mb-6">
                     <h3 className="px-2 mb-2 font-display text-[10px] font-bold text-phoenix-gold uppercase tracking-[0.2em]">Panic Mode</h3>
                     <div className="space-y-2">
-                        <button onClick={() => alert('WIP: Script Logic')} className="w-full flex items-center gap-3 px-3 py-2 bg-red-50/50 border border-red-100 rounded-sm hover:bg-red-50 hover:border-red-200 transition-all text-left group">
+                        <button onClick={() => onPanic('toxic')} className="w-full flex items-center gap-3 px-3 py-2 bg-red-50/50 border border-red-100 rounded-sm hover:bg-red-50 hover:border-red-200 transition-all text-left group">
                             <span className="text-lg">🆘</span>
                             <div>
                                 <div className="font-sans text-xs font-bold text-red-800">Toxic Reply</div>
                                 <div className="font-sans text-[9px] text-red-500">Instant Script</div>
                             </div>
                         </button>
-                        <button onClick={() => alert('WIP: Excuse Generator')} className="w-full flex items-center gap-3 px-3 py-2 bg-amber-50/50 border border-amber-100 rounded-sm hover:bg-amber-50 hover:border-amber-200 transition-all text-left group">
+                        <button onClick={() => onPanic('escape')} className="w-full flex items-center gap-3 px-3 py-2 bg-amber-50/50 border border-amber-100 rounded-sm hover:bg-amber-50 hover:border-amber-200 transition-all text-left group">
                             <span className="text-lg">📅</span>
                             <div>
                                 <div className="font-sans text-xs font-bold text-amber-800">Meeting Escape</div>
                                 <div className="font-sans text-[9px] text-amber-600">Excuse Generator</div>
                             </div>
                         </button>
-                        <button onClick={() => alert('WIP: RAG System')} className="w-full flex items-center gap-3 px-3 py-2 bg-slate-50 border border-slate-100 rounded-sm hover:bg-slate-100 transition-all text-left group">
+                        <button onClick={() => onPanic('defense')} className="w-full flex items-center gap-3 px-3 py-2 bg-slate-50 border border-slate-100 rounded-sm hover:bg-slate-100 transition-all text-left group">
                             <span className="text-lg">🛡️</span>
                             <div>
                                 <div className="font-sans text-xs font-bold text-slate-700">Raise Defense</div>

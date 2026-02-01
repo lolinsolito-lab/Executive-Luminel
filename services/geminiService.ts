@@ -169,3 +169,30 @@ export const sendMessageToCoach = async (message: string, user?: UserProfile): P
     return "CRITICAL FAILURE: Connection to Corporate Grid lost. Please retry.";
   }
 };
+
+// V6 TACTICAL ENGINE (One-Shot Generation for Panic Mode)
+export const generateTacticalResponse = async (systemContext: string, userInput: string): Promise<string> => {
+  const ai = getClient();
+  if (!ai) {
+    // Mock Fallback
+    await new Promise(r => setTimeout(r, 2000));
+    return `**MOCK TACTICAL RESPONSE**\n\n*   **Option A**: Silence and stare.\n*   **Option B**: "Values align, timing does not."\n*   **Option C**: Walk away.`;
+  }
+
+  try {
+    const model = ai.models.generateContent({
+      model: 'gemini-1.5-flash',
+      config: {
+        systemInstruction: systemContext,
+        temperature: 0.8, // Slightly creative for excuses/reframes
+      },
+      contents: [{ role: 'user', parts: [{ text: userInput }] }]
+    });
+
+    const result = await model;
+    return result.text || "TACTICAL COMPUTER OFFLINE.";
+  } catch (e) {
+    console.error("Tactical Gen Failed", e);
+    return "ERROR: Tactical Uplink Failed.";
+  }
+};

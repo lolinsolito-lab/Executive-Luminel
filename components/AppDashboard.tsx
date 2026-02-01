@@ -13,6 +13,7 @@ import { LegalDisclaimer } from './Legal/LegalDisclaimer';
 import { Codex } from './Codex';
 import { Vault } from './Vault';
 import { BlackBook } from './BlackBook';
+import { PanicModal } from './PanicModal';
 // Data Persistence
 import { updateProfile } from '../lib/supabase';
 import { UserProfile, Message } from '../types';
@@ -40,6 +41,9 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
 
     const [activeTab, setActiveTab] = useState('command');
     const [isGenesisOpen, setIsGenesisOpen] = useState(false);
+
+    // PANIC ENGINE STATE
+    const [panicMode, setPanicMode] = useState<'toxic' | 'escape' | 'defense' | null>(null);
 
     // Narrative Loading State
     const [loadingText, setLoadingText] = useState("Decrypting Salary Data...");
@@ -244,6 +248,7 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
                         onOpenUpgrade={(feature) => { setUpgradeFeature(feature); setIsUpgradeOpen(true); }}
                         isAdmin={isAdmin}
                         onOpenAdmin={onOpenAdmin}
+                        onPanic={setPanicMode}
                     />
                 </div>
 
@@ -288,6 +293,7 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
                         onNavigate={(page) => { setActiveTab(page); setIsSidebarOpen(false); }}
                         onOpenMap={() => { setIsMapOpen(true); setIsSidebarOpen(false); }}
                         onOpenUpgrade={(feature) => { setUpgradeFeature(feature); setIsUpgradeOpen(true); setIsSidebarOpen(false); }}
+                        onPanic={(mode) => { setPanicMode(mode); setIsSidebarOpen(false); }}
                     />
                     {isAdmin && (
                         <div className="absolute bottom-4 left-4 right-4">
@@ -334,7 +340,12 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
                 userEmail={userProfile.email}
             />
 
-
+            <PanicModal
+                isOpen={!!panicMode}
+                onClose={() => setPanicMode(null)}
+                mode={panicMode}
+                user={userProfile}
+            />
 
             <GenesisModal
                 isOpen={isGenesisOpen}
