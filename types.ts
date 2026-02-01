@@ -35,6 +35,12 @@ export interface UserProfile {
   tokensUsed?: number;
   maxTokens?: number;
   tokensResetDate?: string;
+
+  // V7.7 - Genesis Protocol
+  currentSalary?: number;
+  targetSalary?: number;
+  mainEnemy?: string;
+  genesisCompleted?: boolean;
 }
 
 export interface Message {
