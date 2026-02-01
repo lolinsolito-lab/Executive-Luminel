@@ -1,11 +1,22 @@
 import React from 'react';
 import { Check, X } from 'lucide-react';
+import { SubscriptionTier } from '../../types';
 
 interface TierSectionProps {
     onEnterApp: () => void;
+    onSelectPlan?: (plan: SubscriptionTier) => void;
 }
 
-export const TierSection: React.FC<TierSectionProps> = ({ onEnterApp }) => {
+export const TierSection: React.FC<TierSectionProps> = ({ onEnterApp, onSelectPlan }) => {
+
+    const handlePlanClick = (tier: SubscriptionTier) => {
+        if (onSelectPlan) {
+            onSelectPlan(tier);
+        } else {
+            onEnterApp();
+        }
+    };
+
     return (
         <section className="py-32 bg-white">
             <div className="max-w-6xl mx-auto px-6">
@@ -21,7 +32,7 @@ export const TierSection: React.FC<TierSectionProps> = ({ onEnterApp }) => {
 
                 <div className="grid md:grid-cols-3 gap-8 items-end">
 
-                    {/* TIER 1: THE TOURIST (Boring/Weak) */}
+                    {/* TIER 1: THE ANALYST (Previously Tourist) */}
                     <div className="bg-gray-50 p-8 rounded-sm border border-gray-200 opacity-70 hover:opacity-100 transition-opacity">
                         <h3 className="font-sans text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">The Analyst</h3>
                         <div className="text-4xl font-display font-bold text-gray-400 mb-2">€0<span className="text-lg">/mo</span></div>
@@ -35,11 +46,11 @@ export const TierSection: React.FC<TierSectionProps> = ({ onEnterApp }) => {
                         </ul>
 
                         <button onClick={onEnterApp} className="w-full py-3 bg-white border border-gray-300 text-gray-400 font-bold text-xs rounded-sm hover:bg-gray-50 transition-colors">
-                            RESTA POVORO
+                            RESTA POVERO
                         </button>
                     </div>
 
-                    {/* TIER 2: THE MERCENARY (Metallic/Solid) */}
+                    {/* TIER 2: THE STRATEGIST (Previously Mercenary) */}
                     <div className="bg-slate-100 p-8 rounded-sm border border-slate-300 relative transform hover:-translate-y-2 transition-transform duration-300">
                         <div className="absolute top-0 inset-x-0 h-1 bg-slate-400"></div>
                         <h3 className="font-sans text-xs font-bold text-slate-600 uppercase tracking-widest mb-4">The Strategist</h3>
@@ -53,12 +64,12 @@ export const TierSection: React.FC<TierSectionProps> = ({ onEnterApp }) => {
                             <li className="flex gap-2 text-gray-400"><X size={16} /> No WhatsApp Line</li>
                         </ul>
 
-                        <button onClick={onEnterApp} className="w-full py-3 bg-slate-800 text-white font-bold text-xs rounded-sm hover:bg-slate-900 transition-colors uppercase tracking-wider">
+                        <button onClick={() => handlePlanClick('STRATEGIST')} className="w-full py-3 bg-slate-800 text-white font-bold text-xs rounded-sm hover:bg-slate-900 transition-colors uppercase tracking-wider">
                             Diventa Operativo
                         </button>
                     </div>
 
-                    {/* TIER 3: THE PARTNER (Gold/Shining) */}
+                    {/* TIER 3: THE EXECUTIVE (Previously Partner) */}
                     <div className="bg-white p-8 rounded-sm border-2 border-phoenix-gold relative shadow-phoenix-shadow-levitate transform scale-105 z-10">
                         <div className="absolute -top-4 inset-x-0 flex justify-center">
                             <span className="bg-phoenix-gold text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest rounded-full shadow-lg">
@@ -77,7 +88,7 @@ export const TierSection: React.FC<TierSectionProps> = ({ onEnterApp }) => {
                             <li className="flex gap-2"><Check size={16} className="text-phoenix-gold" /> <strong>Priority Coaching</strong></li>
                         </ul>
 
-                        <button onClick={onEnterApp} className="w-full py-4 bg-phoenix-gold-gradient text-white font-bold text-sm rounded-sm shadow-phoenix-glow hover:scale-105 transition-transform uppercase tracking-widest relative overflow-hidden group">
+                        <button onClick={() => handlePlanClick('EXECUTIVE')} className="w-full py-4 bg-phoenix-gold-gradient text-white font-bold text-sm rounded-sm shadow-phoenix-glow hover:scale-105 transition-transform uppercase tracking-widest relative overflow-hidden group">
                             <span className="relative z-10">Richiedi Accesso Elitario</span>
                             <div className="absolute top-0 -left-full w-full h-full bg-white/30 transform skew-x-12 group-hover:animate-shine"></div>
                         </button>

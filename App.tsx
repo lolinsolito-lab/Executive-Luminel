@@ -10,7 +10,7 @@ import { ThankYouPage } from './components/ThankYou/ThankYouPage';
 import { ErrorModal } from './components/ErrorModal';
 import { GenesisModal } from './components/GenesisModal';
 import { SmartNavbar } from './components/Landing/SmartNavbar';
-import { UserProfile } from './types';
+import { UserProfile, SubscriptionTier } from './types';
 import { INITIAL_USER } from './constants';
 import { Session } from '@supabase/supabase-js';
 
@@ -26,6 +26,7 @@ const App: React.FC = () => {
 
   // AUTH VIEW STATE
   const [authMode, setAuthMode] = useState<'login' | 'register' | 'recover'>('login');
+  const [selectedPlan, setSelectedPlan] = useState<SubscriptionTier | null>(null);
   const [genesisData, setGenesisData] = useState<{
     currentSalary: number;
     targetSalary: number;
@@ -191,6 +192,12 @@ const App: React.FC = () => {
     }
   };
 
+  const handlePlanSelect = (plan: SubscriptionTier) => {
+    setSelectedPlan(plan);
+    setAuthMode('register');
+    setCurrentPage('auth');
+  };
+
   // RENDER
   if (loading) return <div className="bg-black h-screen w-full flex items-center justify-center text-white font-mono tracking-widest animate-pulse">INITIALIZING LUMINEL V7.9...</div>;
 
@@ -216,6 +223,7 @@ const App: React.FC = () => {
         <AuthPage
           mode={authMode}
           onSwitchMode={setAuthMode}
+          selectedPlan={selectedPlan}
           onSuccess={async () => {
             // FORCE NAVIGATION ON SUCCESS (Fallback if listener lags)
             console.log("Login Success: Forcing Navigation");
@@ -254,7 +262,10 @@ const App: React.FC = () => {
           onLoginClick={() => { setAuthMode('login'); setCurrentPage('auth'); }}
           onGenesisClick={() => setShowGenesisModal(true)}
         />
-        <LandingPage onCtaClick={() => setShowGenesisModal(true)} />
+        <LandingPage
+          onCtaClick={() => setShowGenesisModal(true)}
+          onSelectPlan={handlePlanSelect}
+        />
         <GenesisModal
           isOpen={showGenesisModal}
           onComplete={handleGenesisComplete}

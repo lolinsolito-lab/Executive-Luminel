@@ -54,7 +54,7 @@ export default async function handler(req: any, res: any) {
 
         // Extract UserID from client_reference_id
         const userId = session.client_reference_id;
-        const amount = session.amount_total;
+        const amount = session.amount_total; // e.g., 29900 for €299.00
         const email = session.customer_details?.email;
 
         // Fallback: If no client_reference_id, try to find user by email
@@ -76,25 +76,36 @@ export default async function handler(req: any, res: any) {
             return res.status(400).json({ error: 'User Identification Failed' });
         }
 
-        // Determine Tier based on amount (Primitive but effective for V5.0)
-        // STRATEGIST = ~€4900 (49.00)
-        // EXECUTIVE = ~€29900 (299.00)
-        let newTier = 'GRINDER';
-        if (amount && amount >= 29000) newTier = 'EXECUTIVE';
-        else if (amount && amount >= 4000) newTier = 'STRATEGIST';
+        // TIER MAPPING LOGIC (The Uplink)
+        // Price Config: Strategist (~€49), Executive (~€299)
+        let newTier = 'GRINDER'; // Default to Analyst/Free
 
-        console.log(`✅ Payment received. Upgrading user ${targetUserId} to ${newTier}`);
+        // Check Amount (Robust fallback if Price ID changes)
+        if (amount && amount >= 20000) {
+            newTier = 'EXECUTIVE'; // Maps to "The Executive" (Partner)
+        } else if (amount && amount >= 3000) {
+            newTier = 'STRATEGIST'; // Maps to "The Strategist" (Mercenary)
+        }
 
-        // Update Profile
+        // TODO: If you have specific price_IDs, check session.line_items or session.metadata['price_id']
+
+        console.log(`✅ Payment received (€${amount ? amount / 100 : 0}). Upgrading user ${targetUserId} to ${newTier}`);
+
+        // A. UPDATE PROFILE (Tier Grant)
         const { error: profileError } = await supabase
             .from('profiles')
             .update({
-                subscription_tier: newTier,
+                subscription_tier: newTier, // Must match DB Enum (likely UPPERCASE based on app types)
                 updated_at: new Date().toISOString()
             })
             .eq('id', targetUserId);
 
-        // Create Subscription Record
+        if (profileError) {
+            console.error('Failed to update profile:', profileError);
+            return res.status(500).json({ error: 'DB Update Failed' });
+        }
+
+        // B. UPDATE SUBSCRIPTIONS TABLE (Ledger)
         await supabase.from('subscriptions').insert({
             user_id: targetUserId,
             stripe_customer_id: session.customer as string,
@@ -102,12 +113,42 @@ export default async function handler(req: any, res: any) {
             tier: newTier,
             status: 'active',
             current_period_start: new Date().toISOString(),
-            // Logic for period_end would go here, but omitted for brevity in "Launch" phase
         });
 
-        if (profileError) {
-            console.error('Failed to update profile:', profileError);
-            return res.status(500).json({ error: 'DB Update Failed' });
+        // C. ANALYTICS UPDATE (The CFO Logic)
+        // Increment daily revenue
+        const today = new Date().toISOString().split('T')[0];
+
+        // Upsert analytics row for today
+        // Note: 'total_revenue' is usually an aggregation, but if we have a daily table:
+        // We use an RPC or raw SQL for atomic increment, or fetch-update (optimistic lock).
+        // Since we are Server-Side (Edge Function), straightforward SQL is best if Supabase client permits,
+        // otherwise select -> update. For simplicity/robustness here, we'll try an RPC if it exists, or select-update.
+
+        // Simplified "Get or Create" Logic
+        const { data: stats } = await supabase
+            .from('analytics_daily')
+            .select('*')
+            .eq('date', today)
+            .single();
+
+        if (stats) {
+            await supabase
+                .from('analytics_daily')
+                .update({
+                    total_revenue: (stats.total_revenue || 0) + (amount || 0),
+                    updated_at: new Date().toISOString()
+                })
+                .eq('date', today);
+        } else {
+            await supabase
+                .from('analytics_daily')
+                .insert({
+                    date: today,
+                    total_revenue: amount || 0,
+                    active_users: 1, // Approximation
+                    updated_at: new Date().toISOString()
+                });
         }
     }
 

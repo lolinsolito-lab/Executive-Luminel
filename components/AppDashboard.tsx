@@ -345,6 +345,7 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
                 onClose={() => setPanicMode(null)}
                 mode={panicMode}
                 user={userProfile}
+                onOpenUpgrade={(feature) => { setUpgradeFeature(feature); setIsUpgradeOpen(true); }}
             />
 
             <GenesisModal

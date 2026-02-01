@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
+import { createCheckoutSession } from '../../lib/stripe'; // Added
 import { Mail, Lock, User, ArrowRight, Loader, Building2, Fingerprint } from 'lucide-react';
+
+import { SubscriptionTier } from '../../types';
 
 interface AuthPageProps {
     mode: 'login' | 'register' | 'recover';
     onSuccess: () => void;
     onSwitchMode: (mode: 'login' | 'register' | 'recover') => void;
+    selectedPlan?: SubscriptionTier | null;
     genesisData?: {
         currentSalary: number;
         targetSalary: number;
@@ -14,7 +18,7 @@ interface AuthPageProps {
     };
 }
 
-export const AuthPage: React.FC<AuthPageProps> = ({ mode, onSuccess, onSwitchMode, genesisData }) => {
+export const AuthPage: React.FC<AuthPageProps> = ({ mode, onSuccess, onSwitchMode, genesisData, selectedPlan }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
@@ -44,21 +48,70 @@ export const AuthPage: React.FC<AuthPageProps> = ({ mode, onSuccess, onSwitchMod
                 onSuccess();
             } else {
                 // REGISTER with Genesis Data
-                const { error } = await supabase.auth.signUp({
+                // 1. Create User
+                const { data: { user }, error: signUpError } = await supabase.auth.signUp({
                     email,
                     password,
                     options: {
                         data: {
                             full_name: fullName,
+                            // We still pass metadata as backup
                             company_name: genesisData?.companyName || null,
-                            // Genesis specific metadata can be stored in user_metadata too
                             genesis_enemy: genesisData?.mainEnemy,
                             genesis_gap: genesisData ? (genesisData.targetSalary - genesisData.currentSalary) : 0
                         }
                     }
                 });
-                if (error) throw error;
-                onSuccess();
+                if (signUpError) throw signUpError;
+
+                // 2. DATA ANCHOR: Blocking Persist (CRITICAL)
+                if (user) {
+                    const gapValue = genesisData ? (genesisData.targetSalary - genesisData.currentSalary) : 0;
+
+                    // Force update profile to ensure data capture before any redirect
+                    // We set tier to 'GRINDER' (Analyst) initially. Payment upgrade happens later via Webhook.
+                    // Using 'any' cast to bypass outdated types
+                    (supabase.from('profiles') as any).update({
+                        company_name: genesisData?.companyName || 'Unknown Corp',
+                        // If you have a specific column for gap_value, map it here. 
+                        // Assuming 'genesis_gap' is stored in metadata, but if there's a column:
+                        // gap_value: gapValue, 
+                        subscription_tier: 'GRINDER', // Initial state
+                        updated_at: new Date().toISOString()
+                    }).eq('id', user.id);
+                }
+
+                // 3. DIRECT UPLINK: Check Plan & Redirect
+                if (selectedPlan && selectedPlan !== 'GRINDER') {
+                    // Start Checkout Flow
+                    // In a real app, you'd call your backend to create a Stripe Session here.
+                    // For now, we simulate the "Intent" or redirect to a Payment Link if we had one.
+                    console.log(`initiating_uplink_to_${selectedPlan}`);
+
+                    // Simulate URL retrieval (replace with actual Stripe URL or createCheckoutSession call)
+                    // const { url } = await createCheckoutSession(selectedPlan, user?.id || '', ...);
+
+                    // Placeholder Redirect Logic
+                    const STRIPE_LINKS: Record<string, string> = {
+                        'STRATEGIST': 'https://buy.stripe.com/test_strategist_placeholder', // REPLACE THIS
+                        'EXECUTIVE': 'https://buy.stripe.com/test_executive_placeholder'     // REPLACE THIS
+                    };
+
+                    const redirectUrl = STRIPE_LINKS[selectedPlan as string];
+
+                    if (redirectUrl && !redirectUrl.includes('placeholder')) {
+                        window.location.href = redirectUrl;
+                        return; // Stop execution, let browser redirect
+                    } else {
+                        // Fallback if no link configured yet: Go to Dashboard but show upgrade modal
+                        console.warn("Stripe Links not configured. Proceeding to Dashboard.");
+                        onSuccess();
+                    }
+
+                } else {
+                    // Free Tier -> Dashboard
+                    onSuccess();
+                }
             }
         } catch (err: any) {
             setError(err.message || "Errore di autenticazione. Riprovare.");

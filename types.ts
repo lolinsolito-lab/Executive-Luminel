@@ -44,6 +44,10 @@ export interface UserProfile {
   mainEnemy?: string;
   location?: string; // e.g., 'Milan', 'London'
   genesisCompleted?: boolean;
+
+  // V11.0 - Panic Mode Scarcity
+  panicDailyUsage?: number;
+  panicLastReset?: string;
 }
 
 export interface Message {

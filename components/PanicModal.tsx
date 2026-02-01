@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { X, Zap, Shield, DoorOpen, Copy, Activity } from 'lucide-react';
+import { X, Zap, Shield, DoorOpen, Copy, Activity, Lock } from 'lucide-react';
 import { generateTacticalResponse } from '../services/geminiService';
 import { UserProfile } from '../types';
+import { supabase } from '../lib/supabase';
 import ReactMarkdown from 'react-markdown';
 
 interface PanicModalProps {
@@ -9,9 +10,10 @@ interface PanicModalProps {
     onClose: () => void;
     mode: 'toxic' | 'escape' | 'defense' | null;
     user: UserProfile;
+    onOpenUpgrade?: (feature: string) => void;
 }
 
-export const PanicModal: React.FC<PanicModalProps> = ({ isOpen, onClose, mode, user }) => {
+export const PanicModal: React.FC<PanicModalProps> = ({ isOpen, onClose, mode, user, onOpenUpgrade }) => {
     const [input, setInput] = useState('');
     const [result, setResult] = useState('');
     const [loading, setLoading] = useState(false);
@@ -83,8 +85,32 @@ export const PanicModal: React.FC<PanicModalProps> = ({ isOpen, onClose, mode, u
 
     const currentConfig = config[mode];
 
+    const [usageCount, setUsageCount] = useState(user.panicDailyUsage || 0);
+
+    // Limit Logic
+    const getLimit = () => {
+        if (user.subscription === 'EXECUTIVE') return 9999;
+        if (user.subscription === 'STRATEGIST') return 10;
+        return 1; // GRINDER
+    };
+
+    const limit = getLimit();
+    const remaining = limit - usageCount;
+
     const handleSubmit = async () => {
-        if (mode !== 'escape' && !input) return; // Escape can be empty/defaults
+        if (mode !== 'escape' && !input) return;
+
+        // 1. CHECK LIMIT
+        if (usageCount >= limit) {
+            if (onOpenUpgrade) {
+                onClose();
+                onOpenUpgrade("Unlock: Unlimited Panic Mode");
+            } else {
+                alert("Daily Limit Reached. Upgrade to Executive.");
+            }
+            return;
+        }
+
         setLoading(true);
 
         const prompt = mode === 'escape'
@@ -95,9 +121,30 @@ export const PanicModal: React.FC<PanicModalProps> = ({ isOpen, onClose, mode, u
             ? currentConfig.systemPrompt(user.role)
             : currentConfig.systemPrompt(user.role, user.companyName || 'Corp');
 
-        const response = await generateTacticalResponse(systemParam as any, prompt);
-        setResult(response);
-        setLoading(false);
+        try {
+            const response = await generateTacticalResponse(systemParam as any, prompt);
+            setResult(response);
+
+            // 2. INCREMENT & PERSIST
+            const newCount = usageCount + 1;
+            setUsageCount(newCount);
+
+            // Optimistic update local (props will update on refresh, but we want instant feedback)
+            // Fire and forget DB update to not slow down UI
+            // Using 'any' cast on the table reference to bypass strict outdated types
+            (supabase.from('profiles') as any).update({
+                panic_daily_usage: newCount,
+                panic_last_reset: new Date().toISOString()
+            }).eq('id', user.id).then(({ error }: any) => {
+                if (error) console.error("Failed to update panic usage", error);
+            });
+
+        } catch (e) {
+            console.error(e);
+            setResult("Tactical System Offline. Try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     const copyToClipboard = () => {

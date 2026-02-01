@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { loadStripe } from '@stripe/stripe-js';
 
 const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
@@ -10,55 +11,51 @@ export const stripePromise = stripePublishableKey
 // Pricing configuration
 export const STRIPE_PRICES = {
     STRATEGIST: {
-        priceId: '', // Set after creating product in Stripe Dashboard
+        priceId: 'price_PLACEHOLDER_STRATEGIST', // User must update
+        link: 'https://buy.stripe.com/test_strategist_placeholder',
         name: 'THE STRATEGIST',
         price: 49,
         currency: 'EUR',
-        interval: 'month' as const,
-        features: [
-            'AI Chat illimitata',
-            'Neural Codex (1 card/giorno)',
-            'Out-of-Cycle Window',
-            'Sandbox Simulator',
-            'Vault Templates Base'
-        ]
     },
     EXECUTIVE: {
-        priceId: '', // Set after creating product in Stripe Dashboard
+        priceId: 'price_PLACEHOLDER_EXECUTIVE', // User must update
+        link: 'https://buy.stripe.com/test_executive_placeholder',
         name: 'THE EXECUTIVE',
         price: 299,
         currency: 'EUR',
-        interval: 'month' as const,
-        features: [
-            'Tutto di Strategist +',
-            'Priority AI Support',
-            'Full Neural Codex',
-            'Premium Vault Templates',
-            'Email Support 4h',
-            'WhatsApp Direct Line'
-        ]
     }
 };
 
-// Create checkout session (call your backend)
+// Create checkout session (API Uplink)
 export const createCheckoutSession = async (
     tier: 'STRATEGIST' | 'EXECUTIVE',
     userId: string,
     successUrl: string,
     cancelUrl: string
 ) => {
-    // For now, redirect to Stripe Payment Links
-    // In production, this should call your Supabase Edge Function
-    const priceConfig = STRIPE_PRICES[tier];
+    try {
+        const response = await fetch('/api/create-checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                tier,
+                userId,
+                successUrl,
+                cancelUrl
+            }),
+        });
 
-    // Placeholder - will be replaced with actual Stripe Checkout
-    console.log('Creating checkout for:', { tier, userId, priceConfig });
+        const data = await response.json();
 
-    // Return mock session for development
-    return {
-        sessionId: 'mock_session_' + Date.now(),
-        url: null // Will be set when Stripe products are created
-    };
+        if (!response.ok) throw new Error(data.error || 'Checkout creation failed');
+
+        return data; // { url, sessionId }
+    } catch (error) {
+        console.error("Uplink Error:", error);
+        return null;
+    }
 };
 
 // Redirect to Stripe Customer Portal (for managing subscriptions)

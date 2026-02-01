@@ -127,23 +127,32 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
 
                 {/* V7.7 PANIC MODE (Quick Actions) */}
                 <div className="mb-6">
-                    <h3 className="px-2 mb-2 font-display text-[10px] font-bold text-phoenix-gold uppercase tracking-[0.2em]">Panic Mode</h3>
+                    <div className="flex justify-between items-center px-2 mb-2">
+                        <h3 className="font-display text-[10px] font-bold text-phoenix-gold uppercase tracking-[0.2em]">Panic Mode</h3>
+                        {/* VISUAL CUE: Global Daily Limit */}
+                        <span className="font-mono text-[9px] text-gray-400">
+                            {user.subscription === 'EXECUTIVE'
+                                ? '∞'
+                                : `${(user.panicDailyUsage || 0)}/${user.subscription === 'STRATEGIST' ? 10 : 1}`}
+                        </span>
+                    </div>
+
                     <div className="space-y-2">
-                        <button onClick={() => onPanic('toxic')} className="w-full flex items-center gap-3 px-3 py-2 bg-red-50/50 border border-red-100 rounded-sm hover:bg-red-50 hover:border-red-200 transition-all text-left group">
+                        <button onClick={() => onPanic('toxic')} className="w-full flex items-center gap-3 px-3 py-2 bg-red-50/50 border border-red-100 rounded-sm hover:bg-red-50 hover:border-red-200 transition-all text-left group relative overflow-hidden">
                             <span className="text-lg">🆘</span>
                             <div>
                                 <div className="font-sans text-xs font-bold text-red-800">Toxic Reply</div>
                                 <div className="font-sans text-[9px] text-red-500">Instant Script</div>
                             </div>
                         </button>
-                        <button onClick={() => onPanic('escape')} className="w-full flex items-center gap-3 px-3 py-2 bg-amber-50/50 border border-amber-100 rounded-sm hover:bg-amber-50 hover:border-amber-200 transition-all text-left group">
+                        <button onClick={() => onPanic('escape')} className="w-full flex items-center gap-3 px-3 py-2 bg-amber-50/50 border border-amber-100 rounded-sm hover:bg-amber-50 hover:border-amber-200 transition-all text-left group relative overflow-hidden">
                             <span className="text-lg">📅</span>
                             <div>
                                 <div className="font-sans text-xs font-bold text-amber-800">Meeting Escape</div>
                                 <div className="font-sans text-[9px] text-amber-600">Excuse Generator</div>
                             </div>
                         </button>
-                        <button onClick={() => onPanic('defense')} className="w-full flex items-center gap-3 px-3 py-2 bg-slate-50 border border-slate-100 rounded-sm hover:bg-slate-100 transition-all text-left group">
+                        <button onClick={() => onPanic('defense')} className="w-full flex items-center gap-3 px-3 py-2 bg-slate-50 border border-slate-100 rounded-sm hover:bg-slate-100 transition-all text-left group relative overflow-hidden">
                             <span className="text-lg">🛡️</span>
                             <div>
                                 <div className="font-sans text-xs font-bold text-slate-700">Raise Defense</div>
