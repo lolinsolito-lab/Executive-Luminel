@@ -7,11 +7,11 @@ export const DailyMission: React.FC = () => {
     const [mission, setMission] = useState({ title: '', desc: '' });
 
     const missions = [
-        { title: "The Pause", desc: "Count to 3 before answering any question today." },
-        { title: "Silence is Power", desc: "End a meeting without saying 'Bye', just nod." },
-        { title: "The Mirror", desc: "Mirror the body language of the highest ranking person in the room." },
-        { title: "No Apologies", desc: "Replace 'Sorry' with 'Thank you for waiting' in all emails." },
-        { title: "Eye Contact", desc: "Hold eye contact until they look away first." }
+        { title: "La Pausa Strategica", desc: "Conta fino a 3 prima di rispondere a qualsiasi domanda oggi." },
+        { title: "Il Silenzio è Potere", desc: "Chiudi un meeting senza dire 'Ciao', limitati a un cenno del capo." },
+        { title: "Lo Specchio", desc: "Copia il linguaggio del corpo della persona più importante nella stanza." },
+        { title: "Mai Scusarsi", desc: "Sostituisci 'Scusa' con 'Grazie per l'attesa' in tutte le email." },
+        { title: "Contatto Visivo", desc: "Mantieni il contatto visivo finché non sono loro a distogliere lo sguardo." }
     ];
 
     useEffect(() => {
@@ -55,7 +55,7 @@ export const DailyMission: React.FC = () => {
                     font-display text-[10px] font-bold uppercase tracking-[0.2em] mb-1
                     ${completed ? 'text-white' : 'text-phoenix-gold'}
                 `}>
-                    Daily Mission
+                    Missione Giornaliera
                 </h4>
 
                 <h3 className={`
@@ -84,11 +84,11 @@ export const DailyMission: React.FC = () => {
                 >
                     {completed ? (
                         <>
-                            <Check size={16} /> Mission Accomplished
+                            <Check size={16} /> Missione Compiuta
                         </>
                     ) : (
                         <>
-                            <div className="w-5 h-5 border border-gray-400 rounded-sm flex-shrink-0"></div> Mark Complete
+                            <div className="w-5 h-5 border border-gray-400 rounded-sm flex-shrink-0"></div> Completa
                         </>
                     )}
                 </button>

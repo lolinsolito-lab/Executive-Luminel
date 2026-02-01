@@ -42,14 +42,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
     };
 
     const navItems = [
-        { id: 'command', icon: Home, label: 'Command', active: activePage === 'command', locked: false },
+        { id: 'command', icon: Home, label: 'Comando', active: activePage === 'command', locked: false },
         {
             id: 'codex',
             icon: BookOpen,
-            label: 'The Codex',
+            label: 'Il Codex',
             active: activePage === 'codex',
             locked: !hasAccess(user, 'codex'),
-            lockedMessage: "Access Denied. The Neural Codex requires Strategist Clearance."
+            lockedMessage: "Accesso Negato. Il Codex Neurale richiede Livello Strategist."
         },
         {
             id: 'blackbook',
@@ -57,7 +57,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
             label: 'Black Book',
             active: activePage === 'blackbook',
             locked: !hasAccess(user, 'blackbook'),
-            lockedMessage: "Access Denied. Intelligence is for Operatives. Upgrade to see the files."
+            lockedMessage: "Accesso Negato. L'Intelligence è riservata agli Operativi. Esegui l'Upgrade per sbloccare."
         },
         {
             id: 'vault',
@@ -65,7 +65,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
             label: 'The Vault',
             active: activePage === 'vault',
             locked: !hasAccess(user, 'vault'),
-            lockedMessage: "Access Denied. Intelligence is for Operatives. Upgrade to see the files."
+            lockedMessage: "Accesso Negato. Solo gli Executive possono accedere al Vault."
         },
     ];
 
@@ -133,6 +133,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
                         <span className="font-mono text-[9px] text-gray-400">
                             {user.subscription === 'EXECUTIVE'
                                 ? '∞'
+                                /// FIX: Ensure we use optional chaining properly or default to 0
                                 : `${(user.panicDailyUsage || 0)}/${user.subscription === 'STRATEGIST' ? 10 : 1}`}
                         </span>
                     </div>
@@ -141,22 +142,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
                         <button onClick={() => onPanic('toxic')} className="w-full flex items-center gap-3 px-3 py-2 bg-red-50/50 border border-red-100 rounded-sm hover:bg-red-50 hover:border-red-200 transition-all text-left group relative overflow-hidden">
                             <span className="text-lg">🆘</span>
                             <div>
-                                <div className="font-sans text-xs font-bold text-red-800">Toxic Reply</div>
-                                <div className="font-sans text-[9px] text-red-500">Instant Script</div>
+                                <div className="font-sans text-xs font-bold text-red-800">Risposta Tossica</div>
+                                <div className="font-sans text-[9px] text-red-500">Contrattacco Rapido</div>
                             </div>
                         </button>
                         <button onClick={() => onPanic('escape')} className="w-full flex items-center gap-3 px-3 py-2 bg-amber-50/50 border border-amber-100 rounded-sm hover:bg-amber-50 hover:border-amber-200 transition-all text-left group relative overflow-hidden">
                             <span className="text-lg">📅</span>
                             <div>
-                                <div className="font-sans text-xs font-bold text-amber-800">Meeting Escape</div>
-                                <div className="font-sans text-[9px] text-amber-600">Excuse Generator</div>
+                                <div className="font-sans text-xs font-bold text-amber-800">Evasione Meeting</div>
+                                <div className="font-sans text-[9px] text-amber-600">Generatore Scuse</div>
                             </div>
                         </button>
                         <button onClick={() => onPanic('defense')} className="w-full flex items-center gap-3 px-3 py-2 bg-slate-50 border border-slate-100 rounded-sm hover:bg-slate-100 transition-all text-left group relative overflow-hidden">
                             <span className="text-lg">🛡️</span>
                             <div>
-                                <div className="font-sans text-xs font-bold text-slate-700">Raise Defense</div>
-                                <div className="font-sans text-[9px] text-slate-500">Counter-argument</div>
+                                <div className="font-sans text-xs font-bold text-slate-700">Alza Difese</div>
+                                <div className="font-sans text-[9px] text-slate-500">Contro-argomentazione</div>
                             </div>
                         </button>
                     </div>

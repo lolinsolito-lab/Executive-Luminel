@@ -48,9 +48,9 @@ export const Codex: React.FC<CodexProps> = ({ user, onOpenUpgrade }) => {
             <div className={`${selectedLaw ? 'hidden md:flex' : 'flex'} w-full md:w-1/3 flex-col border-r border-gray-100 bg-phoenix-snow`}>
                 <div className="p-6 border-b border-gray-100">
                     <h2 className="font-display font-bold text-xl text-phoenix-navy tracking-widest uppercase flex items-center gap-3">
-                        <BookOpen className="text-phoenix-gold" /> The Codex
+                        <BookOpen className="text-phoenix-gold" /> Il Codex
                     </h2>
-                    <p className="text-xs text-phoenix-ghost mt-1 font-serif italic">The Immutable Laws of Power.</p>
+                    <p className="text-xs text-phoenix-ghost mt-1 font-serif italic">Le Leggi Immutabili del Potere.</p>
                 </div>
                 <div className="flex-1 overflow-y-auto">
                     {CODEX_LAWS.map((law) => {
@@ -97,7 +97,7 @@ export const Codex: React.FC<CodexProps> = ({ user, onOpenUpgrade }) => {
                                 onClick={() => setSelectedLaw(null)}
                                 className="md:hidden mb-4 text-xs font-bold uppercase tracking-widest text-phoenix-ghost flex items-center gap-1"
                             >
-                                ← Back to Index
+                                ← Torna all'Indice
                             </button>
 
                             <div className="max-w-2xl mx-auto">
@@ -120,7 +120,7 @@ export const Codex: React.FC<CodexProps> = ({ user, onOpenUpgrade }) => {
                 ) : (
                     <div className="flex-1 flex flex-col items-center justify-center text-phoenix-ghost/50">
                         <BookOpen size={64} strokeWidth={1} className="mb-4 opacity-20" />
-                        <p className="font-display text-sm tracking-widest uppercase">Select a Law to Study</p>
+                        <p className="font-display text-sm tracking-widest uppercase">Seleziona una Legge da Studiare</p>
                     </div>
                 )}
             </div>
