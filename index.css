@@ -187,19 +187,77 @@
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 }
 
-/* Luxury Input Field */
-.luxury-input {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #E2E2E2;
+/* =========================================
+   PSYCH-TIER PROTOCOL CLASSES
+   ========================================= */
+
+/* CARD A: THE TOURIST (Weak) */
+.card-tourist {
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  opacity: 0.8;
+  filter: grayscale(100%);
+  transition: all 0.3s ease;
 }
 
-.luxury-input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+.card-tourist:hover {
+  opacity: 1;
+  filter: grayscale(0%);
 }
 
-.luxury-input:focus {
-  background: rgba(0, 0, 0, 0.8);
-  border-color: #C5A059;
-  box-shadow: 0 0 15px rgba(197, 160, 89, 0.15);
+/* CARD B: THE MERCENARY (Tactical) */
+.card-mercenary {
+  background-color: #F8FAFC;
+  border: 1px solid #94A3B8;
+  /* Slate-400 */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  position: relative;
+  border-radius: 2px;
+}
+
+/* Sharp edges logic handled by rounded-sm utility */
+
+/* CARD C: GOD MODE (Divine) */
+.card-god-mode {
+  background-color: #FFFDF5;
+  /* Warm white */
+  border: 2px solid #D4AF37;
+  box-shadow: 0 20px 50px rgba(212, 175, 55, 0.4);
+  position: relative;
+  z-index: 10;
+  transform: scale(1.02);
+}
+
+.card-god-mode-glow {
+  animation: godModePulse 3s infinite;
+}
+
+@keyframes godModePulse {
+  0% {
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.7);
+  }
+
+  100% {
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  }
+}
+
+/* BLUR LOCK (DataStream) */
+.tier-locked-blur {
+  filter: blur(4px);
+  pointer-events: none;
+  opacity: 0.6;
+  user-select: none;
+}
+
+/* GOLD TEXT ANIMATION (Input Placeholder) */
+.placeholder-gold::placeholder {
+  color: #D4AF37;
+  opacity: 1;
+  font-weight: bold;
+  letter-spacing: 0.05em;
 }

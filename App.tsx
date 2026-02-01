@@ -312,11 +312,11 @@ const App: React.FC = () => {
           </button>
         </div>
 
-        {/* DESKTOP: 3-Column Grid Layout */}
-        <div className="hidden md:grid h-full" style={{ gridTemplateColumns: '280px 1fr 340px' }}>
+        {/* DESKTOP: 3-Column Grid Layout (Psych-Tier Protocol: 20% - 60% - 20%) */}
+        <div className="hidden md:grid h-full w-full" style={{ gridTemplateColumns: '20% 60% 20%' }}>
 
           {/* LEFT: THE ARSENAL (Sidebar) */}
-          <div className="h-full bg-phoenix-snow border-r border-gray-100 relative overflow-hidden flex flex-col">
+          <div className="h-full bg-phoenix-snow border-r border-gray-100 relative overflow-hidden flex flex-col min-w-0">
             <Sidebar
               user={userProfile}
               onOpenMap={() => setIsMapOpen(true)}
@@ -335,17 +335,18 @@ const App: React.FC = () => {
             )}
           </div>
 
-          {/* CENTER: THE BATTLEFIELD (Chat) */}
-          <div className="h-full bg-phoenix-canvas relative overflow-hidden flex flex-col border-r border-gray-100">
+          {/* CENTER: THE BATTLEFIELD (Chat) - Prioritized width */}
+          <div className="h-full bg-phoenix-canvas relative overflow-hidden flex flex-col border-r border-gray-100 min-w-0">
             <ChatConsole
               messages={messages}
               isLoading={isLoading}
               onSendMessage={handleSendMessage}
+              userTier={userProfile.subscription as 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE'}
             />
           </div>
 
           {/* RIGHT: THE HUD (DataStream) */}
-          <div className="h-full bg-phoenix-canvas relative overflow-hidden">
+          <div className="h-full bg-phoenix-canvas relative overflow-hidden flex flex-col min-w-0">
             <DataStream user={userProfile} onOpenHierarchy={() => setIsHierarchyOpen(true)} />
           </div>
 
