@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { UserProfile, VaultItem } from '../types';
+import { VAULT_DEFAULTS } from '../data/vaultData';
 import { Sword, FileText, Video, Mic, Scroll, Lock, Eye, Download, Crown, ChevronRight } from 'lucide-react';
 
 interface VaultProps {
@@ -20,7 +21,13 @@ export const Vault: React.FC<VaultProps> = ({ user, onOpenUpgrade }) => {
                 .select('*')
                 .eq('is_active', true)
                 .order('created_at', { ascending: false });
-            if (data) setItems(data as any);
+
+            if (data && data.length > 0) {
+                setItems(data as any);
+            } else {
+                // FALLBACK: Use Local Defaults if DB is empty
+                setItems(VAULT_DEFAULTS);
+            }
             setLoading(false);
         };
         fetchVault();
@@ -70,10 +77,10 @@ export const Vault: React.FC<VaultProps> = ({ user, onOpenUpgrade }) => {
             {/* HEADER */}
             <div className="mb-8 border-b border-gray-100 pb-4">
                 <h2 className="font-display font-bold text-2xl text-phoenix-navy tracking-widest uppercase flex items-center gap-3">
-                    <Sword className="text-phoenix-gold" /> THE VAULT
+                    <Sword className="text-phoenix-gold" /> IL VAULT
                 </h2>
                 <p className="text-xs text-phoenix-ghost mt-1 font-serif italic">
-                    Classified strategies and weapons for the corporate battlefield.
+                    Strategie classificate e armi per il campo di battaglia corporativo.
                 </p>
             </div>
 
@@ -99,13 +106,13 @@ export const Vault: React.FC<VaultProps> = ({ user, onOpenUpgrade }) => {
                             {!unlocked && (
                                 <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-10 flex flex-col items-center justify-center text-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     <Lock size={32} className="text-gray-400 mb-2" />
-                                    <h4 className="font-display font-bold text-phoenix-navy uppercase tracking-widest text-sm mb-1">Classified</h4>
-                                    <p className="font-sans text-[10px] text-gray-500 mb-4">Upgrade to accessing this weapon.</p>
+                                    <h4 className="font-display font-bold text-phoenix-navy uppercase tracking-widest text-sm mb-1">Classificato</h4>
+                                    <p className="font-sans text-[10px] text-gray-500 mb-4">Esegui l'Upgrade per accedere a quest'arma.</p>
                                     <button
                                         onClick={() => onOpenUpgrade(`Unlock: ${item.title}`)}
                                         className="px-4 py-2 bg-phoenix-gold text-white text-[10px] font-bold uppercase tracking-widest rounded-sm hover:bg-amber-600 transition-colors shadow-lg"
                                     >
-                                        Upgrade
+                                        Sblocca Immediatamente
                                     </button>
                                 </div>
                             )}
@@ -117,7 +124,7 @@ export const Vault: React.FC<VaultProps> = ({ user, onOpenUpgrade }) => {
                                 </div>
                                 {!unlocked && (
                                     <div className="px-2 py-1 bg-gray-200 text-gray-500 text-[9px] font-bold uppercase tracking-wider rounded-sm flex items-center gap-1">
-                                        <Lock size={10} /> {item.required_tier === 'partner' ? 'Executive' : 'Strategist'}
+                                        <Lock size={10} /> {item.required_tier === 'partner' ? 'Executive Only' : 'Strategist Only'}
                                     </div>
                                 )}
                             </div>
@@ -143,7 +150,7 @@ export const Vault: React.FC<VaultProps> = ({ user, onOpenUpgrade }) => {
                                     onClick={() => handleAccess(item)}
                                     className="mt-6 w-full py-2 border border-gray-200 hover:border-phoenix-gold text-xs font-bold uppercase tracking-widest text-phoenix-navy hover:text-phoenix-gold transition-all flex items-center justify-center gap-2"
                                 >
-                                    {item.content_type === 'text' ? <Eye size={14} /> : <Download size={14} />} Access Material
+                                    {item.content_type === 'text' ? <Eye size={14} /> : <Download size={14} />} Accedi al Materiale
                                 </button>
                             )}
                         </div>
