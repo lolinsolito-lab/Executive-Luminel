@@ -30,6 +30,11 @@ export interface UserProfile {
   outOfCycleWindow: 'CLOSED' | 'OPEN' | 'PENDING';
 
   skills: string[];
+
+  // V7 PHOENIX - Token System
+  tokensUsed?: number;
+  maxTokens?: number;
+  tokensResetDate?: string;
 }
 
 export interface Message {

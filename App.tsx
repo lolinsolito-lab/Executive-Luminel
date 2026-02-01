@@ -3,14 +3,16 @@ import { supabase } from './lib/supabase';
 import { Analytics } from '@vercel/analytics/react';
 import { TacticalMenu } from './components/TacticalMenu';
 import { DataStream } from './components/DataStream';
-import { Sidebar } from './components/Sidebar'; // Restored per User Feedback
+import { Sidebar } from './components/Sidebar';
 import { ChatConsole } from './components/ChatConsole';
 import { StrategicMapModal } from './components/StrategicMapModal';
 import { HierarchyModal } from './components/HierarchyModal';
 import { UpgradeModal } from './components/Paywall/UpgradeModal';
+import { PaywallModal } from './components/Paywall/PaywallModal';
+import { PriorityUplink } from './components/PriorityUplink';
 import { LandingPage } from './components/Landing/LandingPage';
 import { AdminDashboard } from './components/Admin/AdminDashboard';
-import { LegalPage } from './components/Legal/LegalPage'; // Keep for structure but mostly unused now
+import { LegalPage } from './components/Legal/LegalPage';
 import { AuthModal } from './components/Auth/AuthModal';
 import { ThankYouPage } from './components/ThankYou/ThankYouPage';
 import { UserProfile, Message } from './types';
@@ -404,6 +406,12 @@ const App: React.FC = () => {
         userId={userProfile.id}
         userEmail={userProfile.email}
       />
+
+      {/* V7 PHOENIX - Priority Uplink (Executive Only) */}
+      <PriorityUplink
+        isVisible={currentPage === 'app' && userProfile.subscription === 'EXECUTIVE'}
+      />
+
       <Analytics />
 
       <AuthModal
