@@ -1,18 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { UserProfile, BlackBookEntry } from '../types';
-import { Users, Plus, Save, Trash2, Search, UserMinus, ShieldAlert, Heart, Skull, Meh } from 'lucide-react';
+import { Users, Plus, Save, Trash2, Search, UserMinus, ShieldAlert, Heart, Skull, Meh, Crown } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 
 interface BlackBookProps {
     user: UserProfile;
+    onOpenUpgrade?: (feature: string) => void;
 }
 
-export const BlackBook: React.FC<BlackBookProps> = ({ user }) => {
+export const BlackBook: React.FC<BlackBookProps> = ({ user, onOpenUpgrade }) => {
     const [entries, setEntries] = useState<BlackBookEntry[]>([]);
     const [loading, setLoading] = useState(false);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+
+    // LIMIT LOGIC
+    const getCleanTier = (tier: string) => {
+        // Fallback map in case of mismatch
+        if (tier === 'analyst') return 'GRINDER';
+        if (tier === 'strategist') return 'STRATEGIST';
+        if (tier === 'executive' || tier === 'partner') return 'EXECUTIVE';
+        return tier;
+    };
+
+    const maxEntries = {
+        'GRINDER': 1,
+        'STRATEGIST': 5,
+        'EXECUTIVE': 9999
+    }[getCleanTier(user.subscription) || 'GRINDER'] || 1;
+
+    const currentCount = entries.length;
+    const isLimitReached = currentCount >= maxEntries;
+
+    const handleAddClick = () => {
+        if (isLimitReached) {
+            if (onOpenUpgrade) onOpenUpgrade('Unlock: Unlimited Dossiers');
+            else alert("Upgrade Plan to add more profiles.");
+        } else {
+            setIsFormOpen(true);
+        }
+    };
 
     // Form State
     const [formData, setFormData] = useState<Partial<BlackBookEntry>>({
@@ -98,13 +126,27 @@ export const BlackBook: React.FC<BlackBookProps> = ({ user }) => {
                     <h2 className="font-display font-bold text-2xl text-phoenix-navy tracking-widest uppercase flex items-center gap-3">
                         <Users className="text-phoenix-gold" /> PERSONNEL DOSSIER
                     </h2>
-                    <p className="text-xs text-phoenix-ghost mt-1 font-serif italic">Know your friends. Study your enemies.</p>
+                    <div className="flex items-center gap-3 mt-1">
+                        <p className="text-xs text-phoenix-ghost font-serif italic">Know your friends. Study your enemies.</p>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${isLimitReached ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500'}`}>
+                            {entries.length} / {maxEntries > 1000 ? '∞' : maxEntries}
+                        </span>
+                    </div>
                 </div>
                 <button
-                    onClick={() => setIsFormOpen(true)}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-phoenix-navy text-white font-bold text-xs uppercase tracking-widest rounded-sm hover:bg-phoenix-gold hover:text-phoenix-navy transition-colors shadow-lg"
+                    onClick={handleAddClick}
+                    className={`flex items-center gap-2 px-5 py-2.5 font-bold text-xs uppercase tracking-widest rounded-sm transition-colors shadow-lg
+                        ${isLimitReached
+                            ? 'bg-phoenix-gold text-white hover:bg-amber-500 animate-pulse'
+                            : 'bg-phoenix-navy text-white hover:bg-phoenix-gold hover:text-phoenix-navy'
+                        }
+                    `}
                 >
-                    <Plus size={16} /> ADD PROFILE
+                    {isLimitReached ? (
+                        <><Crown size={16} /> UNLOCK LIMITS</>
+                    ) : (
+                        <><Plus size={16} /> ADD PROFILE</>
+                    )}
                 </button>
             </div>
 

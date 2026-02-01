@@ -262,9 +262,9 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
                             userProfile={userProfile}
                         />
                     )}
-                    {activeTab === 'codex' && <Codex />}
+                    {activeTab === 'codex' && <Codex user={userProfile} onOpenUpgrade={(feat) => { setUpgradeFeature(feat); setIsUpgradeOpen(true); }} />}
                     {activeTab === 'vault' && <Vault user={userProfile} onOpenUpgrade={(feat) => { setUpgradeFeature(feat); setIsUpgradeOpen(true); }} />}
-                    {activeTab === 'blackbook' && <BlackBook user={userProfile} />}
+                    {activeTab === 'blackbook' && <BlackBook user={userProfile} onOpenUpgrade={(feat) => { setUpgradeFeature(feat); setIsUpgradeOpen(true); }} />}
                 </div>
 
                 {/* RIGHT: THE HUD (DataStream) */}
@@ -312,9 +312,9 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
                             userProfile={userProfile}
                         />
                     )}
-                    {activeTab === 'codex' && <Codex />}
+                    {activeTab === 'codex' && <Codex user={userProfile} onOpenUpgrade={(feat) => { setUpgradeFeature(feat); setIsUpgradeOpen(true); }} />}
                     {activeTab === 'vault' && <Vault user={userProfile} onOpenUpgrade={(feat) => { setUpgradeFeature(feat); setIsUpgradeOpen(true); }} />}
-                    {activeTab === 'blackbook' && <BlackBook user={userProfile} />}
+                    {activeTab === 'blackbook' && <BlackBook user={userProfile} onOpenUpgrade={(feat) => { setUpgradeFeature(feat); setIsUpgradeOpen(true); }} />}
                 </div>
             </div>
 

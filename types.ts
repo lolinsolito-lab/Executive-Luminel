@@ -89,5 +89,6 @@ export interface CodexLaw {
   description: string;
   category: 'Psychology' | 'Strategy' | 'Defense' | 'Offense';
   content: string; // Markdown
+  min_tier: 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE';
   isLocked?: boolean;
 }

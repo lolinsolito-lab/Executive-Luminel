@@ -1,8 +1,9 @@
 import { CodexLaw } from '../types';
 
-export const CODEX_LAWS: CodexLaw[] = [
+const CODEX_LAWS: CodexLaw[] = [
     {
         id: 'law-1',
+        min_tier: 'GRINDER',
         title: 'Silence is Leverage',
         description: 'Never fill the silence in a negotiation. The first one to speak loses.',
         category: 'Psychology',
@@ -23,6 +24,7 @@ If they speak first, you have gained intelligence. If they fidget, you have gain
     },
     {
         id: 'law-2',
+        min_tier: 'GRINDER',
         title: 'The Mirror Strategy',
         description: 'Reflect their body language to bypass their defenses.',
         category: 'Psychology',
@@ -43,6 +45,7 @@ Target: "Yes, because of the timeline."
     },
     {
         id: 'law-3',
+        min_tier: 'STRATEGIST',
         title: 'Never Outshine the Master',
         description: 'Make those above you feel superior. In their comfort, they will lift you up.',
         category: 'Strategy',
@@ -60,6 +63,7 @@ If you make your boss feel insecure, they will crush you.
     },
     {
         id: 'law-4',
+        min_tier: 'STRATEGIST',
         title: 'Control the Options',
         description: 'Get them to play with the cards you deal.',
         category: 'Strategy',
@@ -77,6 +81,7 @@ Ensure BOTH options lead to your victory.
     },
     {
         id: 'law-5',
+        min_tier: 'EXECUTIVE',
         title: 'Crush Your Enemy Totally',
         description: 'If you leave an ember burning, the fire will return.',
         category: 'Offense',
@@ -92,3 +97,5 @@ If you must remove a rival, do not just demote them—remove their influence, th
         `
     }
 ];
+
+export { CODEX_LAWS };

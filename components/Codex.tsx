@@ -1,11 +1,46 @@
 import React, { useState } from 'react';
-import { CodexLaw } from '../types';
+import { CodexLaw, UserProfile } from '../types';
 import { CODEX_LAWS } from '../data/codexData';
 import { BookOpen, ChevronRight, Lock, Bookmark } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
-export const Codex: React.FC = () => {
+interface CodexProps {
+    user?: UserProfile; // Optional to not break old usage immediately, but recommended
+    onOpenUpgrade?: (feature: string) => void;
+}
+
+export const Codex: React.FC<CodexProps> = ({ user, onOpenUpgrade }) => {
     const [selectedLaw, setSelectedLaw] = useState<CodexLaw | null>(null);
+
+    // TIER LOGIC
+    const userTierValue = {
+        'GRINDER': 0, // Analyst
+        'STRATEGIST': 1, // Strategist
+        'EXECUTIVE': 2 // Executive
+    }[user?.subscription || 'GRINDER'] || 0;
+
+    const getRequiredTierValue = (tier: string) => {
+        switch (tier) {
+            case 'GRINDER': return 0;
+            case 'STRATEGIST': return 1;
+            case 'EXECUTIVE': return 2;
+            default: return 99;
+        }
+    };
+
+    const isUnlocked = (lawTier: string) => {
+        return userTierValue >= getRequiredTierValue(lawTier);
+    };
+
+    const handleLawClick = (law: CodexLaw) => {
+        if (isUnlocked(law.min_tier)) {
+            setSelectedLaw(law);
+        } else {
+            // Trigger Upgrade
+            if (onOpenUpgrade) onOpenUpgrade(`Unlock: ${law.title}`);
+            else alert("Upgrade required to access this Law.");
+        }
+    };
 
     return (
         <div className="h-full flex bg-phoenix-canvas text-phoenix-ink animate-fade-in overflow-hidden">
@@ -18,24 +53,38 @@ export const Codex: React.FC = () => {
                     <p className="text-xs text-phoenix-ghost mt-1 font-serif italic">The Immutable Laws of Power.</p>
                 </div>
                 <div className="flex-1 overflow-y-auto">
-                    {CODEX_LAWS.map((law) => (
-                        <div
-                            key={law.id}
-                            onClick={() => setSelectedLaw(law)}
-                            className={`p-5 border-b border-gray-100 cursor-pointer transition-all hover:bg-white group ${selectedLaw?.id === law.id ? 'bg-white border-l-4 border-l-phoenix-gold' : 'border-l-4 border-l-transparent'}`}
-                        >
-                            <div className="flex justify-between items-start mb-1">
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-phoenix-gold">{law.category}</span>
-                                {law.isLocked && <Lock size={12} className="text-gray-400" />}
+                    {CODEX_LAWS.map((law) => {
+                        const unlocked = isUnlocked(law.min_tier);
+                        return (
+                            <div
+                                key={law.id}
+                                onClick={() => handleLawClick(law)}
+                                className={`
+                                    p-5 border-b border-gray-100 cursor-pointer transition-all group relative overflow-hidden
+                                    ${selectedLaw?.id === law.id ? 'bg-white border-l-4 border-l-phoenix-gold' : 'border-l-4 border-l-transparent hover:bg-white'}
+                                `}
+                            >
+                                <div className="flex justify-between items-start mb-1">
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-phoenix-gold">{law.category}</span>
+                                    {!unlocked && <Lock size={12} className="text-gray-400" />}
+                                </div>
+                                <h3 className={`font-display font-bold text-lg mb-1 transition-colors ${selectedLaw?.id === law.id ? 'text-phoenix-gold' : 'text-phoenix-navy'} ${!unlocked ? 'opacity-70' : ''}`}>
+                                    {law.title}
+                                </h3>
+                                <p className={`font-serif text-xs text-phoenix-ghost line-clamp-2 leading-relaxed ${!unlocked ? 'blur-[3px] select-none opacity-50' : ''}`}>
+                                    {law.description}
+                                </p>
+
+                                {!unlocked && (
+                                    <div className="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-white/10 backdrop-blur-[1px]">
+                                        <div className="bg-phoenix-gold text-white text-[9px] font-bold uppercase px-2 py-1 rounded-sm shadow-sm">
+                                            {law.min_tier === 'EXECUTIVE' ? 'Executive Only' : 'Strategist Only'}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                            <h3 className={`font-display font-bold text-lg mb-1 group-hover:text-phoenix-gold transition-colors ${selectedLaw?.id === law.id ? 'text-phoenix-gold' : 'text-phoenix-navy'}`}>
-                                {law.title}
-                            </h3>
-                            <p className="font-serif text-xs text-phoenix-ghost line-clamp-2 leading-relaxed">
-                                {law.description}
-                            </p>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             </div>
 
