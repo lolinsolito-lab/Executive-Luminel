@@ -33,8 +33,8 @@ export const GenesisModal: React.FC<GenesisModalProps> = ({ isOpen, onComplete }
     };
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-phoenix-navy/95 backdrop-blur-md">
-            <div className="w-full max-w-md bg-phoenix-canvas border border-phoenix-gold p-8 rounded-sm relative shadow-2xl animate-fade-in-up">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-phoenix-navy/95 backdrop-blur-md animate-fade-in">
+            <div className="w-full max-w-md bg-phoenix-canvas border border-phoenix-gold p-8 rounded-sm relative shadow-2xl animate-fade-in">
 
                 {/* Header */}
                 <div className="text-center mb-8">
