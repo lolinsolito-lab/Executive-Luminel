@@ -66,8 +66,8 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
 
               {/* Avatar */}
               <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${msg.role === 'user'
-                  ? 'bg-phoenix-snow border border-gray-200 text-phoenix-ghost'
-                  : 'bg-phoenix-navy text-phoenix-gold'
+                ? 'bg-phoenix-snow border border-gray-200 text-phoenix-ghost'
+                : 'bg-phoenix-navy text-phoenix-gold'
                 }`}>
                 {msg.role === 'user'
                   ? <span className="font-sans text-[10px] font-bold">YOU</span>
@@ -107,28 +107,40 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
       <div className="p-4 lg:p-5 bg-phoenix-canvas border-t border-gray-100 z-30 shrink-0">
         <form onSubmit={handleSubmit} className="relative max-w-4xl mx-auto">
           {/* Floating Input Container */}
-          <div className="flex items-center gap-3 bg-white border border-gray-200 p-3 lg:p-4 rounded-sm phoenix-input-float focus-within:border-phoenix-gold transition-all">
+          <div className={`
+              flex items-center gap-3 border p-3 lg:p-4 rounded-sm phoenix-input-float focus-within:border-phoenix-gold transition-all
+              ${userTier === 'EXECUTIVE' ? 'bg-phoenix-cream border-phoenix-gold/30' : 'bg-white border-gray-200'}
+            `}>
             <span className="text-phoenix-gold font-display text-xl font-bold">{'>'}</span>
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Qual è la tua mossa strategica?"
-              className="flex-1 bg-transparent border-none focus:outline-none text-phoenix-ink font-sans text-sm placeholder-phoenix-ghost"
+              placeholder={
+                userTier === 'GRINDER' ? "3 messaggi rimanenti oggi..." :
+                  userTier === 'STRATEGIST' ? "Inserisci comando tattico..." :
+                    "Unlimited Uplink Secure. What is your command?"
+              }
+              className={`
+                  flex-1 bg-transparent border-none focus:outline-none font-sans text-sm
+                  ${userTier === 'EXECUTIVE' ? 'text-phoenix-ink placeholder-gold font-medium' : 'text-phoenix-ink placeholder-phoenix-ghost'}
+                `}
               disabled={isLoading}
               autoFocus
             />
 
-            {/* Token Counter (Tier 2 only) */}
+            {/* Token Counter (Tier 2 - Mercenary) */}
             {userTier === 'STRATEGIST' && (
-              <span className="text-[11px] font-sans text-phoenix-ghost">
+              <span className="text-[11px] font-sans text-phoenix-ghost flex items-center gap-1">
+                <Activity size={12} className="text-blue-500" />
                 {tokenCount}/{maxTokens} Tokens
               </span>
             )}
 
-            {/* Unlimited Badge (Tier 3) */}
+            {/* Unlimited Badge (Tier 3 - God Mode) */}
             {userTier === 'EXECUTIVE' && (
-              <span className="text-[10px] font-sans text-phoenix-gold uppercase tracking-widest font-bold">
+              <span className="text-[10px] font-sans text-phoenix-gold uppercase tracking-widest font-bold flex items-center gap-1">
+                <Crown size={12} />
                 Unlimited
               </span>
             )}
@@ -137,9 +149,17 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
             <button
               type="submit"
               disabled={!input.trim() || isLoading}
-              className="px-4 py-2 bg-phoenix-gold text-white font-sans text-sm font-bold uppercase tracking-widest hover:bg-amber-600 transition-colors disabled:opacity-30 disabled:cursor-not-allowed rounded-sm"
+              className={`
+                  px-4 py-2 font-sans text-sm font-bold uppercase tracking-widest transition-all disabled:opacity-30 disabled:cursor-not-allowed rounded-sm
+                  ${userTier === 'EXECUTIVE'
+                  ? 'bg-gradient-to-r from-phoenix-gold to-amber-600 text-white shadow-phoenix-gold hover:from-amber-600 hover:to-phoenix-gold animate-pulse'
+                  : userTier === 'STRATEGIST'
+                    ? 'bg-slate-800 text-white hover:bg-slate-700'
+                    : 'bg-gray-200 text-gray-500 hover:bg-gray-300'
+                }
+                `}
             >
-              Execute
+              {userTier === 'GRINDER' ? 'Invia' : userTier === 'STRATEGIST' ? 'Armati' : 'EXECUTE'}
             </button>
           </div>
         </form>

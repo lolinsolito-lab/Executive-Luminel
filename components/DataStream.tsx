@@ -1,6 +1,6 @@
 import React from 'react';
 import { UserProfile } from '../types';
-import { TrendingUp, Clock, AlertTriangle, ChevronRight, Crown, Zap } from 'lucide-react';
+import { TrendingUp, Clock, AlertTriangle, ChevronRight, Crown, Zap, Lock } from 'lucide-react';
 
 interface DataStreamProps {
     user: UserProfile;
@@ -59,24 +59,46 @@ export const DataStream: React.FC<DataStreamProps> = ({ user, onOpenHierarchy })
             <div className="flex-1 overflow-y-auto space-y-6 pr-2 min-h-0">
 
                 {/* B. POLITICAL FLAME (Vertical Bar) */}
-                <div className="space-y-3">
+                <div className="space-y-3 relative group">
                     <div className="flex justify-between items-end">
                         <span className="font-display font-bold text-phoenix-ink text-sm tracking-wide">Political Flame</span>
-                        <span className={`font-sans text-sm font-bold ${flamePercent < 40 ? 'text-red-500' : 'text-phoenix-gold'}`}>
-                            {Math.round(flamePercent)}%
-                        </span>
+
+                        {/* Value or Mask */}
+                        {user.subscription !== 'GRINDER' ? (
+                            <span className={`font-sans text-sm font-bold ${flamePercent < 40 ? 'text-red-500' : 'text-phoenix-gold'}`}>
+                                {Math.round(flamePercent)}%
+                                {user.subscription === 'EXECUTIVE' && <span className="text-[9px] ml-2 text-emerald-600">▲ +15% Trend</span>}
+                            </span>
+                        ) : (
+                            <span className="font-sans text-[10px] text-gray-400 font-bold uppercase">Locked</span>
+                        )}
                     </div>
 
-                    {/* Flame Bar */}
-                    <div className="h-32 w-full bg-phoenix-snow border border-gray-200 rounded-sm relative p-1 shadow-inner">
+                    {/* Flame Bar Container */}
+                    <div className={`
+                        h-32 w-full bg-phoenix-snow border border-gray-200 rounded-sm relative p-1 shadow-inner
+                        ${user.subscription === 'GRINDER' ? 'grayscale opacity-50' : ''}
+                    `}>
+                        {/* Blur Overlay for Free Tier */}
+                        {user.subscription === 'GRINDER' && (
+                            <div className="absolute inset-0 z-20 backdrop-blur-[2px] flex items-center justify-center bg-white/20">
+                                <div className="text-center px-4">
+                                    <Lock size={16} className="mx-auto text-gray-500 mb-1" />
+                                    <span className="text-[9px] font-sans font-bold text-gray-600 uppercase tracking-wider block">
+                                        Upgrade to view
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+
                         <div
                             className="absolute bottom-1 left-1 right-1 bg-gradient-to-t from-amber-700 via-amber-500 to-amber-400 rounded-sm transition-all duration-1000 phoenix-flame-breathe"
-                            style={{ height: `${flamePercent}%` }}
+                            style={{ height: `${user.subscription === 'GRINDER' ? 40 : flamePercent}%` }}
                         ></div>
                         <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/10 pointer-events-none rounded-sm"></div>
                     </div>
 
-                    {flamePercent < 40 && (
+                    {flamePercent < 40 && user.subscription !== 'GRINDER' && (
                         <div className="flex items-center gap-2 text-red-500 text-[10px] font-sans font-bold">
                             <AlertTriangle size={12} />
                             <span>CRITICAL - Azione immediata richiesta</span>
@@ -85,12 +107,14 @@ export const DataStream: React.FC<DataStreamProps> = ({ user, onOpenHierarchy })
                 </div>
 
                 {/* C. PERFORMANCE KPI */}
-                <div className="space-y-3">
+                <div className="space-y-3 relative">
                     <div className="flex justify-between items-end">
                         <span className="font-display font-bold text-phoenix-ink text-sm tracking-wide">Performance</span>
-                        <span className="font-sans text-sm font-bold text-emerald-600">85%</span>
+                        <span className="font-sans text-sm font-bold text-emerald-600">
+                            {user.subscription === 'GRINDER' ? '??%' : '85%'}
+                        </span>
                     </div>
-                    <div className="relative w-24 h-24 mx-auto flex items-center justify-center">
+                    <div className={`relative w-24 h-24 mx-auto flex items-center justify-center ${user.subscription === 'GRINDER' ? 'tier-locked-blur' : ''}`}>
                         <svg className="w-full h-full transform -rotate-90">
                             <circle cx="50%" cy="50%" r="42%" stroke="#e5e7eb" strokeWidth="8" fill="transparent" />
                             <circle cx="50%" cy="50%" r="42%" stroke="#D4AF37" strokeWidth="8" fill="transparent" strokeDasharray="240" strokeDashoffset="36" strokeLinecap="round" />

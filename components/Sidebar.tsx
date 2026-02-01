@@ -22,10 +22,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
     };
 
     const navItems = [
-        { icon: Home, label: 'Command', active: true },
-        { icon: BookOpen, label: 'The Codex', active: false },
-        { icon: Users, label: 'Black Book', active: false, locked: user.subscription === 'GRINDER' },
-        { icon: Lock, label: 'The Vault', active: false, locked: user.subscription !== 'EXECUTIVE' },
+        { icon: Home, label: 'Command', active: true, locked: false },
+        { icon: BookOpen, label: 'The Codex', active: false, locked: false }, // Strategy Support is generic
+        {
+            icon: Users,
+            label: 'Black Book',
+            active: false,
+            locked: user.subscription === 'GRINDER',
+            lockedMessage: "Access Denied. Intelligence is for Operatives. Upgrade to see the files."
+        },
+        {
+            icon: Lock,
+            label: 'The Vault',
+            active: false,
+            locked: user.subscription === 'GRINDER', // Totally locked for Free
+            lockedMessage: "Access Denied. Intelligence is for Operatives. Upgrade to see the files."
+        },
     ];
 
     return (
@@ -54,14 +66,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
                 {navItems.map((item, idx) => (
                     <div
                         key={idx}
-                        onClick={() => item.locked ? onOpenUpgrade?.(item.label) : null}
+                        onClick={() => item.locked ? onOpenUpgrade?.(item.lockedMessage || item.label) : null}
                         className={`
                             group flex items-center gap-3 px-4 py-3 rounded-sm cursor-pointer transition-all duration-200
                             ${item.active
                                 ? 'bg-gradient-to-r from-amber-50 to-transparent border-l-[3px] border-phoenix-gold text-phoenix-ink'
                                 : 'hover:bg-gradient-to-r hover:from-amber-50/50 hover:to-transparent hover:border-l-[3px] hover:border-phoenix-gold/50 text-phoenix-ghost hover:text-phoenix-ink'
                             }
-                            ${item.locked ? 'opacity-60' : ''}
+                            ${item.locked ? 'opacity-60 grayscale' : ''}
                         `}
                     >
                         <item.icon size={18} className={item.active ? 'text-phoenix-gold' : 'group-hover:text-phoenix-gold'} />

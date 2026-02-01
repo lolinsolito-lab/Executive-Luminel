@@ -205,8 +205,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
 
                     <div className="grid md:grid-cols-3 gap-8 items-start">
 
-                        {/* CARD 1: THE TOURIST (Free) */}
-                        <div className="bg-white border border-gray-200 p-8 rounded-sm opacity-80 hover:opacity-100 transition-opacity">
+                        {/* CARD 1: THE TOURIST (Free) - WEAK */}
+                        <div className="card-tourist p-8 rounded-sm">
                             <div className="text-center mb-6">
                                 <span className="text-[10px] font-sans text-gray-400 uppercase tracking-widest">Per Curiosi & Scettici</span>
                                 <h3 className="font-display font-bold text-2xl text-gray-500 mt-2">THE TOURIST</h3>
@@ -217,103 +217,87 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                             <p className="text-center text-gray-500 italic mb-6">"Guarda il gioco dagli spalti."</p>
 
                             <ul className="space-y-3 mb-8">
-                                <li className="flex items-center gap-2 text-sm text-gray-500">
-                                    <Check size={16} className="text-gray-400" /> Dashboard View
+                                <li className="flex items-center gap-2 text-sm text-gray-400">
+                                    <X size={16} className="text-red-300" /> No Vault Access
+                                </li>
+                                <li className="flex items-center gap-2 text-sm text-gray-400">
+                                    <X size={16} className="text-red-300" /> No Strategy Support
                                 </li>
                                 <li className="flex items-center gap-2 text-sm text-gray-500">
-                                    <Check size={16} className="text-gray-400" /> Strategic Map (bloccata)
-                                </li>
-                                <li className="flex items-center gap-2 text-sm text-gray-500">
-                                    <X size={16} className="text-gray-300" /> AI illimitata
+                                    <AlertTriangle size={16} className="text-amber-300" /> Public Queue Only
                                 </li>
                             </ul>
 
                             <button className="w-full py-3 border border-gray-300 text-gray-400 font-sans text-sm uppercase tracking-widest rounded-sm hover:bg-gray-100 transition-colors">
-                                Resta a guardare
+                                Resta a Guardare
                             </button>
                         </div>
 
-                        {/* CARD 2: THE MERCENARY (€49) */}
-                        <div className="bg-white border-2 border-gray-300 p-8 rounded-sm shadow-lg relative">
-                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-[10px] font-sans px-3 py-1 uppercase tracking-widest rounded-sm">
-                                Popolare
+                        {/* CARD 2: THE MERCENARY (€49) - TACTICAL */}
+                        <div className="card-mercenary p-8">
+                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[10px] font-sans px-3 py-1 uppercase tracking-widest rounded-sm shadow-sm">
+                                TACTICAL
                             </div>
 
                             <div className="text-center mb-6">
-                                <span className="text-[10px] font-sans text-blue-500 uppercase tracking-widest">Per Chi Vuole Risultati</span>
+                                <span className="text-[10px] font-sans text-blue-600 uppercase tracking-widest">Per Chi Vuole Risultati</span>
                                 <h3 className="font-display font-bold text-2xl text-phoenix-ink mt-2">THE MERCENARY</h3>
                                 <div className="text-4xl font-display font-bold text-phoenix-ink mt-4">€49<span className="text-lg text-gray-400">/mese</span></div>
                             </div>
 
                             <p className="text-center text-phoenix-ghost italic mb-6">"Armati per la battaglia."</p>
 
-                            <p className="text-sm text-phoenix-ghost text-center mb-6 leading-relaxed">
-                                Smetti di subire le riunioni. <strong className="text-phoenix-ink">Dominale.</strong> Hai 50 colpi al mese per riscrivere la tua reputazione.
-                            </p>
-
                             <ul className="space-y-3 mb-8">
                                 <li className="flex items-center gap-2 text-sm text-phoenix-ink">
-                                    <Check size={16} className="text-blue-500" /> 50 messaggi AI/mese
+                                    <Check size={16} className="text-blue-500" /> 50 Strategic Tokens
                                 </li>
                                 <li className="flex items-center gap-2 text-sm text-phoenix-ink">
-                                    <Check size={16} className="text-blue-500" /> Vault Standard
+                                    <Check size={16} className="text-blue-500" /> Sandbox Enabled
                                 </li>
                                 <li className="flex items-center gap-2 text-sm text-phoenix-ink">
-                                    <Check size={16} className="text-blue-500" /> Hacker Mode
+                                    <Check size={16} className="text-blue-500" /> Out-of-Cycle Button Active
                                 </li>
                             </ul>
 
                             <button
                                 onClick={onEnterApp}
-                                className="w-full py-3 bg-blue-500 text-white font-sans text-sm font-bold uppercase tracking-widest rounded-sm hover:bg-blue-600 transition-colors"
+                                className="w-full py-3 bg-blue-600 text-white font-sans text-sm font-bold uppercase tracking-widest rounded-sm hover:bg-blue-700 transition-colors shadow-md"
                             >
-                                Diventa Operativo
+                                Armati Ora
                             </button>
                         </div>
 
-                        {/* CARD 3: GOD MODE (€299) - IL FOCUS */}
-                        <div className="bg-gradient-to-br from-amber-50 to-white border-2 border-phoenix-gold p-8 rounded-sm shadow-2xl relative overflow-hidden">
-                            {/* Gold glow effect */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-phoenix-gold/5 to-transparent pointer-events-none"></div>
-
-                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-phoenix-gold text-white text-[10px] font-sans px-3 py-1 uppercase tracking-widest rounded-sm flex items-center gap-1">
-                                <Crown size={12} /> Elite
+                        {/* CARD 3: GOD MODE (€299) - DIVINE */}
+                        <div className="card-god-mode p-8 card-god-mode-glow">
+                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-phoenix-gold text-white text-[10px] font-sans px-3 py-1 uppercase tracking-widest rounded-sm flex items-center gap-1 shadow-phoenix-gold">
+                                <Crown size={12} /> SUPREME
                             </div>
 
                             <div className="text-center mb-6 relative z-10">
-                                <span className="text-[10px] font-sans text-phoenix-gold uppercase tracking-widest">Per Futuri Leader</span>
+                                <span className="text-[10px] font-sans text-phoenix-gold uppercase tracking-widest">Per Futuri CEO</span>
                                 <h3 className="font-display font-bold text-2xl text-phoenix-ink mt-2">GOD MODE</h3>
                                 <div className="text-4xl font-display font-bold text-phoenix-gold mt-4">€299<span className="text-lg text-gray-400">/mese</span></div>
                             </div>
 
-                            <p className="text-center text-phoenix-gold font-bold italic mb-6">"Non chiedere il permesso. Prendilo."</p>
-
-                            <p className="text-sm text-phoenix-ghost text-center mb-6 leading-relaxed relative z-10">
-                                Questo non è un abbonamento. È un <strong className="text-phoenix-ink">investimento con ROI del 1000%.</strong>
-                                <br /><br />
-                                <span className="text-phoenix-gold">Se questo prezzo ti spaventa, non sei pronto per il livello C.</span>
-                            </p>
+                            <p className="text-center text-phoenix-gold font-bold italic mb-6">"Non chiedere il permesso."</p>
 
                             <ul className="space-y-3 mb-8 relative z-10">
-                                <li className="flex items-center gap-2 text-sm text-phoenix-ink font-semibold">
-                                    <Check size={16} className="text-phoenix-gold" /> AI ILLIMITATA
+                                <li className="flex items-center gap-2 text-sm text-phoenix-ink font-bold">
+                                    <Crown size={16} className="text-phoenix-gold" /> Unlimited AI
                                 </li>
-                                <li className="flex items-center gap-2 text-sm text-phoenix-ink font-semibold">
-                                    <Check size={16} className="text-phoenix-gold" /> Vault Completo
+                                <li className="flex items-center gap-2 text-sm text-phoenix-ink font-bold">
+                                    <Crown size={16} className="text-phoenix-gold" /> Full Vault (Salary Hacks)
                                 </li>
-                                <li className="flex items-center gap-2 text-sm text-phoenix-ink font-semibold">
-                                    <Check size={16} className="text-phoenix-gold" /> Out-of-Cycle Strategy
-                                </li>
-                                <li className="flex items-center gap-2 text-sm text-phoenix-ink font-semibold">
-                                    <Check size={16} className="text-phoenix-gold" /> Priority Uplink (WhatsApp)
+                                <li className="flex items-center gap-2 text-sm text-phoenix-ink font-bold">
+                                    <Crown size={16} className="text-phoenix-gold" /> Direct WhatsApp Line
                                 </li>
                             </ul>
 
                             <button
                                 onClick={onEnterApp}
-                                className="w-full py-4 bg-gradient-to-r from-phoenix-gold to-amber-600 text-white font-sans text-sm font-bold uppercase tracking-widest rounded-sm hover:from-amber-600 hover:to-phoenix-gold transition-all shadow-lg"
+                                className="w-full py-4 bg-gradient-to-r from-phoenix-gold to-amber-600 text-white font-sans text-sm font-bold uppercase tracking-widest rounded-sm hover:from-amber-600 hover:to-phoenix-gold transition-all shadow-lg animate-pulse"
                             >
-                                Richiedi Accesso Elitario
+                                Prendi il Comando
                             </button>
                         </div>
                     </div>
