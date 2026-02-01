@@ -259,7 +259,7 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
                         messages={messages}
                         isLoading={isLoading}
                         onSendMessage={handleSendMessage}
-                        userTier={userProfile.subscription as 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE'}
+                        userProfile={userProfile}
                     />
                 </div>
 
@@ -303,7 +303,7 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
                         messages={messages}
                         isLoading={isLoading}
                         onSendMessage={handleSendMessage}
-                        userTier={userProfile.subscription as 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE'}
+                        userProfile={userProfile}
                     />
                 </div>
             </div>

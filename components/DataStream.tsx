@@ -44,17 +44,25 @@ export const DataStream: React.FC<DataStreamProps> = ({ user, onOpenHierarchy })
 
                 <div className="flex justify-between text-xs font-sans text-phoenix-ghost px-2">
                     <span>CURRENT VALUE:</span>
-                    <span className="font-bold text-phoenix-ink">€45k</span>
+                    <span className="font-bold text-phoenix-ink">
+                        {user.currentSalary ? `€${(user.currentSalary / 1000).toFixed(1)}k` : '€0'}
+                    </span>
                 </div>
                 <div className="flex justify-between text-xs font-sans text-phoenix-ghost px-2">
                     <span>TARGET (Tier C):</span>
-                    <span className="font-bold text-phoenix-ink">€62k</span>
+                    <span className="font-bold text-phoenix-ink">
+                        {user.targetSalary ? `€${(user.targetSalary / 1000).toFixed(1)}k` : '€0'}
+                    </span>
                 </div>
 
                 <div className="mt-3 bg-red-50 border border-red-100 p-2 rounded-sm">
                     <div className="flex justify-between items-center px-1">
                         <span className="font-display text-[10px] font-bold text-red-800 tracking-wider uppercase">GAP</span>
-                        <span className="font-sans text-sm font-bold text-red-600">-€17,000/yr</span>
+                        <span className="font-sans text-sm font-bold text-red-600">
+                            {user.targetSalary && user.currentSalary
+                                ? `-€${(user.targetSalary - user.currentSalary).toLocaleString()}/yr`
+                                : '-€0/yr'}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -119,16 +127,23 @@ export const DataStream: React.FC<DataStreamProps> = ({ user, onOpenHierarchy })
                     <div className="flex justify-between items-end">
                         <span className="font-display font-bold text-phoenix-ink text-sm tracking-wide">Performance</span>
                         <span className="font-sans text-sm font-bold text-emerald-600">
-                            {user.subscription === 'GRINDER' ? '??%' : '85%'}
+                            {Math.min(100, Math.round((user.performanceXP / user.maxPerformanceXP) * 100))}%
                         </span>
                     </div>
                     <div className={`relative w-24 h-24 mx-auto flex items-center justify-center ${user.subscription === 'GRINDER' ? 'tier-locked-blur' : ''}`}>
                         <svg className="w-full h-full transform -rotate-90">
                             <circle cx="50%" cy="50%" r="42%" stroke="#e5e7eb" strokeWidth="8" fill="transparent" />
-                            <circle cx="50%" cy="50%" r="42%" stroke="#D4AF37" strokeWidth="8" fill="transparent" strokeDasharray="240" strokeDashoffset="36" strokeLinecap="round" />
+                            <circle
+                                cx="50%" cy="50%" r="42%" stroke="#D4AF37" strokeWidth="8" fill="transparent"
+                                strokeDasharray="264"
+                                strokeDashoffset={264 - (264 * (user.performanceXP / user.maxPerformanceXP))}
+                                strokeLinecap="round"
+                            />
                         </svg>
                         <div className="absolute text-center">
-                            <span className="block text-2xl font-bold text-phoenix-ink font-display">A-</span>
+                            <span className="block text-2xl font-bold text-phoenix-ink font-display">
+                                {user.level}
+                            </span>
                             <span className="text-[9px] text-phoenix-ghost uppercase tracking-wider font-sans">Optimal</span>
                         </div>
                     </div>

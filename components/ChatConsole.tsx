@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
-import { Message } from '../types';
-import { Send, Crown, Activity } from 'lucide-react';
+import { UserProfile, Message } from '../types';
+import { Send, Crown, Activity, Sparkles } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
 interface ChatConsoleProps {
@@ -9,7 +9,7 @@ interface ChatConsoleProps {
   onSendMessage: (text: string) => void;
   tokenCount?: number;
   maxTokens?: number;
-  userTier?: 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE';
+  userProfile: UserProfile;
 }
 
 // V7 PHOENIX - THE BATTLEFIELD
@@ -19,10 +19,22 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
   onSendMessage,
   tokenCount = 50,
   maxTokens = 50,
-  userTier = 'STRATEGIST'
+  userProfile
 }) => {
   const [input, setInput] = React.useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // DATA CALCULATION
+  const gap = (userProfile.targetSalary || 0) - (userProfile.currentSalary || 0);
+  const formattedGap = gap > 0
+    ? `+€${(gap / 1000).toFixed(1)}k`
+    : '€0';
+
+  const firstName = userProfile.name?.split(' ')[0] || 'Agente';
+  const enemyName = userProfile.mainEnemy || 'Il Mercato';
+  const tierLabel = userProfile.subscription === 'EXECUTIVE' ? 'Partner' : userProfile.subscription === 'STRATEGIST' ? 'Strategist' : 'Analyst';
+
+  const userTier = userProfile.subscription as 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE';
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -43,18 +55,45 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
   return (
     <div className="flex-1 flex flex-col h-full relative overflow-hidden bg-phoenix-canvas">
 
-      {/* A. BRIEFING BOX (Fixed Top) */}
-      <div className="shrink-0 p-5 lg:p-6 border border-phoenix-gold bg-phoenix-cream phoenix-briefing z-20 shadow-sm relative overflow-hidden">
-        {/* Decorative Gloss */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/20 blur-2xl rounded-full transform -translate-y-1/2 translate-x-1/2"></div>
+      {/* A. BRIEFING BOX (Luxury Integration) */}
+      <div className="shrink-0 p-6 lg:p-8 bg-gradient-to-b from-[#FFFBF0] to-white z-20 relative border-b border-phoenix-gold/30">
 
-        <h2 className="font-display font-bold text-phoenix-ink text-sm mb-3 flex items-center gap-3 tracking-[0.2em] uppercase border-b border-phoenix-gold/20 pb-2">
-          <img src="/favicon.png" alt="Phoenix" className="w-5 h-5 object-contain" />
-          Phoenix Briefing // 08:30 AM
-        </h2>
-        <div className="font-display text-base text-phoenix-navy leading-relaxed relative z-10 pl-1">
-          <p><strong>Agent Jara.</strong> Target: <span className="text-emerald-700 font-bold">+€17k</span>.</p>
-          <p className="mt-1">We need to neutralize Stefano today. <span className="italic font-medium opacity-80">Execute protocol.</span></p>
+        {/* Dynamic Header */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-phoenix-gold/10 flex items-center justify-center border border-phoenix-gold/30">
+              <Crown size={14} className="text-phoenix-gold" />
+            </div>
+            <div>
+              <h2 className="font-display font-bold text-phoenix-ink text-xs tracking-[0.2em] uppercase">
+                MORNING BRIEFING
+              </h2>
+              <span className="font-sans text-[10px] text-phoenix-ghost font-medium tracking-wider">
+                {new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase()}
+              </span>
+            </div>
+          </div>
+
+          {/* Status Badge */}
+          <div className={`px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-wider flex items-center gap-2
+                ${userTier === 'EXECUTIVE'
+              ? 'bg-amber-50 border-phoenix-gold text-phoenix-gold'
+              : 'bg-slate-50 border-slate-200 text-slate-500'
+            }`}>
+            <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${userTier === 'EXECUTIVE' ? 'bg-phoenix-gold' : 'bg-slate-400'}`}></div>
+            {tierLabel} Clearance
+          </div>
+        </div>
+
+        {/* Narrative Content */}
+        <div className="font-display text-lg text-phoenix-navy leading-relaxed relative z-10 pl-1 border-l-2 border-phoenix-gold/50">
+          <p className="pl-4">
+            <strong>{firstName}.</strong> Gap Attuale: <span className="text-red-700 font-bold drop-shadow-sm">{formattedGap}</span>.
+          </p>
+          <p className="mt-2 pl-4 text-base opacity-80 font-sans">
+            L'obiettivo è neutralizzare <span className="font-bold text-phoenix-ink">{enemyName}</span>.
+            <br className="hidden md:block" />Il tempo è una risorsa non rinnovabile.
+          </p>
         </div>
       </div>
 
