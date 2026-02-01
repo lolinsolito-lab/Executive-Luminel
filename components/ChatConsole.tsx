@@ -44,14 +44,17 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
     <div className="flex-1 flex flex-col h-full relative overflow-hidden bg-phoenix-canvas">
 
       {/* A. BRIEFING BOX (Fixed Top) */}
-      <div className="shrink-0 p-5 lg:p-6 border-b border-phoenix-gold bg-phoenix-cream phoenix-briefing z-20 shadow-sm">
-        <h2 className="font-display font-bold text-phoenix-gold text-lg mb-2 flex items-center gap-2 tracking-widest uppercase">
-          <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+      <div className="shrink-0 p-5 lg:p-6 border border-phoenix-gold bg-phoenix-cream phoenix-briefing z-20 shadow-sm relative overflow-hidden">
+        {/* Decorative Gloss */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/20 blur-2xl rounded-full transform -translate-y-1/2 translate-x-1/2"></div>
+
+        <h2 className="font-display font-bold text-phoenix-ink text-sm mb-3 flex items-center gap-3 tracking-[0.2em] uppercase border-b border-phoenix-gold/20 pb-2">
+          <img src="/favicon.png" alt="Phoenix" className="w-5 h-5 object-contain" />
           Phoenix Briefing // 08:30 AM
         </h2>
-        <div className="font-display text-base text-phoenix-ink leading-relaxed">
-          <p><strong>Agent Jara.</strong> Target: <span className="text-emerald-600 font-bold">+€17k</span>.</p>
-          <p className="mt-1">We need to neutralize Stefano today. <span className="italic text-phoenix-ghost">Execute protocol.</span></p>
+        <div className="font-display text-base text-phoenix-navy leading-relaxed relative z-10 pl-1">
+          <p><strong>Agent Jara.</strong> Target: <span className="text-emerald-700 font-bold">+€17k</span>.</p>
+          <p className="mt-1">We need to neutralize Stefano today. <span className="italic font-medium opacity-80">Execute protocol.</span></p>
         </div>
       </div>
 
