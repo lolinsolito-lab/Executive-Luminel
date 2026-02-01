@@ -194,7 +194,8 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     if (currentPage === 'app' && session) {
-      if (userProfile.isAdmin) return <AdminDashboard onClose={() => setCurrentPage('app')} />;
+      // FIX: Do not force Admin Dashboard. Allow User View with "GOD MODE" button.
+      // if (userProfile.isAdmin) return <AdminDashboard onClose={() => setCurrentPage('app')} />;
       return (
         <AppDashboard
           userProfile={userProfile}
