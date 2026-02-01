@@ -40,6 +40,22 @@ const App: React.FC = () => {
 
   // STARTUP & AUTH LISTENER
   useEffect(() => {
+    // 0. SYSTEM SIGNATURE
+    console.log(
+      `%c
+      ██╗     ██╗   ██╗███╗   ███╗██╗███╗   ██╗███████╗██╗     
+      ██║     ██║   ██║████╗ ████║██║████╗  ██║██╔════╝██║     
+      ██║     ██║   ██║██╔████╔██║██║██╔██╗ ██║█████╗  ██║     
+      ██║     ██║   ██║██║╚██╔╝██║██║██║╚██╗██║██╔══╝  ██║     
+      ███████╗╚██████╔╝██║ ╚═╝ ██║██║██║ ╚████║███████╗███████╗
+      ╚══════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝╚══════╝
+      
+      %c V7.9 PHOENIX PROTOCOL // SYSTEM ONLINE 
+      `,
+      'color: #D4AF37; font-weight: bold; text-shadow: 0 0 10px rgba(212,175,55,0.2);',
+      'background: #0F172A; color: #D4AF37; padding: 4px 8px; border-radius: 4px; font-family: monospace; font-weight: bold;'
+    );
+
     // 1. Check Session
     // 1. Check Session
     const initSession = async () => {
