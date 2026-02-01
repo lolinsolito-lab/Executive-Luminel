@@ -295,87 +295,96 @@ const App: React.FC = () => {
       return <LegalPage type={legalType} onBack={() => setCurrentPage('landing')} />;
     }
 
-    // 6. Main App
+    // 6. Main App - V7 ELITE DASHBOARD LAYOUT
     return (
-      <div className="phoenix-dashboard flex h-screen w-full overflow-hidden font-sans relative z-0 bg-phoenix-canvas">
+      <div className="phoenix-dashboard h-screen w-full overflow-hidden font-sans relative z-0 bg-phoenix-canvas">
+
         {/* Mobile Header */}
-        <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-amber-200/50 p-3 flex justify-between items-center shadow-sm">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-amber-100 border border-amber-400 rounded-sm flex items-center justify-center">
-              <span className="font-display font-bold text-lg text-amber-600">L</span>
+        <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 p-4 flex justify-between items-center shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-phoenix-gold/10 border border-phoenix-gold rounded-sm flex items-center justify-center">
+              <Crown size={16} className="text-phoenix-gold" />
             </div>
-            <span className="font-display font-bold text-gray-900 text-sm">LUMINEL</span>
+            <span className="font-display font-bold text-phoenix-ink text-sm tracking-widest">LUMINEL</span>
           </div>
-          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-amber-600 p-1">
-            {/* Hamburger Icon */}
-            <div className="space-y-1.5">
-              <div className="w-6 h-0.5 bg-amber-600"></div>
-              <div className="w-4 h-0.5 bg-amber-600 ml-auto"></div>
-            </div>
+          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-phoenix-ink p-2 hover:bg-gray-100 rounded-sm">
+            {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
-        {/* --- LEFT COLUMN: THE SIDEBAR (Restored per User Order) --- */}
-        {/* Shows Rank, Status, Navigation. Essential for user orientation. */}
-        {/* --- MOBILE SIDEBAR (Drawer) --- */}
-        <div className={`
-          md:hidden fixed inset-y-0 left-0 z-50 w-[280px] bg-[#F9F8F2] transition-transform duration-300 border-r border-amber-200/50 shadow-xl overflow-hidden
-          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        `}>
-          <Sidebar
-            user={userProfile}
-            onOpenMap={() => { setIsMapOpen(true); setIsSidebarOpen(false); }}
-            onOpenUpgrade={(feature) => { openUpgrade(feature); setIsSidebarOpen(false); }}
-          />
-          {isAdmin && (
-            <div className="absolute bottom-4 left-4 right-4">
-              <button onClick={() => setCurrentPage('admin')} className="w-full py-2 bg-red-100 text-red-600 text-xs font-mono font-bold rounded-sm border border-red-200 hover:bg-red-200 transition-colors">GOD MODE</button>
-            </div>
-          )}
-        </div>
+        {/* DESKTOP: 3-Column Grid Layout */}
+        <div className="hidden md:grid h-full" style={{ gridTemplateColumns: '280px 1fr 340px' }}>
 
-        {/* Mobile Overlay */}
-        {isSidebarOpen && (
-          <div className="md:hidden fixed inset-0 bg-black/30 z-40" onClick={() => setIsSidebarOpen(false)}></div>
-        )}
-
-        {/* --- DESKTOP SIDEBAR (Static Column) --- */}
-        {/* Force flex display on medium screens and up. NEVER hidden. */}
-        <div className="hidden md:flex flex-col w-[280px] lg:w-[320px] flex-shrink-0 h-full bg-[#F9F8F2] border-r border-amber-200/50 relative z-30 overflow-hidden">
-          <Sidebar
-            user={userProfile}
-            onOpenMap={() => setIsMapOpen(true)}
-            onOpenUpgrade={openUpgrade}
-          />
-
-          {/* Admin Button Desktop */}
-          {isAdmin && (
-            <div className="absolute bottom-4 left-4 right-4 animate-fade-in z-50">
-              <div className="bg-red-50 border border-red-200 p-1 rounded-sm">
+          {/* LEFT: THE ARSENAL (Sidebar) */}
+          <div className="h-full bg-phoenix-snow border-r border-gray-100 relative overflow-hidden flex flex-col">
+            <Sidebar
+              user={userProfile}
+              onOpenMap={() => setIsMapOpen(true)}
+              onOpenUpgrade={openUpgrade}
+            />
+            {/* Admin Button Desktop */}
+            {isAdmin && (
+              <div className="absolute bottom-4 left-4 right-4 z-50">
                 <button
                   onClick={() => setCurrentPage('admin')}
-                  className="w-full py-1.5 bg-transparent text-red-600 text-[10px] font-mono uppercase tracking-widest hover:text-red-700 transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-2 bg-red-50 text-red-600 text-[10px] font-sans font-bold uppercase tracking-widest border border-red-200 hover:bg-red-100 transition-colors flex items-center justify-center gap-2 rounded-sm"
                 >
-                  <Crown size={10} />
-                  GOD MODE
+                  <Crown size={12} /> GOD MODE
                 </button>
               </div>
-            </div>
+            )}
+          </div>
+
+          {/* CENTER: THE BATTLEFIELD (Chat) */}
+          <div className="h-full bg-phoenix-canvas relative overflow-hidden flex flex-col border-r border-gray-100">
+            <ChatConsole
+              messages={messages}
+              isLoading={isLoading}
+              onSendMessage={handleSendMessage}
+            />
+          </div>
+
+          {/* RIGHT: THE HUD (DataStream) */}
+          <div className="h-full bg-phoenix-canvas relative overflow-hidden">
+            <DataStream user={userProfile} onOpenHierarchy={() => setIsHierarchyOpen(true)} />
+          </div>
+
+        </div>
+
+        {/* MOBILE: Drawer + Main Content */}
+        <div className="md:hidden h-full pt-16 flex flex-col">
+
+          {/* Mobile Sidebar Overlay */}
+          {isSidebarOpen && (
+            <div className="fixed inset-0 bg-phoenix-ink/40 z-40" onClick={() => setIsSidebarOpen(false)}></div>
           )}
-        </div>
 
-        {/* --- CENTER COLUMN: WAR ROOM (Chat Console) --- */}
-        <div className="flex-1 pt-14 md:pt-0 relative w-full overflow-hidden flex flex-col bg-[#F9F8F2]">
-          <ChatConsole
-            messages={messages}
-            isLoading={isLoading}
-            onSendMessage={handleSendMessage}
-          />
-        </div>
+          {/* Mobile Sidebar Drawer */}
+          <div className={`
+            fixed inset-y-0 left-0 z-50 w-[280px] bg-phoenix-snow transition-transform duration-300 shadow-xl
+            ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+          `}>
+            <Sidebar
+              user={userProfile}
+              onOpenMap={() => { setIsMapOpen(true); setIsSidebarOpen(false); }}
+              onOpenUpgrade={(feature) => { openUpgrade(feature); setIsSidebarOpen(false); }}
+            />
+            {isAdmin && (
+              <div className="absolute bottom-4 left-4 right-4">
+                <button onClick={() => setCurrentPage('admin')} className="w-full py-2 bg-red-100 text-red-600 text-xs font-sans font-bold rounded-sm border border-red-200">GOD MODE</button>
+              </div>
+            )}
+          </div>
 
-        {/* --- RIGHT COLUMN: DATA STREAM --- */}
-        {/* Hidden on mobile, visible on lg screens */}
-        <DataStream user={userProfile} onOpenHierarchy={() => setIsHierarchyOpen(true)} />
+          {/* Mobile Chat */}
+          <div className="flex-1 overflow-hidden">
+            <ChatConsole
+              messages={messages}
+              isLoading={isLoading}
+              onSendMessage={handleSendMessage}
+            />
+          </div>
+        </div>
 
       </div>
     );

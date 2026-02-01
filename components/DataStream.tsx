@@ -25,7 +25,7 @@ export const DataStream: React.FC<DataStreamProps> = ({ user, onOpenHierarchy })
     const tierStyle = getTierAccent();
 
     return (
-        <div className="w-72 lg:w-80 xl:w-96 h-full bg-phoenix-canvas border-l border-gray-100 flex flex-col p-5 lg:p-6 z-30 shrink-0 hidden lg:flex overflow-hidden">
+        <div className="w-full h-full bg-phoenix-canvas flex flex-col p-5 lg:p-6 overflow-hidden">
 
             {/* A. THE BADGE (Clickable) */}
             <div className="shrink-0 mb-6">
