@@ -148,6 +148,41 @@
 }
 
 /* =========================================
+   V7.7 VISUAL PHYSICS (THE GOLD STANDARD)
+   ========================================= */
+
+/* METALLIC REFLECTION GRADIENT */
+.bg-phoenix-gold-gradient {
+  background-image: linear-gradient(to right, #D4AF37, #F3E5AB, #D4AF37);
+}
+
+.text-phoenix-gold-gradient {
+  background-image: linear-gradient(to right, #D4AF37, #F3E5AB, #D4AF37);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.border-phoenix-gold-gradient {
+  border-image: linear-gradient(to right, #D4AF37, #F3E5AB, #D4AF37) 1;
+}
+
+/* GLASSMORPHISM (Pro-Level) */
+.phoenix-glass {
+  backdrop-filter: blur(12px);
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+/* SHADOW LEVITATION */
+.phoenix-shadow-levitate {
+  box-shadow: 0 10px 40px -10px rgba(15, 23, 42, 0.1);
+}
+
+.phoenix-shadow-glow {
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+}
+
+/* =========================================
    V7 LANDING PAGE SPECIFIC STYLES
    ========================================= */
 
