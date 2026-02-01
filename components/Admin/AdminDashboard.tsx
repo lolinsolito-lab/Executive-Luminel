@@ -25,6 +25,7 @@ interface AdminProfile {
     created_at: string; // Added created_at
     location: string;
     onboarding_completed: boolean;
+    custom_token_limit?: number;
 }
 
 // --- MOCK DATA FOR CHARTS (Since we don't have historical data tables yet) ---
@@ -168,8 +169,8 @@ export const AdminDashboard: React.FC = () => {
                             key={tab}
                             onClick={() => setActiveTab(tab)}
                             className={`py-3 text-xs font-bold uppercase tracking-[0.15em] transition-all border-b-2 ${activeTab === tab
-                                    ? 'border-[#D4AF37] text-[#0F172A]'
-                                    : 'border-transparent text-gray-400 hover:text-gray-600'
+                                ? 'border-[#D4AF37] text-[#0F172A]'
+                                : 'border-transparent text-gray-400 hover:text-gray-600'
                                 }`}
                         >
                             {tab.replace('-', ' ')}
@@ -200,7 +201,7 @@ export const AdminDashboard: React.FC = () => {
                                 label="Total Active Users"
                                 value={kpi.totalUsers.toString()}
                                 icon={<Users className="text-blue-500" />}
-                                subValue={`${kpi.partnerCount} Partner • ${kpi.mercenaryCount} Merc.`}
+                                subValue={`${kpi.partnerCount} Executive • ${kpi.mercenaryCount} Strat.`}
                             />
                             <StatsCard
                                 label="Conversion Rate"
@@ -260,9 +261,9 @@ export const AdminDashboard: React.FC = () => {
                                     </RePieChart>
                                 </ResponsiveContainer>
                                 <div className="flex gap-4 text-[10px] text-gray-400 uppercase tracking-wider">
-                                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-gray-400" /> Tourist</div>
-                                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-blue-500" /> Mercenary</div>
-                                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-yellow-500" /> Partner</div>
+                                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-gray-400" /> Analyst</div>
+                                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-blue-500" /> Strategist</div>
+                                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-yellow-500" /> Executive</div>
                                 </div>
                             </div>
                         </div>
@@ -305,7 +306,7 @@ export const AdminDashboard: React.FC = () => {
                                 <thead>
                                     <tr className="bg-black/40 text-xs text-gray-400 border-b border-white/10 uppercase tracking-widest">
                                         <th className="p-4 font-normal">Agent Identity</th>
-                                        <th className="p-4 font-normal">Clearance</th>
+                                        <th className="p-4 font-normal">Rank (Tier)</th>
                                         <th className="p-4 font-normal">Pain (Gap)</th>
                                         <th className="p-4 font-normal">Last Active</th>
                                         <th className="p-4 font-normal">Whale Signal</th>
@@ -325,10 +326,11 @@ export const AdminDashboard: React.FC = () => {
                                                 </td>
                                                 <td className="p-4">
                                                     <span className={`px-2 py-1 text-[9px] font-bold uppercase tracking-wider border rounded-sm ${user.subscription_tier === 'EXECUTIVE' ? 'bg-yellow-900/30 text-yellow-400 border-yellow-500/30' :
-                                                            user.subscription_tier === 'STRATEGIST' || user.subscription_tier === 'GRINDER' ? 'bg-blue-900/30 text-blue-400 border-blue-500/30' :
-                                                                'bg-gray-800 text-gray-500 border-gray-700'
+                                                        user.subscription_tier === 'STRATEGIST' ? 'bg-blue-900/30 text-blue-400 border-blue-500/30' :
+                                                            'bg-gray-800 text-gray-400 border-gray-700'
                                                         }`}>
-                                                        {user.subscription_tier || 'TOURIST'}
+                                                        {user.subscription_tier === 'EXECUTIVE' ? 'THE EXECUTIVE' :
+                                                            user.subscription_tier === 'STRATEGIST' ? 'THE STRATEGIST' : 'THE ANALYST'}
                                                     </span>
                                                 </td>
                                                 <td className="p-4 text-sm font-mono text-red-400">
@@ -359,7 +361,7 @@ export const AdminDashboard: React.FC = () => {
                     </div>
                 )}
 
-                {/* USERS TAB (Simple List) */}
+                {/* USERS TAB (Simple List with GOD MODE) */}
                 {activeTab === 'users' && (
                     <div className="space-y-6 animate-fade-in">
                         {/* Search & Filters */}
@@ -368,7 +370,7 @@ export const AdminDashboard: React.FC = () => {
                                 <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-corp-silver" />
                                 <input
                                     type="text"
-                                    placeholder="Search users by name or email..."
+                                    placeholder="Search agents by name or email..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     className="w-full pl-10 pr-4 py-3 bg-corp-onyx border border-white/20 rounded-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-corp-gold/50"
@@ -380,10 +382,11 @@ export const AdminDashboard: React.FC = () => {
                             <table className="w-full text-left">
                                 <thead className="bg-black/20 text-xs text-gray-500 uppercase tracking-widest">
                                     <tr>
-                                        <th className="p-4">Name</th>
+                                        <th className="p-4">Agent Name</th>
                                         <th className="p-4">Email</th>
-                                        <th className="p-4">Tier</th>
+                                        <th className="p-4">Rank Identity</th>
                                         <th className="p-4">Location</th>
+                                        <th className="p-4 text-right">God Mode</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
@@ -391,8 +394,19 @@ export const AdminDashboard: React.FC = () => {
                                         <tr key={user.id} className="hover:bg-white/5 transition-colors">
                                             <td className="p-4 font-bold">{user.full_name}</td>
                                             <td className="p-4 text-gray-400 text-sm">{user.email}</td>
-                                            <td className="p-4 text-corp-gold text-xs font-mono">{user.subscription_tier}</td>
+                                            <td className="p-4">
+                                                <span className={`px-2 py-1 text-[10px] font-bold uppercase tracking-wider border rounded-sm ${user.subscription_tier === 'EXECUTIVE' ? 'bg-yellow-900/30 text-yellow-400 border-yellow-500/30' :
+                                                    user.subscription_tier === 'STRATEGIST' ? 'bg-blue-900/30 text-blue-400 border-blue-500/30' :
+                                                        'bg-gray-800 text-gray-400 border-gray-700'
+                                                    }`}>
+                                                    {user.subscription_tier === 'EXECUTIVE' ? 'THE EXECUTIVE' :
+                                                        user.subscription_tier === 'STRATEGIST' ? 'THE STRATEGIST' : 'THE ANALYST'}
+                                                </span>
+                                            </td>
                                             <td className="p-4 text-gray-500 text-xs">{user.location}</td>
+                                            <td className="p-4 text-right">
+                                                <EditUserButton user={user} onUpdate={() => fetchAdminData()} />
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -408,6 +422,7 @@ export const AdminDashboard: React.FC = () => {
                     </div>
                 )}
             </div>
+
         </div>
     );
 };
@@ -416,7 +431,7 @@ export const AdminDashboard: React.FC = () => {
 
 const StatsCard = ({ label, value, icon, subValue, trend, isGold, isDanger }: any) => (
     <div className={`p-6 border rounded-sm shadow-lg relative overflow-hidden group transition-all ${isGold ? 'bg-gradient-to-br from-[#FFFBF0] to-white border-[#D4AF37] text-[#0F172A]' :
-            'bg-[#1E293B] border-white/10 text-white hover:border-gray-600'
+        'bg-[#1E293B] border-white/10 text-white hover:border-gray-600'
         }`}>
         <div className="flex justify-between items-start mb-4">
             <h3 className={`text-[10px] font-bold uppercase tracking-[0.2em] ${isGold ? 'text-[#D4AF37]' : 'text-gray-400'}`}>
@@ -437,3 +452,118 @@ const StatsCard = ({ label, value, icon, subValue, trend, isGold, isDanger }: an
         )}
     </div>
 );
+
+// --- GOD MODE EDITOR COMPONENT ---
+const EditUserButton = ({ user, onUpdate }: { user: AdminProfile, onUpdate: () => void }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [tier, setTier] = useState<'GRINDER' | 'STRATEGIST' | 'EXECUTIVE'>(user.subscription_tier || 'GRINDER');
+    const [tokens, setTokens] = useState<number | string>(user.custom_token_limit || '');
+    const [loading, setLoading] = useState(false);
+
+    const handleSave = async () => {
+        setLoading(true);
+        try {
+            const updates: any = {
+                subscription_tier: tier,
+                updated_at: new Date().toISOString()
+            };
+
+            if (tokens !== '') {
+                updates.custom_token_limit = Number(tokens);
+            }
+
+            const { error } = await supabase
+                .from('profiles')
+                .update(updates)
+                .eq('id', user.id);
+
+            if (error) throw error;
+
+            setIsOpen(false);
+            onUpdate();
+        } catch (e) {
+            console.error("Update failed", e);
+            alert("Update Failed");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <>
+            <button
+                onClick={() => setIsOpen(true)}
+                className="p-2 bg-gray-800 hover:bg-corp-gold hover:text-black text-gray-400 rounded-sm transition-all shadow-lg"
+                title="Modify Protocol"
+            >
+                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider">
+                    <span>Edit</span>
+                </div>
+            </button>
+
+            {isOpen && (
+                <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
+                    <div className="bg-corp-onyx border border-corp-gold/30 p-8 max-w-md w-full shadow-[0_0_50px_rgba(212,175,55,0.1)] rounded-sm relative">
+                        <button
+                            onClick={() => setIsOpen(false)}
+                            className="absolute top-4 right-4 text-gray-500 hover:text-white"
+                        >
+                            <X size={20} />
+                        </button>
+
+                        <div className="flex items-center gap-3 text-corp-gold mb-6 border-b border-corp-gold/20 pb-4">
+                            <Crown size={24} />
+                            <h3 className="font-display font-bold text-xl uppercase tracking-widest">Modify User Protocol</h3>
+                        </div>
+
+                        <div className="space-y-6">
+                            {/* USER INFO */}
+                            <div className="p-3 bg-white/5 rounded-sm mb-4">
+                                <div className="text-sm font-bold text-white">{user.full_name}</div>
+                                <div className="text-xs text-gray-400 font-mono">{user.email}</div>
+                            </div>
+
+                            {/* TIER SELECTOR */}
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase font-bold text-corp-gold tracking-widest block">Start Protocol (Tier)</label>
+                                <select
+                                    value={tier || 'GRINDER'}
+                                    onChange={(e) => setTier(e.target.value as any)}
+                                    className="w-full bg-[#FFFBF0] border border-[#E2E8F0] p-3 text-[#0F172A] focus:ring-2 focus:ring-[#D4AF37] rounded-sm font-serif"
+                                >
+                                    <option value="GRINDER">THE ANALYST (Tourist)</option>
+                                    <option value="STRATEGIST">THE STRATEGIST (Mercenary)</option>
+                                    <option value="EXECUTIVE">THE EXECUTIVE (Partner)</option>
+                                </select>
+                            </div>
+
+                            {/* TOKEN GRANT */}
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase font-bold text-corp-gold tracking-widest block">Grant AI Tokens (Override)</label>
+                                <input
+                                    type="number"
+                                    value={tokens}
+                                    onChange={(e) => setTokens(e.target.value)}
+                                    placeholder="Enter total token limit..."
+                                    className="w-full bg-[#FFFBF0] border border-[#E2E8F0] p-3 text-[#0F172A] focus:ring-2 focus:ring-[#D4AF37] rounded-sm font-serif"
+                                />
+                                <p className="text-[9px] text-gray-500 italic">*Leave empty to use default tier limits.</p>
+                            </div>
+
+                            {/* ACTIONS */}
+                            <div className="pt-4 flex gap-3">
+                                <button
+                                    onClick={handleSave}
+                                    disabled={loading}
+                                    className="flex-1 py-3 bg-gradient-to-r from-corp-gold to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-black font-bold uppercase tracking-widest shadow-lg rounded-sm transition-all"
+                                >
+                                    {loading ? 'Overwriting...' : 'Save Protocol'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
+    );
+};
