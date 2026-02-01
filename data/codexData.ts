@@ -45,7 +45,7 @@ Target: "Yes, because of the timeline."
     },
     {
         id: 'law-3',
-        min_tier: 'STRATEGIST',
+        min_tier: 'GRINDER',
         title: 'Never Outshine the Master',
         description: 'Make those above you feel superior. In their comfort, they will lift you up.',
         category: 'Strategy',

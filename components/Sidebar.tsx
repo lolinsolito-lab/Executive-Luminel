@@ -28,7 +28,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
         } else if (item.locked) {
             onOpenUpgrade?.(item.lockedMessage);
         } else {
-            onNavigate?.(item.label.toLowerCase().replace(' ', '-')); // Simple mapping
+            onNavigate?.(item.id);
         }
     };
 

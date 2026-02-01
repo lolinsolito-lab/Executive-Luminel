@@ -31,7 +31,16 @@ const getDynamicSystemPrompt = (user?: UserProfile): string => {
 
     const enemyContext = `\n\nCONTESTO STRATEGICO: L'utente sta combattendo per scalare la gerarchia. Il nemico è lo status quo.`;
 
-    return `${basePrompt}${companyContext}${roleContext}${enemyContext}`;
+    // FINANCIAL PAIN INJECTION
+    let painContext = "";
+    if (user.currentSalary && user.targetSalary) {
+      const gap = user.targetSalary - user.currentSalary;
+      if (gap > 0) {
+        painContext = `\n\nFINANCIAL REALITY: The user is losing €${gap.toLocaleString()} every year by not being promoted. \nINSTRUCTION: Subtly remind them that hesitation is expensive. Tone: "Time is currency".`;
+      }
+    }
+
+    return `${basePrompt}${companyContext}${roleContext}${enemyContext}${painContext}`;
   }
   return basePrompt;
 };
