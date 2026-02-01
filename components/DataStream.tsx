@@ -49,7 +49,7 @@ export const DataStream: React.FC<DataStreamProps> = ({ user, onOpenHierarchy })
                     </span>
                 </div>
                 <div className="flex justify-between text-xs font-sans text-phoenix-ghost px-2">
-                    <span>TARGET (Tier C):</span>
+                    <span>TARGET:</span>
                     <span className="font-bold text-phoenix-ink">
                         {user.targetSalary ? `€${(user.targetSalary / 1000).toFixed(1)}k` : '€0'}
                     </span>
