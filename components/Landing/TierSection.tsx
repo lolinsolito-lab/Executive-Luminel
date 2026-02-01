@@ -23,9 +23,9 @@ export const TierSection: React.FC<TierSectionProps> = ({ onEnterApp }) => {
 
                     {/* TIER 1: THE TOURIST (Boring/Weak) */}
                     <div className="bg-gray-50 p-8 rounded-sm border border-gray-200 opacity-70 hover:opacity-100 transition-opacity">
-                        <h3 className="font-sans text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">The Tourist</h3>
+                        <h3 className="font-sans text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">The Analyst</h3>
                         <div className="text-4xl font-display font-bold text-gray-400 mb-2">€0<span className="text-lg">/mo</span></div>
-                        <p className="text-xs text-gray-400 mb-8 italic">Per chi vuole rimanere spettatore.</p>
+                        <p className="text-xs text-gray-400 mb-8 italic">Per chi studia il mercato.</p>
 
                         <ul className="space-y-4 mb-8 text-sm text-gray-500">
                             <li className="flex gap-2"><Check size={16} /> Accesso limitato</li>
@@ -42,9 +42,9 @@ export const TierSection: React.FC<TierSectionProps> = ({ onEnterApp }) => {
                     {/* TIER 2: THE MERCENARY (Metallic/Solid) */}
                     <div className="bg-slate-100 p-8 rounded-sm border border-slate-300 relative transform hover:-translate-y-2 transition-transform duration-300">
                         <div className="absolute top-0 inset-x-0 h-1 bg-slate-400"></div>
-                        <h3 className="font-sans text-xs font-bold text-slate-600 uppercase tracking-widest mb-4">The Mercenary</h3>
+                        <h3 className="font-sans text-xs font-bold text-slate-600 uppercase tracking-widest mb-4">The Strategist</h3>
                         <div className="text-4xl font-display font-bold text-slate-800 mb-2">€49<span className="text-lg">/mo</span></div>
-                        <p className="text-xs text-slate-500 mb-8">Per chi vuole combattere.</p>
+                        <p className="text-xs text-slate-500 mb-8">Per chi pianifica l'ascesa.</p>
 
                         <ul className="space-y-4 mb-8 text-sm text-slate-700">
                             <li className="flex gap-2"><Check size={16} /> Accesso Completo</li>
@@ -66,9 +66,9 @@ export const TierSection: React.FC<TierSectionProps> = ({ onEnterApp }) => {
                             </span>
                         </div>
 
-                        <h3 className="font-sans text-xs font-bold text-phoenix-gold uppercase tracking-widest mb-4">The Partner</h3>
+                        <h3 className="font-sans text-xs font-bold text-phoenix-gold uppercase tracking-widest mb-4">The Executive</h3>
                         <div className="text-5xl font-display font-bold text-phoenix-ink mb-2">€299<span className="text-lg">/mo</span></div>
-                        <p className="text-xs text-phoenix-navy mb-8 font-medium">Per chi vuole possedere il gioco.</p>
+                        <p className="text-xs text-phoenix-navy mb-8 font-medium">Per chi comanda.</p>
 
                         <ul className="space-y-4 mb-8 text-sm text-phoenix-ink font-medium">
                             <li className="flex gap-2"><Check size={16} className="text-phoenix-gold" /> <strong>Unlimited AI</strong> (God Mode)</li>

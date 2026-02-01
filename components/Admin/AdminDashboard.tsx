@@ -370,9 +370,15 @@ export const AdminDashboard: React.FC = () => {
                                                     )}
                                                 </td>
                                                 <td className="p-4 text-right">
-                                                    <button className="text-gray-500 hover:text-white transition-colors text-xs uppercase underline decoration-gray-700 hover:decoration-white underline-offset-4">
-                                                        Manage
-                                                    </button>
+                                                    <EditUserButton
+                                                        user={user}
+                                                        onUpdate={() => fetchAdminData()}
+                                                        customTrigger={
+                                                            <button className="text-gray-500 hover:text-[#D4AF37] transition-colors text-xs uppercase underline decoration-gray-300 hover:decoration-[#D4AF37] underline-offset-4">
+                                                                Manage
+                                                            </button>
+                                                        }
+                                                    />
                                                 </td>
                                             </tr>
                                         );
@@ -486,7 +492,7 @@ const StatsCard = ({ label, value, icon, subValue, trend, isGold, isDanger, spar
 );
 
 // --- GOD MODE EDITOR COMPONENT ---
-const EditUserButton = ({ user, onUpdate }: { user: AdminProfile, onUpdate: () => void }) => {
+const EditUserButton = ({ user, onUpdate, customTrigger }: { user: AdminProfile, onUpdate: () => void, customTrigger?: React.ReactNode }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [tier, setTier] = useState<'GRINDER' | 'STRATEGIST' | 'EXECUTIVE'>(user.subscription_tier || 'GRINDER');
     const [tokens, setTokens] = useState<number | string>(user.custom_token_limit || '');
@@ -524,45 +530,49 @@ const EditUserButton = ({ user, onUpdate }: { user: AdminProfile, onUpdate: () =
 
     return (
         <>
-            <button
-                onClick={() => setIsOpen(true)}
-                className="p-2 bg-gray-800 hover:bg-corp-gold hover:text-black text-gray-400 rounded-sm transition-all shadow-lg"
-                title="Modify Protocol"
-            >
-                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider">
-                    <span>Edit</span>
-                </div>
-            </button>
+            {customTrigger ? (
+                <div onClick={() => setIsOpen(true)}>{customTrigger}</div>
+            ) : (
+                <button
+                    onClick={() => setIsOpen(true)}
+                    className="p-2 bg-gray-800 hover:bg-corp-gold hover:text-black text-gray-400 rounded-sm transition-all shadow-lg"
+                    title="Modify Protocol"
+                >
+                    <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider">
+                        <span>Edit</span>
+                    </div>
+                </button>
+            )}
 
             {isOpen && (
-                <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
-                    <div className="bg-corp-onyx border border-corp-gold/30 p-8 max-w-md w-full shadow-[0_0_50px_rgba(212,175,55,0.1)] rounded-sm relative">
+                <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+                    <div className="bg-white border border-[#D4AF37] p-8 max-w-md w-full shadow-[0_0_50px_rgba(212,175,55,0.2)] rounded-sm relative">
                         <button
                             onClick={() => setIsOpen(false)}
-                            className="absolute top-4 right-4 text-gray-500 hover:text-white"
+                            className="absolute top-4 right-4 text-gray-400 hover:text-black transition-colors"
                         >
                             <X size={20} />
                         </button>
 
-                        <div className="flex items-center gap-3 text-corp-gold mb-6 border-b border-corp-gold/20 pb-4">
+                        <div className="flex items-center gap-3 text-[#D4AF37] mb-6 border-b border-[#D4AF37]/20 pb-4">
                             <Crown size={24} />
-                            <h3 className="font-display font-bold text-xl uppercase tracking-widest">Modify User Protocol</h3>
+                            <h3 className="font-display font-bold text-xl uppercase tracking-widest text-[#0F172A]">Modify User Protocol</h3>
                         </div>
 
                         <div className="space-y-6">
                             {/* USER INFO */}
-                            <div className="p-3 bg-white/5 rounded-sm mb-4">
-                                <div className="text-sm font-bold text-white">{user.full_name}</div>
+                            <div className="p-3 bg-gray-50 rounded-sm mb-4 border border-gray-100">
+                                <div className="text-sm font-bold text-[#0F172A]">{user.full_name}</div>
                                 <div className="text-xs text-gray-400 font-mono">{user.email}</div>
                             </div>
 
                             {/* TIER SELECTOR */}
                             <div className="space-y-2">
-                                <label className="text-[10px] uppercase font-bold text-corp-gold tracking-widest block">Start Protocol (Tier)</label>
+                                <label className="text-[10px] uppercase font-bold text-[#D4AF37] tracking-widest block">Start Protocol (Tier)</label>
                                 <select
                                     value={tier || 'GRINDER'}
                                     onChange={(e) => setTier(e.target.value as any)}
-                                    className="w-full bg-[#FFFBF0] border border-[#E2E8F0] p-3 text-[#0F172A] focus:ring-2 focus:ring-[#D4AF37] rounded-sm font-serif"
+                                    className="w-full bg-white border border-gray-200 p-3 text-[#0F172A] focus:ring-2 focus:ring-[#D4AF37] rounded-sm font-serif outline-none"
                                 >
                                     <option value="GRINDER">THE ANALYST (Tourist)</option>
                                     <option value="STRATEGIST">THE STRATEGIST (Mercenary)</option>
@@ -572,15 +582,15 @@ const EditUserButton = ({ user, onUpdate }: { user: AdminProfile, onUpdate: () =
 
                             {/* TOKEN GRANT */}
                             <div className="space-y-2">
-                                <label className="text-[10px] uppercase font-bold text-corp-gold tracking-widest block">Grant AI Tokens (Override)</label>
+                                <label className="text-[10px] uppercase font-bold text-[#D4AF37] tracking-widest block">Grant AI Tokens (Override)</label>
                                 <input
                                     type="number"
                                     value={tokens}
                                     onChange={(e) => setTokens(e.target.value)}
                                     placeholder="Enter total token limit..."
-                                    className="w-full bg-[#FFFBF0] border border-[#E2E8F0] p-3 text-[#0F172A] focus:ring-2 focus:ring-[#D4AF37] rounded-sm font-serif"
+                                    className="w-full bg-white border border-gray-200 p-3 text-[#0F172A] focus:ring-2 focus:ring-[#D4AF37] rounded-sm font-serif outline-none placeholder:text-gray-300"
                                 />
-                                <p className="text-[9px] text-gray-500 italic">*Leave empty to use default tier limits.</p>
+                                <p className="text-[9px] text-gray-400 italic">*Leave empty to use default tier limits.</p>
                             </div>
 
                             {/* ACTIONS */}
@@ -588,7 +598,7 @@ const EditUserButton = ({ user, onUpdate }: { user: AdminProfile, onUpdate: () =
                                 <button
                                     onClick={handleSave}
                                     disabled={loading}
-                                    className="flex-1 py-3 bg-gradient-to-r from-corp-gold to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-black font-bold uppercase tracking-widest shadow-lg rounded-sm transition-all"
+                                    className="flex-1 py-3 bg-[#D4AF37] hover:bg-[#B4941F] text-white font-bold uppercase tracking-widest shadow-lg rounded-sm transition-all"
                                 >
                                     {loading ? 'Overwriting...' : 'Save Protocol'}
                                 </button>
