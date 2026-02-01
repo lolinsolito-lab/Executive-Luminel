@@ -355,8 +355,8 @@ const App: React.FC = () => {
           </button>
         </div>
 
-        {/* DESKTOP: 3-Column Grid Layout (Psych-Tier Protocol: 20% - 60% - 20%) */}
-        <div className="hidden md:grid h-full w-full" style={{ gridTemplateColumns: '20% 60% 20%' }}>
+        {/* DESKTOP: 3-Column Grid Layout (Psych-Tier Protocol: Smart Proportions) */}
+        <div className="hidden md:grid h-full w-full" style={{ gridTemplateColumns: 'minmax(280px, 20%) 1fr minmax(300px, 20%)' }}>
 
           {/* LEFT: THE ARSENAL (Sidebar) */}
           <div className="h-full bg-phoenix-snow border-r border-gray-100 relative overflow-hidden flex flex-col min-w-0">

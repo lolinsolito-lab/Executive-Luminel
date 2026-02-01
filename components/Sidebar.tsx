@@ -43,7 +43,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
     ];
 
     return (
-        <div className="w-full md:w-[280px] lg:w-[300px] flex-shrink-0 border-r border-gray-100 flex flex-col h-full bg-phoenix-canvas overflow-hidden">
+        <div className="w-full h-full flex flex-col bg-phoenix-canvas overflow-hidden border-r border-gray-100">
 
             {/* A. HEADER - Logo */}
             <div className="shrink-0 p-5 lg:p-6 border-b border-gray-100">
