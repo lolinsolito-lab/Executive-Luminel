@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
     Crown, Shield, Zap, Target, Brain, Lock,
     ChevronRight, ArrowRight, Check, X,
-    Eye, Sword, Scroll, MessageCircle, Users, Sparkles
+    Eye, Sword, Scroll, MessageCircle, Users, Sparkles, AlertTriangle
 } from 'lucide-react';
 import { LegalModal } from '../Legal/LegalModal';
 
