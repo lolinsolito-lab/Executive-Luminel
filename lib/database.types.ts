@@ -16,6 +16,12 @@ export interface Database {
                     updated_at: string
                     email: string
                     full_name: string | null
+                    company_name: string | null
+                    location: string | null // Added
+                    current_salary: number | null // Added
+                    target_salary: number | null // Added
+                    gap_value: number | null // Added
+                    permissions: Json | null
                     subscription_tier: 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE'
                     tier_level: string
                     performance_xp: number
@@ -29,6 +35,8 @@ export interface Database {
                     tos_accepted_at: string | null
                     privacy_accepted_at: string | null
                     onboarding_completed: boolean
+                    tokens_used: number // Added
+                    tokens_reset_date: string // Added
                 }
                 Insert: {
                     id: string
@@ -36,6 +44,10 @@ export interface Database {
                     updated_at?: string
                     email: string
                     full_name?: string | null
+                    company_name?: string | null
+                    location?: string | null
+                    current_salary?: number | null
+                    target_salary?: number | null
                     subscription_tier?: 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE'
                     tier_level?: string
                     performance_xp?: number
@@ -49,6 +61,8 @@ export interface Database {
                     tos_accepted_at?: string | null
                     privacy_accepted_at?: string | null
                     onboarding_completed?: boolean
+                    tokens_used?: number
+                    tokens_reset_date?: string
                 }
                 Update: {
                     id?: string
@@ -56,6 +70,11 @@ export interface Database {
                     updated_at?: string
                     email?: string
                     full_name?: string | null
+                    company_name?: string | null
+                    location?: string | null
+                    current_salary?: number | null
+                    target_salary?: number | null
+                    permissions?: Json | null
                     subscription_tier?: 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE'
                     tier_level?: string
                     performance_xp?: number
@@ -69,6 +88,8 @@ export interface Database {
                     tos_accepted_at?: string | null
                     privacy_accepted_at?: string | null
                     onboarding_completed?: boolean
+                    tokens_used?: number
+                    tokens_reset_date?: string
                 }
             }
             subscriptions: {

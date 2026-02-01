@@ -9,11 +9,14 @@ import { PriorityUplink } from './PriorityUplink';
 import { GenesisModal } from './GenesisModal';
 // import { ErrorModal } from './ErrorModal'; // Handled in App? Or here? Let's keep specific dashboard errors here if needed, or global in App. Global is better for now, but User asked to separate. user handles generic errors.
 // Actually App.tsx has ErrorModal. Let's start with Dashboard logic.
+import { LegalDisclaimer } from './Legal/LegalDisclaimer';
+// Data Persistence
+import { updateProfile } from '../lib/supabase';
 import { UserProfile, Message } from '../types';
 import { INITIAL_USER, WELCOME_MESSAGE } from '../constants';
 import { sendMessageToCoach, initializeChat } from '../services/geminiService';
 import { v4 as uuidv4 } from 'uuid';
-import { Menu, X, Crown } from 'lucide-react';
+import { Menu, X, Crown, ShieldAlert } from 'lucide-react';
 
 interface AppDashboardProps {
     userProfile: UserProfile;
@@ -58,7 +61,7 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
 
             const initChat = async () => {
                 try {
-                    await initializeChat();
+                    await initializeChat(userProfile);
                     setMessages([{
                         id: uuidv4(),
                         role: 'model',
@@ -75,7 +78,7 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
 
             return () => clearInterval(interval);
         }
-    }, [isInitialized]);
+    }, [isInitialized]); // removing userProfile from dependency to avoid loop, it's captured in closure at start. Or add it if we want dynamic update? Start with simple.
 
     // 1.5 GENESIS TRIGGER
     useEffect(() => {
@@ -85,20 +88,37 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
         }
     }, [isInitialized, userProfile.genesisCompleted]);
 
-    const handleGenesisComplete = (data: { currentSalary: number; targetSalary: number; mainEnemy: string }) => {
+    const handleGenesisComplete = async (data: { currentSalary: number; targetSalary: number; mainEnemy: string; companyName: string; location: string }) => {
         setIsGenesisOpen(false);
+
+        // OPTIMISTIC UI UPDATE
         setUserProfile(prev => ({
             ...prev,
             ...data,
             genesisCompleted: true
         }));
 
-        // Add a system welcome based on enemy
+        // DB PERSISTENCE (V7.9 INTELLIGENCE)
+        if (userProfile.id) {
+            try {
+                await updateProfile(userProfile.id, {
+                    current_salary: data.currentSalary,
+                    target_salary: data.targetSalary,
+                    company_name: data.companyName,
+                    location: data.location,
+                    onboarding_completed: true
+                });
+            } catch (e) {
+                console.error("Failed to persist Genesis Intel", e);
+            }
+        }
+
+        // Add a system welcome based on enemy and location
         setTimeout(() => {
             setMessages(prev => [...prev, {
                 id: uuidv4(),
                 role: 'model',
-                content: `System Initialize. Target Locked: **${data.mainEnemy}**. \n\nCalculated Opportunity Cost: **€${(data.targetSalary - data.currentSalary).toLocaleString()}**. \n\nLet's get it back.`,
+                content: `System Initialize. Target Locked: **${data.mainEnemy}**. \nLocation Context: **${data.location.toUpperCase()}**. \n\nCalculated Opportunity Cost: **€${(data.targetSalary - data.currentSalary).toLocaleString()}**. \n\nLet's get it back.`,
                 timestamp: new Date()
             }]);
         }, 800);
@@ -138,7 +158,7 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
         }
 
         try {
-            const responseText = await sendMessageToCoach(text);
+            const responseText = await sendMessageToCoach(text, userProfile);
 
             if (userProfile.subscription === 'GRINDER') {
                 localStorage.setItem(usageKey, (currentUsage + 1).toString());
@@ -318,6 +338,11 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
                 isOpen={isGenesisOpen}
                 onComplete={handleGenesisComplete}
             />
+
+            <LegalDisclaimer onAccept={() => {
+                // Log acceptance if needed
+                console.log("Terms accepted by user:", userProfile.id);
+            }} />
 
         </div>
     );

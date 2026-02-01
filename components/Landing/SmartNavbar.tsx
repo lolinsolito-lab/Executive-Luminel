@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 interface SmartNavbarProps {
-    onEnterApp: () => void;
+    onLoginClick: () => void;
+    onGenesisClick: () => void;
 }
 
-export const SmartNavbar: React.FC<SmartNavbarProps> = ({ onEnterApp }) => {
+export const SmartNavbar: React.FC<SmartNavbarProps> = ({ onLoginClick, onGenesisClick }) => {
     const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
@@ -39,7 +40,7 @@ export const SmartNavbar: React.FC<SmartNavbarProps> = ({ onEnterApp }) => {
                 {/* ACTIONS */}
                 <div className="flex items-center gap-6">
                     <button
-                        onClick={onEnterApp}
+                        onClick={onLoginClick}
                         className={`font-sans text-xs font-bold uppercase tracking-widest transition-colors ${scrolled ? 'text-phoenix-ghost hover:text-phoenix-gold' : 'text-phoenix-ghost hover:text-phoenix-ink'
                             }`}
                     >
@@ -47,11 +48,13 @@ export const SmartNavbar: React.FC<SmartNavbarProps> = ({ onEnterApp }) => {
                     </button>
 
                     <button
-                        onClick={onEnterApp}
+                        onClick={onGenesisClick}
                         className="hidden md:block px-5 py-2 bg-phoenix-navy text-white text-xs font-bold uppercase tracking-widest rounded-sm hover:bg-phoenix-gold transition-colors"
                     >
                         Accesso Elitario
                     </button>
+
+                    {/* Mobile Menu Trigger (Optional) */}
                 </div>
             </div>
         </nav>

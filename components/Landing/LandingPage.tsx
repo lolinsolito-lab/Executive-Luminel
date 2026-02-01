@@ -6,21 +6,18 @@ import { BlackMarketSection } from './BlackMarketSection';
 import { TierSection } from './TierSection';
 import { FooterSection } from './FooterSection';
 
-import { SmartNavbar } from './SmartNavbar';
-
 interface LandingPageProps {
-    onEnterApp: () => void;
+    onCtaClick: () => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onCtaClick }) => {
     return (
         <div className="w-full bg-white text-phoenix-ink overflow-x-hidden">
-            <SmartNavbar onEnterApp={onEnterApp} />
-            <HeroSection onEnterApp={onEnterApp} />
+            <HeroSection onEnterApp={onCtaClick} />
             <AwakeningSection />
             <WeaponSection />
             <BlackMarketSection />
-            <TierSection onEnterApp={onEnterApp} />
+            <TierSection onEnterApp={onCtaClick} />
             <FooterSection />
         </div>
     );

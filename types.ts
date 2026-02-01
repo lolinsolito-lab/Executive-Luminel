@@ -16,6 +16,8 @@ export interface UserProfile {
   name: string;
   level: GranularLevel;
   role: string;
+  companyName?: string;
+  permissions?: { [key: string]: boolean };
   subscription: SubscriptionTier;
   isAdmin?: boolean;
 
@@ -40,6 +42,7 @@ export interface UserProfile {
   currentSalary?: number;
   targetSalary?: number;
   mainEnemy?: string;
+  location?: string; // e.g., 'Milan', 'London'
   genesisCompleted?: boolean;
 }
 

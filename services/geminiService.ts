@@ -1,18 +1,39 @@
 import { GoogleGenAI, ChatSession } from "@google/genai";
 import { SYSTEM_PROMPT } from '../constants';
+import { UserProfile } from '../types';
 
 let chatSession: ChatSession | null = null;
+let currentUserId: string | null = null;
 
 const getClient = (): GoogleGenAI | null => {
   const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
   if (!apiKey) {
-    // Silent fail or debug log only if dev
     if (import.meta.env.DEV) {
       console.warn("VITE_GOOGLE_API_KEY missing. Using Mock Mode.");
     }
     return null;
   }
   return new GoogleGenAI({ apiKey });
+};
+
+// DYNAMIC PROMPT GENERATOR (THE INTEL LAYER)
+const getDynamicSystemPrompt = (user?: UserProfile): string => {
+  let basePrompt = SYSTEM_PROMPT;
+
+  if (user) {
+    const companyContext = user.companyName
+      ? `\n\nTARGET COMPANY DETECTED: ${user.companyName.toUpperCase()}.\nADATTARE CONSIGLI AL CONTESTO AZIENDALE SPECIFICO.`
+      : "";
+
+    const roleContext = user.role
+      ? `\nROLE: ${user.role.toUpperCase()}.`
+      : "";
+
+    const enemyContext = `\n\nCONTESTO STRATEGICO: L'utente sta combattendo per scalare la gerarchia. Il nemico è lo status quo.`;
+
+    return `${basePrompt}${companyContext}${roleContext}${enemyContext}`;
+  }
+  return basePrompt;
 };
 
 // V4.0 SANDBOX MOCK RESPONSES
@@ -97,17 +118,26 @@ Devi alzare la posta.
 [[CAPITAL: +5]]`;
 };
 
-export const initializeChat = async (): Promise<ChatSession | null> => {
+export const initializeChat = async (user?: UserProfile): Promise<ChatSession | null> => {
   try {
     const ai = getClient();
     if (!ai) return null;
 
-    const model = "gemini-3-flash-preview";
+    // Reset if user changed
+    if (user?.id && currentUserId !== user.id) {
+      chatSession = null;
+      currentUserId = user.id;
+    }
+
+    // Don't re-init if exists and same user (unless explicit force? No, keep simple)
+    if (chatSession) return chatSession;
+
+    const model = "gemini-1.5-flash"; // Updated model name
 
     chatSession = ai.chats.create({
       model: model,
       config: {
-        systemInstruction: SYSTEM_PROMPT,
+        systemInstruction: getDynamicSystemPrompt(user),
         temperature: 0.7,
       },
     });
@@ -118,9 +148,9 @@ export const initializeChat = async (): Promise<ChatSession | null> => {
   }
 };
 
-export const sendMessageToCoach = async (message: string): Promise<string> => {
+export const sendMessageToCoach = async (message: string, user?: UserProfile): Promise<string> => {
   if (!chatSession) {
-    await initializeChat();
+    await initializeChat(user);
   }
 
   if (!chatSession) {

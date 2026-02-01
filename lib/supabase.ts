@@ -52,10 +52,18 @@ export const getProfile = async (userId: string) => {
 
 export const updateProfile = async (userId: string, updates: Partial<{
     full_name: string;
+    company_name: string;
+    location: string; // Added
+    current_salary: number; // Added
+    target_salary: number; // Added
+    permissions: any;
     subscription_tier: 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE';
     tier_level: string;
     performance_xp: number;
     political_capital: number;
+    tokens_used: number; // Added
+    tokens_reset_date: string; // Added
+    onboarding_completed: boolean; // Added
 }>) => {
     const { data, error } = await supabase
         .from('profiles')

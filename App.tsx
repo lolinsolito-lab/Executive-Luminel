@@ -1,178 +1,192 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from './lib/supabase';
+import { supabase, getProfile } from './lib/supabase';
 import { Analytics } from '@vercel/analytics/react';
-import { AppDashboard } from './components/AppDashboard'; // NEW COMPONENT
+import { AppDashboard } from './components/AppDashboard';
 import { LandingPage } from './components/Landing/LandingPage';
 import { AdminDashboard } from './components/Admin/AdminDashboard';
 import { LegalPage } from './components/Legal/LegalPage';
-import { AuthModal } from './components/Auth/AuthModal';
+import { AuthPage } from './components/Auth/AuthPage';
 import { ThankYouPage } from './components/ThankYou/ThankYouPage';
 import { ErrorModal } from './components/ErrorModal';
+import { GenesisModal } from './components/GenesisModal';
+import { SmartNavbar } from './components/Landing/SmartNavbar';
 import { UserProfile } from './types';
 import { INITIAL_USER } from './constants';
 import { Session } from '@supabase/supabase-js';
 
-// Admin emails - add your email here
-const ADMIN_EMAILS = ['lolinsolito@gmail.com'];
+// Admin emails
+const ADMIN_EMAILS = ['lolinsolito@gmail.com', 'admin@luminel.com'];
 
 const App: React.FC = () => {
-  // CORE STATE (Router & Auth)
+  // CORE STATE
   const [session, setSession] = useState<Session | null>(null);
   const [currentPage, setCurrentPage] = useState<string>('landing');
   const [userProfile, setUserProfile] = useState<UserProfile>(INITIAL_USER);
+  const [loading, setLoading] = useState(true);
 
-  // AUTH MODAL STATE
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [isAuthModalMode, setIsAuthModalMode] = useState<'login' | 'signup' | 'recover' | 'update'>('login');
+  // AUTH VIEW STATE
+  const [authMode, setAuthMode] = useState<'login' | 'register' | 'recover'>('login');
+  const [genesisData, setGenesisData] = useState<{
+    currentSalary: number;
+    targetSalary: number;
+    mainEnemy: string;
+    companyName: string;
+  } | undefined>(undefined);
 
-  // GLOBAL ERROR STATE
+  // MODALS
+  const [showGenesisModal, setShowGenesisModal] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
-  // Default error states
-  const [errorType, setErrorType] = useState<'network' | 'ai-overload' | 'session-expired' | 'generic'>('generic');
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
-  // BRAND SIGNATURE
+  // STARTUP & AUTH LISTENER
   useEffect(() => {
-    console.log(
-      "%c EXECUTIVE LUMINEL %c V7.0 PHOENIX \n%c THE ELITE DOES NOT COMPETE. IT DOMINATES. ",
-      "background: linear-gradient(90deg, #C5A059 0%, #E5D3B3 100%); color: #000; padding: 5px 10px; font-weight: 900; font-family: sans-serif; font-size: 14px; border-radius: 2px;",
-      "background: #1A1A1A; color: #C5A059; padding: 5px 10px; border-radius: 2px; font-family: monospace; font-weight: bold; border: 1px solid #C5A059;",
-      "color: #C5A059; font-style: italic; font-family: serif; font-size: 12px; padding-top: 10px; display: block;"
-    );
-  }, []);
-
-  // LOAD USER PROFILE
-  useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          if (!user.id || user.id === "0") {
-            return;
-          }
-
-          let { data: profile, error } = await supabase.from('profiles').select('*').eq('id', user.id).single();
-
-          // AUTO-HEAL
-          if (!profile || error) {
-            console.log("Profile missing, attempting auto-heal...");
-            const { data: newProfile, error: createError } = await supabase.from('profiles').insert({
-              id: user.id,
-              email: user.email!,
-              full_name: user.user_metadata?.full_name || 'Executive',
-              subscription_tier: 'GRINDER'
-            }).select().single();
-
-            if (!createError) profile = newProfile;
-          }
-
-          if (profile) {
-            setUserProfile(prev => ({
-              ...prev,
-              id: user.id,
-              email: user.email,
-              name: profile.full_name || user.email?.split('@')[0] || 'Executive',
-              subscription: profile.subscription_tier as any,
-              isAdmin: profile.is_admin,
-              performanceXP: profile.performance_xp,
-              politicalCapital: profile.political_capital,
-              ...prev
-            }));
-          }
-        }
-      } catch (err) {
-        console.error("Critical User Load Error:", err);
-      }
-    };
-    loadUser();
-
-    // AUTH LISTENER
-    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setSession(session);
-      if (event === 'PASSWORD_RECOVERY') {
-        setIsAuthModalMode('update');
-        setIsAuthOpen(true);
-      }
-      if (event === 'SIGNED_OUT') {
-        setCurrentPage('landing');
-        setUserProfile(INITIAL_USER);
+    // 1. Check Session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        setSession(session);
+        loadUserProfile(session.user.id);
+      } else {
+        setLoading(false);
       }
     });
 
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
+    // 2. Listen for Auth Changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      setSession(session);
+
+      if (event === 'SIGNED_IN') {
+        if (session) await loadUserProfile(session.user.id);
+        setCurrentPage('app');
+      } else if (event === 'SIGNED_OUT') {
+        setCurrentPage('landing');
+        setUserProfile(INITIAL_USER);
+      } else if (event === 'PASSWORD_RECOVERY') {
+        setAuthMode('recover');
+        setCurrentPage('auth');
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  // ROUTER LOGIC
-  const handleEnterApp = () => {
-    if (!userProfile.id || userProfile.id === "") {
-      setIsAuthOpen(true);
-    } else {
-      setCurrentPage('app');
+  const loadUserProfile = async (userId: string) => {
+    try {
+      const { data: profile } = await getProfile(userId);
+      if (profile) {
+        setUserProfile({
+          id: profile.id,
+          email: profile.email,
+          name: profile.full_name || 'Agente',
+          level: (profile.tier_level as any) || 'B1',
+          role: 'Consultant',
+          companyName: profile.company_name || undefined,
+          permissions: profile.permissions as any,
+          subscription: profile.subscription_tier,
+          isAdmin: profile.email === 'admin@luminel.com' || ADMIN_EMAILS.includes(profile.email),
+          performanceXP: profile.performance_xp || 0,
+          maxPerformanceXP: 1000,
+          politicalCapital: profile.political_capital || 0,
+          maxPoliticalCapital: 1000,
+          nextReviewDate: "TBD",
+          outOfCycleWindow: 'CLOSED',
+          skills: []
+        });
+      }
+    } catch (e) {
+      console.error("Profile load error", e);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // CHECK ADMIN STATUS
-  const isAdmin = userProfile.isAdmin || ADMIN_EMAILS.includes(userProfile.email || '');
+  // HANDLERS
+  const handleGenesisComplete = (data: any) => {
+    setGenesisData(data);
+    setShowGenesisModal(false);
+    setAuthMode('register');
+    setCurrentPage('auth');
+  };
 
-  // RENDER CONTENT
-  const renderContent = () => {
-    switch (currentPage) {
-      case 'landing':
-        return <LandingPage onEnterApp={handleEnterApp} />;
-
-      case 'app':
-        return (
-          <AppDashboard
-            userProfile={userProfile}
-            setUserProfile={setUserProfile}
-            onOpenAdmin={() => setCurrentPage('admin')}
-          />
-        );
-
-      case 'admin':
-        return <AdminDashboard onClose={() => setCurrentPage('app')} />;
-
-      case 'thank-you':
-        return (
-          <ThankYouPage
-            tier={userProfile.subscription as any}
-            userName={userProfile.name}
-            userEmail={userProfile.email || ''}
-            onEnterApp={() => setCurrentPage('app')}
-          />
-        );
-
-      default:
-        // Legal pages handler
-        if (currentPage.startsWith('legal-')) {
-          const legalType = currentPage.replace('legal-', '') as any;
-          return <LegalPage type={legalType} onBack={() => setCurrentPage('landing')} />;
-        }
-        return <LandingPage onEnterApp={handleEnterApp} />;
+  const handleEnterApp = () => {
+    if (session) {
+      setCurrentPage('app');
+    } else {
+      setAuthMode('login');
+      setCurrentPage('auth');
     }
+  };
+
+  // RENDER
+  if (loading) return <div className="bg-black h-screen w-full flex items-center justify-center text-white font-mono tracking-widest animate-pulse">INITIALIZING LUMINEL V7.9...</div>;
+
+  const renderContent = () => {
+    if (currentPage === 'app' && session) {
+      if (userProfile.isAdmin) return <AdminDashboard onClose={() => setCurrentPage('app')} />;
+      return (
+        <AppDashboard
+          userProfile={userProfile}
+          setUserProfile={setUserProfile}
+          onOpenAdmin={() => setCurrentPage('admin')}
+        />
+      );
+    }
+
+    if (currentPage === 'admin' && session) {
+      return <AdminDashboard onClose={() => setCurrentPage('app')} />;
+    }
+
+    if (currentPage === 'auth') {
+      return (
+        <AuthPage
+          mode={authMode}
+          onSwitchMode={setAuthMode}
+          onSuccess={() => {/* Handled by onAuthStateChange */ }}
+          genesisData={genesisData}
+        />
+      );
+    }
+
+    if (currentPage === 'thank-you') {
+      return (
+        <ThankYouPage
+          tier={userProfile.subscription as any}
+          userName={userProfile.name}
+          userEmail={userProfile.email || ''}
+          onEnterApp={() => setCurrentPage('app')}
+        />
+      );
+    }
+
+    if (currentPage.startsWith('legal-')) {
+      const type = currentPage.replace('legal-', '') as any;
+      return <LegalPage type={type} onBack={() => setCurrentPage('landing')} />;
+    }
+
+    // Default: Landing
+    return (
+      <div className="bg-corp-onyx min-h-screen font-sans text-corp-platinum selection:bg-corp-gold selection:text-corp-onyx">
+        <SmartNavbar
+          onLoginClick={() => { setAuthMode('login'); setCurrentPage('auth'); }}
+          onGenesisClick={() => setShowGenesisModal(true)}
+        />
+        <LandingPage onCtaClick={() => setShowGenesisModal(true)} />
+        <GenesisModal
+          isOpen={showGenesisModal}
+          onComplete={handleGenesisComplete}
+        />
+      </div>
+    );
   };
 
   return (
     <>
       {renderContent()}
-
       <Analytics />
-
-      <AuthModal
-        isOpen={isAuthOpen}
-        onClose={() => setIsAuthOpen(false)}
-        initialMode={isAuthModalMode}
-        onSuccess={() => setCurrentPage('app')}
-      />
-
       <ErrorModal
         isOpen={isErrorOpen}
         onClose={() => setIsErrorOpen(false)}
-        errorType={errorType}
         errorMessage={errorMessage}
-        onRetry={() => window.location.reload()}
+        errorType="generic"
       />
     </>
   );

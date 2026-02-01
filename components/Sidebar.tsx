@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { UserProfile } from '../types';
 import { Home, BookOpen, Users, Lock, Settings, Crown, ChevronRight } from 'lucide-react';
 import { DailyMission } from './DailyMission';
+import { hasAccess } from '../lib/permissions';
+import { SettingsModal } from './SettingsModal';
 
 interface SidebarProps {
     user: UserProfile;
@@ -15,6 +17,7 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade, onNavigate, activePage }) => {
 
     const [expandedItem, setExpandedItem] = useState<string | null>(null);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
     const handleItemClick = (item: any) => {
         if (item.children) {
@@ -37,13 +40,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
 
     const navItems = [
         { id: 'command', icon: Home, label: 'Command', active: activePage === 'command', locked: false },
-        { id: 'codex', icon: BookOpen, label: 'The Codex', active: activePage === 'codex', locked: false }, // Strategy Support is generic
+        {
+            id: 'codex',
+            icon: BookOpen,
+            label: 'The Codex',
+            active: activePage === 'codex',
+            locked: !hasAccess(user, 'codex'),
+            lockedMessage: "Access Denied. The Neural Codex requires Strategist Clearance."
+        },
         {
             id: 'blackbook',
             icon: Users,
             label: 'Black Book',
             active: activePage === 'blackbook',
-            locked: user.subscription === 'GRINDER',
+            locked: !hasAccess(user, 'blackbook'),
             lockedMessage: "Access Denied. Intelligence is for Operatives. Upgrade to see the files."
         },
         {
@@ -51,7 +61,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
             icon: Lock,
             label: 'The Vault',
             active: activePage === 'vault',
-            locked: user.subscription === 'GRINDER', // Totally locked for Free
+            locked: !hasAccess(user, 'vault'),
             lockedMessage: "Access Denied. Intelligence is for Operatives. Upgrade to see the files."
         },
     ];
@@ -159,11 +169,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
                             <div className={`text-[10px] font-sans uppercase tracking-widest ${getTierAccent()}`}>{user.subscription}</div>
                         </div>
                     </div>
-                    <button className="p-2 hover:bg-gray-100 rounded-sm transition-colors">
+                    <button
+                        onClick={() => setIsSettingsOpen(true)}
+                        className="p-2 hover:bg-gray-100 rounded-sm transition-colors"
+                    >
                         <Settings size={16} className="text-phoenix-ghost" />
                     </button>
                 </div>
             </div>
+
+            <SettingsModal
+                isOpen={isSettingsOpen}
+                onClose={() => setIsSettingsOpen(false)}
+                user={user}
+            />
         </div>
     );
 };
