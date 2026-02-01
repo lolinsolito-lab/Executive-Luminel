@@ -44,14 +44,14 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
     <div className="flex-1 flex flex-col h-full relative overflow-hidden bg-phoenix-canvas">
 
       {/* A. BRIEFING BOX (Fixed Top) */}
-      <div className="shrink-0 p-5 lg:p-6 border-b border-gray-100 bg-phoenix-cream phoenix-briefing z-20">
-        <h2 className="font-display font-bold text-phoenix-ink text-lg mb-2 flex items-center gap-2 tracking-widest">
+      <div className="shrink-0 p-5 lg:p-6 border-b border-phoenix-gold bg-phoenix-cream phoenix-briefing z-20 shadow-sm">
+        <h2 className="font-display font-bold text-phoenix-gold text-lg mb-2 flex items-center gap-2 tracking-widest uppercase">
           <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-          PHOENIX BRIEFING // 08:30 AM
+          Phoenix Briefing // 08:30 AM
         </h2>
-        <div className="font-sans text-sm text-phoenix-ghost leading-relaxed">
-          <p>Agente Jara. Mercati aperti. Il tuo focus oggi è sul consolidamento della posizione strategica.</p>
-          <p className="mt-1 text-phoenix-gold font-semibold">Strategia consigliata: Silenzio Attivo.</p>
+        <div className="font-display text-base text-phoenix-ink leading-relaxed">
+          <p><strong>Agent Jara.</strong> Target: <span className="text-emerald-600 font-bold">+€17k</span>.</p>
+          <p className="mt-1">We need to neutralize Stefano today. <span className="italic text-phoenix-ghost">Execute protocol.</span></p>
         </div>
       </div>
 

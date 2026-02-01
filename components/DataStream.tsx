@@ -31,23 +31,31 @@ export const DataStream: React.FC<DataStreamProps> = ({ user, onOpenHierarchy })
             <div className="shrink-0 mb-6">
                 <div
                     onClick={onOpenHierarchy}
-                    className={`p-5 bg-phoenix-snow border ${tierStyle.border} rounded-sm flex items-center justify-between cursor-pointer hover:shadow-phoenix-gold transition-all group`}
+                    className={`p-5 bg-phoenix-snow border ${tierStyle.border} rounded-full lg:rounded-full aspect-square w-32 h-32 mx-auto flex flex-col items-center justify-center cursor-pointer hover:shadow-phoenix-gold transition-all group relative`}
                 >
-                    {/* Badge Circle */}
-                    <div className="flex items-center gap-4">
-                        <div className={`w-16 h-16 rounded-full border-2 ${tierStyle.border} flex items-center justify-center ${tierStyle.bg} shadow-sm`}>
-                            <span className="font-display font-bold text-lg text-phoenix-ink">{user.level}</span>
-                        </div>
-                        <div>
-                            <h3 className={`font-display text-phoenix-ink text-sm font-bold tracking-wide ${tierStyle.color}`}>
-                                {user.role?.toUpperCase()}
-                            </h3>
-                            <p className="font-sans text-[10px] text-phoenix-ghost uppercase tracking-widest">
-                                Level 2 // Active
-                            </p>
-                        </div>
+                    <div className="absolute inset-0 rounded-full border border-phoenix-gold opacity-30 animate-pulse"></div>
+                    <span className="font-display font-bold text-3xl text-phoenix-gold tracking-tighter">[{user.level}]</span>
+                </div>
+            </div>
+
+            {/* V7.7 MONEY METRIC (Opportunity Cost) */}
+            <div className="mb-6 text-center space-y-1 pb-6 border-b border-gray-100">
+                <h3 className="font-display text-[10px] font-bold text-phoenix-ink tracking-[0.2em] uppercase mb-3">Opportunity Cost</h3>
+
+                <div className="flex justify-between text-xs font-sans text-phoenix-ghost px-2">
+                    <span>CURRENT VALUE:</span>
+                    <span className="font-bold text-phoenix-ink">€45k</span>
+                </div>
+                <div className="flex justify-between text-xs font-sans text-phoenix-ghost px-2">
+                    <span>TARGET (Tier C):</span>
+                    <span className="font-bold text-phoenix-ink">€62k</span>
+                </div>
+
+                <div className="mt-3 bg-red-50 border border-red-100 p-2 rounded-sm">
+                    <div className="flex justify-between items-center px-1">
+                        <span className="font-display text-[10px] font-bold text-red-800 tracking-wider uppercase">GAP</span>
+                        <span className="font-sans text-sm font-bold text-red-600">-€17,000/yr</span>
                     </div>
-                    <ChevronRight size={18} className="text-phoenix-ghost group-hover:text-phoenix-gold group-hover:translate-x-1 transition-all" />
                 </div>
             </div>
 
@@ -92,7 +100,7 @@ export const DataStream: React.FC<DataStreamProps> = ({ user, onOpenHierarchy })
                         )}
 
                         <div
-                            className="absolute bottom-1 left-1 right-1 bg-gradient-to-t from-amber-700 via-amber-500 to-amber-400 rounded-sm transition-all duration-1000 phoenix-flame-breathe"
+                            className="absolute bottom-1 left-1 right-1 bg-gradient-to-t from-phoenix-alert to-phoenix-gold rounded-sm transition-all duration-1000 phoenix-flame-breathe"
                             style={{ height: `${user.subscription === 'GRINDER' ? 40 : flamePercent}%` }}
                         ></div>
                         <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/10 pointer-events-none rounded-sm"></div>
