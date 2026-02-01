@@ -21,8 +21,11 @@ export const hasAccess = (user: UserProfile, feature: string): boolean => {
 
         case 'GRINDER':
         default:
-            // Free tier gets almost nothing
+            // Free tier gets almost nothing but can view the Shop Window (Vault) and basic Laws
             if (feature === 'command') return true;
+            if (feature === 'vault') return true; // View locked items
+            if (feature === 'codex') return true; // View basic laws
+            if (feature === 'blackbook') return true; // Start profiling
             return false;
     }
 };

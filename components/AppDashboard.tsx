@@ -10,6 +10,9 @@ import { GenesisModal } from './GenesisModal';
 // import { ErrorModal } from './ErrorModal'; // Handled in App? Or here? Let's keep specific dashboard errors here if needed, or global in App. Global is better for now, but User asked to separate. user handles generic errors.
 // Actually App.tsx has ErrorModal. Let's start with Dashboard logic.
 import { LegalDisclaimer } from './Legal/LegalDisclaimer';
+import { Codex } from './Codex';
+import { Vault } from './Vault';
+import { BlackBook } from './BlackBook';
 // Data Persistence
 import { updateProfile } from '../lib/supabase';
 import { UserProfile, Message } from '../types';
@@ -244,14 +247,19 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
                     />
                 </div>
 
-                {/* CENTER: THE BATTLEFIELD (Chat) */}
+                {/* CENTER: THE BATTLEFIELD (Chat & Modules) */}
                 <div className="h-full bg-phoenix-canvas relative overflow-hidden flex flex-col border-r border-gray-100 min-w-0">
-                    <ChatConsole
-                        messages={messages}
-                        isLoading={isLoading}
-                        onSendMessage={handleSendMessage}
-                        userProfile={userProfile}
-                    />
+                    {activeTab === 'command' && (
+                        <ChatConsole
+                            messages={messages}
+                            isLoading={isLoading}
+                            onSendMessage={handleSendMessage}
+                            userProfile={userProfile}
+                        />
+                    )}
+                    {activeTab === 'codex' && <Codex />}
+                    {activeTab === 'vault' && <Vault user={userProfile} onOpenUpgrade={(feat) => { setUpgradeFeature(feat); setIsUpgradeOpen(true); }} />}
+                    {activeTab === 'blackbook' && <BlackBook user={userProfile} />}
                 </div>
 
                 {/* RIGHT: THE HUD (DataStream) */}
@@ -288,14 +296,19 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
                     )}
                 </div>
 
-                {/* Mobile Chat */}
+                {/* Mobile Chat & Modules */}
                 <div className="flex-1 overflow-hidden">
-                    <ChatConsole
-                        messages={messages}
-                        isLoading={isLoading}
-                        onSendMessage={handleSendMessage}
-                        userProfile={userProfile}
-                    />
+                    {activeTab === 'command' && (
+                        <ChatConsole
+                            messages={messages}
+                            isLoading={isLoading}
+                            onSendMessage={handleSendMessage}
+                            userProfile={userProfile}
+                        />
+                    )}
+                    {activeTab === 'codex' && <Codex />}
+                    {activeTab === 'vault' && <Vault user={userProfile} onOpenUpgrade={(feat) => { setUpgradeFeature(feat); setIsUpgradeOpen(true); }} />}
+                    {activeTab === 'blackbook' && <BlackBook user={userProfile} />}
                 </div>
             </div>
 

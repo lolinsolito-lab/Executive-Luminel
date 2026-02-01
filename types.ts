@@ -57,3 +57,37 @@ export interface SimulationState {
   isLoading: boolean;
   error: string | null;
 }
+
+// V10.1 CORE FEATURES
+export interface BlackBookEntry {
+  id: string;
+  user_id: string;
+  name: string;
+  role: string;
+  status: 'Ally' | 'Enemy' | 'Neutral' | 'Target';
+  weakness?: string;
+  leverage?: string;
+  created_at: string;
+}
+
+export interface VaultItem {
+  id: string;
+  title: string;
+  description: string;
+  content_type: 'text' | 'pdf' | 'video_link' | 'audio_link';
+  content_body?: string; // URL or Text
+  required_tier: 'tourist' | 'mercenary' | 'partner';
+  ai_tags: string[];
+  is_active: boolean;
+  is_preview: boolean;
+  created_at: string;
+}
+
+export interface CodexLaw {
+  id: string;
+  title: string;
+  description: string;
+  category: 'Psychology' | 'Strategy' | 'Defense' | 'Offense';
+  content: string; // Markdown
+  isLocked?: boolean;
+}
