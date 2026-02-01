@@ -15,14 +15,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onEnterApp }) => {
 
             <div className="relative z-10 px-6 max-w-5xl mx-auto space-y-8">
 
-                {/* LOGO: Rising Phoenix */}
+                {/* LOGO: Official Branding */}
                 <div className="animate-fadeInUp opacity-0">
-                    <div className="w-24 h-24 mx-auto bg-gradient-to-br from-phoenix-gold to-amber-600 rounded-lg flex items-center justify-center shadow-phoenix-shadow-levitate mb-6 transform hover:scale-105 transition-transform duration-700">
-                        <Crown size={48} className="text-white" strokeWidth={1.5} />
+                    <div className="flex flex-col items-center justify-center gap-4 mb-8">
+                        <img
+                            src="/favicon.png"
+                            alt="Luminel Logo"
+                            className="w-24 h-24 object-contain drop-shadow-lg transform hover:scale-105 transition-transform duration-700"
+                        />
+                        <div className="text-center">
+                            <h2 className="font-display text-2xl font-bold tracking-[0.2em] text-phoenix-ink uppercase">
+                                Executive Luminel
+                            </h2>
+                            <p className="font-sans text-[10px] tracking-[0.4em] text-phoenix-gold uppercase font-bold mt-2">
+                                V7.7 PHOENIX
+                            </p>
+                        </div>
                     </div>
-                    <p className="font-sans text-sm tracking-[0.4em] text-phoenix-gold uppercase font-bold mb-4">
-                        LUMINEL V7.7
-                    </p>
                 </div>
 
                 {/* HEADLINE: Playfair Display */}
