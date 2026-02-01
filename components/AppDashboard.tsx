@@ -31,7 +31,7 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
     const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
     const [upgradeFeature, setUpgradeFeature] = useState<string | undefined>();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
     const [activeTab, setActiveTab] = useState('command');
     const [isGenesisOpen, setIsGenesisOpen] = useState(false);
 
