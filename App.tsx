@@ -41,28 +41,49 @@ const App: React.FC = () => {
   // STARTUP & AUTH LISTENER
   useEffect(() => {
     // 0. SYSTEM SIGNATURE
-    const styleTitle = 'color: #D4AF37; font-weight: bold; text-shadow: 0 0 10px rgba(212,175,55,0.2); font-family: sans-serif;';
-    const styleBadge = 'background: #0F172A; color: #D4AF37; padding: 4px 8px; border-radius: 4px; font-family: monospace; font-weight: bold; border: 1px solid #D4AF37;';
-    const styleLog = 'font-family: monospace; font-weight: bold;';
+    const initSignature = () => {
+      const titleStyle = [
+        'font-size: 24px',
+        'font-family: "Playfair Display", serif',
+        'font-weight: bold',
+        'color: #D4AF37', // Phoenix Gold
+        'text-shadow: 0 0 20px rgba(212,175,55,0.4)',
+        'padding: 10px 0',
+        'letter-spacing: 2px'
+      ].join(';');
 
-    console.log(
-      `%c
-      ██╗     ██╗   ██╗███╗   ███╗██╗███╗   ██╗███████╗██╗     
-      ██║     ██║   ██║████╗ ████║██║████╗  ██║██╔════╝██║     
-      ██║     ██║   ██║██╔████╔██║██║██╔██╗ ██║█████╗  ██║     
-      ██║     ██║   ██║██║╚██╔╝██║██║██║╚██╗██║██╔══╝  ██║     
-      ███████╗╚██████╔╝██║ ╚═╝ ██║██║██║ ╚████║███████╗███████╗
-      ╚══════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝╚══════╝
-      
-      %c V7.9 PHOENIX PROTOCOL // SYSTEM ONLINE 
-      `,
-      styleTitle,
-      styleBadge
-    );
-    console.log(`%c > CONTROL SYSTEM....... ACTIVATED`, `color: #10B981; ${styleLog}`);
-    console.log(`%c > RAT TRAP............. DETECTED`, `color: #EF4444; ${styleLog}`);
-    console.log(`%c > EVASION MODE......... O CI SEI, O CI FAI`, `color: #D4AF37; ${styleLog}`);
-    console.log(`%c > WELCOME EXECUTIVE.`, `color: #F8FAFC; ${styleLog}`);
+      const badgeStyle = [
+        'background: #0F172A',
+        'border: 1px solid #D4AF37',
+        'color: #F8FAFC',
+        'padding: 4px 10px',
+        'border-radius: 2px',
+        'font-family: monospace',
+        'font-size: 10px',
+        'font-weight: bold'
+      ].join(';');
+
+      const lineStyle = [
+        'font-family: monospace',
+        'font-size: 11px',
+        'color: #94A3B8', // Slate-400
+        'line-height: 1.5'
+      ].join(';');
+
+      // Clear previous logs to simulate a fresh boot
+      // console.clear(); // Optional: keeps it very clean but might hide useful errors
+
+      console.group('%c EXECUTIVE LUMINEL ', titleStyle);
+      console.log('%c V7.9 PHOENIX PROTOCOL // SYSTEM ONLINE ', badgeStyle);
+      console.log(''); // Spacer
+      console.log(`%c[SYSTEM] Control System....... %cACTIVATED`, lineStyle, 'color: #10B981; font-weight: bold;');
+      console.log(`%c[INTEL]  Rat Trap............. %cDETECTED`, lineStyle, 'color: #EF4444; font-weight: bold;');
+      console.log(`%c[MODE]   Evasion.............. %cO CI SEI, O CI FAI`, lineStyle, 'color: #D4AF37; font-weight: bold;');
+      console.log(''); // Spacer
+      console.groupEnd();
+    };
+
+    initSignature();
 
     // 1. Check Session
     // 1. Check Session
