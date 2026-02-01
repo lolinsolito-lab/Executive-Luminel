@@ -15,7 +15,7 @@ import { INITIAL_USER } from './constants';
 import { Session } from '@supabase/supabase-js';
 
 // Admin emails
-const ADMIN_EMAILS = ['lolinsolito@gmail.com', 'admin@luminel.com'];
+const ADMIN_EMAILS = ['lolinsolito@gmail.com', 'admin@luminel.com', 'jaramichael@hotmail.com'];
 
 const App: React.FC = () => {
   // CORE STATE
