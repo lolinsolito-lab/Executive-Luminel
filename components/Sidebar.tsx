@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { UserProfile } from '../types';
-import { Home, BookOpen, Users, Lock, Settings, Crown, ChevronRight, FileText, DollarSign, ShieldAlert } from 'lucide-react';
-import { DailyBriefing } from './NeuralCodex/DailyBriefing';
+import { Home, BookOpen, Users, Lock, Settings, Crown, ChevronRight } from 'lucide-react';
+import { DailyMission } from './DailyMission';
 
 interface SidebarProps {
     user: UserProfile;
@@ -12,7 +12,19 @@ interface SidebarProps {
 }
 
 // V7 PHOENIX - THE ARSENAL
-export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade, onNavigate, activePage }) => {
+
+    const [expandedItem, setExpandedItem] = useState<string | null>(null);
+
+    const handleItemClick = (item: any) => {
+        if (item.children) {
+            setExpandedItem(expandedItem === item.id ? null : item.id);
+        } else if (item.locked) {
+            onOpenUpgrade?.(item.lockedMessage);
+        } else {
+            onNavigate?.(item.label.toLowerCase().replace(' ', '-')); // Simple mapping
+        }
+    };
 
     // Tier accent color logic
     const getTierAccent = () => {
@@ -24,19 +36,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
     };
 
     const navItems = [
-        { icon: Home, label: 'Command', active: true, locked: false },
-        { icon: BookOpen, label: 'The Codex', active: false, locked: false }, // Strategy Support is generic
+        { id: 'command', icon: Home, label: 'Command', active: activePage === 'command', locked: false },
+        { id: 'codex', icon: BookOpen, label: 'The Codex', active: activePage === 'codex', locked: false }, // Strategy Support is generic
         {
+            id: 'blackbook',
             icon: Users,
             label: 'Black Book',
-            active: false,
+            active: activePage === 'blackbook',
             locked: user.subscription === 'GRINDER',
             lockedMessage: "Access Denied. Intelligence is for Operatives. Upgrade to see the files."
         },
         {
+            id: 'vault',
             icon: Lock,
             label: 'The Vault',
-            active: false,
+            active: activePage === 'vault',
             locked: user.subscription === 'GRINDER', // Totally locked for Free
             lockedMessage: "Access Denied. Intelligence is for Operatives. Upgrade to see the files."
         },
@@ -81,37 +95,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
                             <item.icon size={18} className={item.active ? 'text-phoenix-gold' : 'group-hover:text-phoenix-gold'} />
                             <span className="font-sans text-sm font-medium">{item.label}</span>
                             {item.locked && <Lock size={12} className="ml-auto text-phoenix-ghost" />}
-                            {item.children && !item.locked && (
-                                <ChevronRight size={14} className={`ml-auto transition-transform ${expandedItem === item.id ? 'rotate-90' : ''}`} />
-                            )}
                         </div>
-
-                        {/* Sub-menu */}
-                        {item.children && expandedItem === item.id && !item.locked && (
-                            <div className="ml-8 mt-1 space-y-1 border-l border-gray-100 pl-2 animate-fade-in-down">
-                                {item.children.map((child) => (
-                                    <div
-                                        key={child.id}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            if (child.locked) {
-                                                onOpenUpgrade?.(child.lockedMessage);
-                                            } else {
-                                                onNavigate?.(child.id);
-                                            }
-                                        }}
-                                        className={`
-                                            flex items-center gap-2 px-3 py-2 rounded-sm cursor-pointer text-xs font-sans transition-colors
-                                            ${child.locked ? 'text-gray-400' : 'text-phoenix-ghost hover:text-phoenix-ink hover:bg-gray-50'}
-                                        `}
-                                    >
-                                        <child.icon size={14} />
-                                        <span>{child.label}</span>
-                                        {child.locked && <Lock size={10} className="ml-auto text-phoenix-gold" />}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
                     </div>
                 ))}
 
@@ -136,48 +120,50 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
                                 <div className="font-sans text-[9px] text-amber-600">Excuse Generator</div>
                             </div>
                         </button>
+                        <button className="w-full flex items-center gap-3 px-3 py-2 bg-slate-50 border border-slate-100 rounded-sm hover:bg-slate-100 transition-all text-left group">
+                            <span className="text-lg">🛡️</span>
+                            <div>
+                                <div className="font-sans text-xs font-bold text-slate-700">Raise Defense</div>
+                                <div className="font-sans text-[9px] text-slate-500">Counter-argument</div>
+                            </div>
+                        </button>
                     </div>
-                </button>
-            </div>
-        </div>
-
-                {/* V7.7 GAMIFICATION ENGINE (Daily Mission) */ }
-    <DailyMission />
-            </div >
-
-    {/* V7.7 DAILY MANTRA */ }
-    < div className = "mt-auto" >
-        <div className="bg-phoenix-canvas border border-gray-200 p-4 rounded-sm shadow-sm relative overflow-hidden group hover:border-phoenix-gold transition-colors">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-phoenix-gold/5 blur-xl rounded-full"></div>
-            <h4 className="font-sans text-[9px] font-bold text-phoenix-ghost uppercase tracking-widest mb-2 flex items-center gap-2">
-                Daily Mantra
-            </h4>
-            <p className="font-display font-medium text-phoenix-ink text-sm leading-relaxed italic">
-                "Lass your aerireve as mvsea be nur in the best marting manney."
-                {/* Placeholder Latin-ish from image, replacing with real quote */}
-                "True power happens when you stop asking for permission and start issuing commands."
-            </p>
-        </div>
-                </div >
-            </div >
-
-    {/* C. FOOTER - Profile */ }
-    < div className = "shrink-0 mt-auto p-4 border-t border-gray-100 bg-phoenix-snow" >
-        <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-phoenix-navy rounded-full flex items-center justify-center text-white font-sans font-bold text-sm">
-                    {user.name?.charAt(0) || 'J'}
                 </div>
-                <div>
-                    <div className="font-sans text-sm font-medium text-phoenix-ink">{user.name}</div>
-                    <div className={`text-[10px] font-sans uppercase tracking-widest ${getTierAccent()}`}>{user.subscription}</div>
+
+                {/* V7.7 GAMIFICATION ENGINE (Daily Mission) */}
+                <DailyMission />
+            </div>
+
+            {/* V7.7 DAILY MANTRA - Fixed Bottom */}
+            <div className="mt-auto px-4 pb-4">
+                <div className="bg-phoenix-canvas border border-gray-200 p-4 rounded-sm shadow-sm relative overflow-hidden group hover:border-phoenix-gold transition-colors">
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-phoenix-gold/5 blur-xl rounded-full"></div>
+                    <h4 className="font-sans text-[9px] font-bold text-phoenix-ghost uppercase tracking-widest mb-2 flex items-center gap-2">
+                        Daily Mantra
+                    </h4>
+                    <p className="font-display font-medium text-phoenix-ink text-sm leading-relaxed italic">
+                        "True power happens when you stop asking for permission and start issuing commands."
+                    </p>
                 </div>
             </div>
-            <button className="p-2 hover:bg-gray-100 rounded-sm transition-colors">
-                <Settings size={16} className="text-phoenix-ghost" />
-            </button>
+
+            {/* C. FOOTER - Profile */}
+            <div className="shrink-0 mt-auto p-4 border-t border-gray-100 bg-phoenix-snow">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 bg-phoenix-navy rounded-full flex items-center justify-center text-white font-sans font-bold text-sm">
+                            {user.name?.charAt(0) || 'J'}
+                        </div>
+                        <div>
+                            <div className="font-sans text-sm font-medium text-phoenix-ink">{user.name}</div>
+                            <div className={`text-[10px] font-sans uppercase tracking-widest ${getTierAccent()}`}>{user.subscription}</div>
+                        </div>
+                    </div>
+                    <button className="p-2 hover:bg-gray-100 rounded-sm transition-colors">
+                        <Settings size={16} className="text-phoenix-ghost" />
+                    </button>
+                </div>
+            </div>
         </div>
-            </div >
-        </div >
     );
 };
