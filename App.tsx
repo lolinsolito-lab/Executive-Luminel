@@ -362,6 +362,8 @@ const App: React.FC = () => {
           <div className="h-full bg-phoenix-snow border-r border-gray-100 relative overflow-hidden flex flex-col min-w-0">
             <Sidebar
               user={userProfile}
+              activePage={activeTab}
+              onNavigate={setActiveTab}
               onOpenMap={() => setIsMapOpen(true)}
               onOpenUpgrade={openUpgrade}
             />

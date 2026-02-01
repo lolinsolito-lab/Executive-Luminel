@@ -45,9 +45,9 @@ export const ErrorModal: React.FC<ErrorModalProps> = ({
             case 'generic':
             default:
                 return {
-                    title: 'ERRORE DI SISTEMA',
-                    subtitle: 'System Error',
-                    message: errorMessage || 'Si è verificato un errore imprevisto. Il team è stato notificato.',
+                    title: 'SEGNALE PERSO',
+                    subtitle: 'Signal Lost',
+                    message: errorMessage || 'Il segnale è perso. The Corporate Fog is too thick. Refresh to reconnect.',
                     canRetry: true,
                 };
         }

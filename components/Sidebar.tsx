@@ -1,10 +1,12 @@
 import React from 'react';
 import { UserProfile } from '../types';
-import { Home, BookOpen, Users, Lock, Settings, Crown, ChevronRight } from 'lucide-react';
+import { Home, BookOpen, Users, Lock, Settings, Crown, ChevronRight, FileText, DollarSign, ShieldAlert } from 'lucide-react';
 import { DailyBriefing } from './NeuralCodex/DailyBriefing';
 
 interface SidebarProps {
     user: UserProfile;
+    activePage?: string;
+    onNavigate?: (page: string) => void;
     onOpenMap: () => void;
     onOpenUpgrade?: (feature?: string) => void;
 }
@@ -63,22 +65,53 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, onOpenMap, onOpenUpgrade
 
             {/* B. NAVIGATION */}
             <div className="flex-1 overflow-y-auto p-4 lg:p-5 space-y-1 min-h-0">
-                {navItems.map((item, idx) => (
-                    <div
-                        key={idx}
-                        onClick={() => item.locked ? onOpenUpgrade?.(item.lockedMessage || item.label) : null}
-                        className={`
-                            group flex items-center gap-3 px-4 py-3 rounded-sm cursor-pointer transition-all duration-200
-                            ${item.active
-                                ? 'bg-gradient-to-r from-amber-50 to-transparent border-l-[3px] border-phoenix-gold text-phoenix-ink'
-                                : 'hover:bg-gradient-to-r hover:from-amber-50/50 hover:to-transparent hover:border-l-[3px] hover:border-phoenix-gold/50 text-phoenix-ghost hover:text-phoenix-ink'
-                            }
-                            ${item.locked ? 'opacity-60 grayscale' : ''}
-                        `}
-                    >
-                        <item.icon size={18} className={item.active ? 'text-phoenix-gold' : 'group-hover:text-phoenix-gold'} />
-                        <span className="font-sans text-sm font-medium">{item.label}</span>
-                        {item.locked && <Lock size={12} className="ml-auto text-phoenix-ghost" />}
+                {navItems.map((item) => (
+                    <div key={item.id}>
+                        <div
+                            onClick={() => handleItemClick(item)}
+                            className={`
+                                group flex items-center gap-3 px-4 py-3 rounded-sm cursor-pointer transition-all duration-200
+                                ${item.active
+                                    ? 'bg-gradient-to-r from-amber-50 to-transparent border-l-[3px] border-phoenix-gold text-phoenix-ink'
+                                    : 'hover:bg-gradient-to-r hover:from-amber-50/50 hover:to-transparent hover:border-l-[3px] hover:border-phoenix-gold/50 text-phoenix-ghost hover:text-phoenix-ink'
+                                }
+                                ${item.locked ? 'opacity-60 grayscale' : ''}
+                            `}
+                        >
+                            <item.icon size={18} className={item.active ? 'text-phoenix-gold' : 'group-hover:text-phoenix-gold'} />
+                            <span className="font-sans text-sm font-medium">{item.label}</span>
+                            {item.locked && <Lock size={12} className="ml-auto text-phoenix-ghost" />}
+                            {item.children && !item.locked && (
+                                <ChevronRight size={14} className={`ml-auto transition-transform ${expandedItem === item.id ? 'rotate-90' : ''}`} />
+                            )}
+                        </div>
+
+                        {/* Sub-menu */}
+                        {item.children && expandedItem === item.id && !item.locked && (
+                            <div className="ml-8 mt-1 space-y-1 border-l border-gray-100 pl-2 animate-fade-in-down">
+                                {item.children.map((child) => (
+                                    <div
+                                        key={child.id}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            if (child.locked) {
+                                                onOpenUpgrade?.(child.lockedMessage);
+                                            } else {
+                                                onNavigate?.(child.id);
+                                            }
+                                        }}
+                                        className={`
+                                            flex items-center gap-2 px-3 py-2 rounded-sm cursor-pointer text-xs font-sans transition-colors
+                                            ${child.locked ? 'text-gray-400' : 'text-phoenix-ghost hover:text-phoenix-ink hover:bg-gray-50'}
+                                        `}
+                                    >
+                                        <child.icon size={14} />
+                                        <span>{child.label}</span>
+                                        {child.locked && <Lock size={10} className="ml-auto text-phoenix-gold" />}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 ))}
 
