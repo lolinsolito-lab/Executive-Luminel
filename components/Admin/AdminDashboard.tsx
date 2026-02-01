@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
     Users, CreditCard, Activity, TrendingUp, AlertTriangle,
     Search, Briefcase, DollarSign, BarChart3, PieChart,
-    Crown, X, RefreshCw, Mail, Eye, Trash2
+    Crown, X, RefreshCw, Mail, Eye, Trash2, Home, Layout, LogOut
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { WarRoomPanel } from './WarRoomPanel';
@@ -164,9 +164,25 @@ export const AdminDashboard: React.FC = () => {
                         </span>
                     </div>
 
-                    <div className="flex items-center gap-6">
-                        <button onClick={() => fetchAdminData()} className="hover:text-[#D4AF37] transition-colors"><RefreshCw size={18} /></button>
-                        <button onClick={() => window.location.href = '/'} className="hover:text-red-500 transition-colors"><X size={18} /></button>
+                    <div className="flex items-center gap-4">
+                        <button onClick={() => fetchAdminData()} className="hover:text-[#D4AF37] transition-colors" title="Refresh Data"><RefreshCw size={18} /></button>
+                        <div className="h-4 w-px bg-gray-300 mx-2" />
+                        <button onClick={() => window.location.href = '/'} className="flex items-center gap-2 hover:text-[#D4AF37] transition-colors text-xs font-bold uppercase tracking-wider">
+                            <Home size={16} /> <span className="hidden md:inline">Home</span>
+                        </button>
+                        <button onClick={() => window.location.href = '/'} className="flex items-center gap-2 hover:text-[#D4AF37] transition-colors text-xs font-bold uppercase tracking-wider">
+                            <Layout size={16} /> <span className="hidden md:inline">App</span>
+                        </button>
+                        <div className="h-4 w-px bg-gray-300 mx-2" />
+                        <button
+                            onClick={async () => {
+                                await supabase.auth.signOut();
+                                window.location.href = '/';
+                            }}
+                            className="flex items-center gap-2 text-red-400 hover:text-red-500 transition-colors text-xs font-bold uppercase tracking-wider"
+                        >
+                            <LogOut size={16} /> <span className="hidden md:inline">Logout</span>
+                        </button>
                     </div>
                 </div>
 
