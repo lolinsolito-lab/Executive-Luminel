@@ -9,6 +9,7 @@ import { StrategicMapModal } from './components/StrategicMapModal';
 import { HierarchyModal } from './components/HierarchyModal';
 import { UpgradeModal } from './components/Paywall/UpgradeModal';
 import { PaywallModal } from './components/Paywall/PaywallModal';
+import { ErrorModal } from './components/ErrorModal';
 import { PriorityUplink } from './components/PriorityUplink';
 import { LandingPage } from './components/Landing/LandingPage';
 import { AdminDashboard } from './components/Admin/AdminDashboard';
@@ -43,6 +44,36 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState('command'); // Fix for TacticalMenu
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isAuthModalMode, setIsAuthModalMode] = useState<'login' | 'signup' | 'recover' | 'update'>('login');
+
+  // Error Handling State
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const [errorType, setErrorType] = useState<'network' | 'ai-overload' | 'session-expired' | 'generic'>('generic');
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
+
+  // Narrative Loading State
+  const [loadingText, setLoadingText] = useState("Decrypting Salary Data...");
+  const [loadingPhase, setLoadingPhase] = useState(0);
+
+  // Psych-Tier Loading Cycle
+  useEffect(() => {
+    if (!isInitialized) {
+      const phases = [
+        "Decrypting Salary Data...",
+        "Analyzing Manager Profiling...",
+        "Loading God Mode Assets...",
+        "Establishing Secure Uplink..."
+      ];
+
+      const interval = setInterval(() => {
+        setLoadingPhase(prev => {
+          const next = (prev + 1) % phases.length;
+          setLoadingText(phases[next]);
+          return next;
+        });
+      }, 1500); // Cycle every 1.5s
+      return () => clearInterval(interval);
+    }
+  }, [isInitialized]);
 
   // Check if current user is admin (DB flag or hardcoded list)
   const isAdmin = userProfile.isAdmin || ADMIN_EMAILS.includes(userProfile.email || '');
@@ -253,12 +284,24 @@ const App: React.FC = () => {
 
   // RENDER LOGIC
   const renderContent = () => {
-    // 1. Loading State
+    // 1. Loading State (Narrative Psych-Tier)
     if (!isInitialized) {
       return (
-        <div className="h-screen w-full bg-[#09090b] flex items-center justify-center flex-col gap-4">
-          <div className="w-16 h-16 border-t-2 border-b-2 border-corp-gold rounded-full animate-spin"></div>
-          <div className="font-mono text-corp-gold text-xs tracking-[0.2em] animate-pulse">LUMINEL V5.0 // INITIALIZING...</div>
+        <div className="h-screen w-full bg-[#09090b] flex items-center justify-center flex-col gap-6">
+          {/* Logo Pulse */}
+          <div className="w-16 h-16 bg-phoenix-gold/10 border border-phoenix-gold rounded-sm flex items-center justify-center animate-pulse">
+            <Crown size={32} className="text-phoenix-gold" />
+          </div>
+
+          {/* Narrative Typing */}
+          <div className="font-mono text-phoenix-gold text-xs tracking-[0.2em] animate-pulse">
+            // {loadingText.toUpperCase()} //
+          </div>
+
+          {/* Progress Bar */}
+          <div className="w-48 h-1 bg-gray-800 rounded-full overflow-hidden">
+            <div className="h-full bg-phoenix-gold animate-progress-indeterminate"></div>
+          </div>
         </div>
       );
     }
@@ -432,6 +475,15 @@ const App: React.FC = () => {
           // User loaded by useEffect, just need to enter app
           setCurrentPage('app');
         }}
+      />
+
+      {/* ERROR MODAL */}
+      <ErrorModal
+        isOpen={isErrorOpen}
+        onClose={() => setIsErrorOpen(false)}
+        errorType={errorType}
+        errorMessage={errorMessage}
+        onRetry={() => window.location.reload()}
       />
     </>
   );
