@@ -21,7 +21,7 @@ export const PriorityUplink: React.FC<PriorityUplinkProps> = ({
     return (
         <button
             onClick={handleClick}
-            className="fixed bottom-6 left-6 z-40 flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-phoenix-gold to-amber-600 text-white font-sans text-sm font-bold uppercase tracking-widest rounded-sm shadow-lg hover:shadow-xl hover:from-amber-600 hover:to-phoenix-gold transition-all animate-pulse-slow"
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-phoenix-gold to-amber-600 text-white font-sans text-[10px] font-bold uppercase tracking-widest rounded-sm shadow-md hover:shadow-lg hover:from-amber-600 hover:to-phoenix-gold transition-all animate-pulse-slow"
         >
             <MessageCircle size={18} />
             <span>Priority Uplink</span>

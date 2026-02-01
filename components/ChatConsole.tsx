@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { UserProfile, Message } from '../types';
 import { Send, Crown, Activity, Sparkles } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import PriorityUplink from './PriorityUplink';
 
 interface ChatConsoleProps {
   messages: Message[];
@@ -32,7 +33,7 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
 
   const firstName = userProfile.name?.split(' ')[0] || 'Agente';
   const enemyName = userProfile.mainEnemy || 'Il Mercato';
-  const tierLabel = userProfile.subscription === 'EXECUTIVE' ? 'Executive' : userProfile.subscription === 'STRATEGIST' ? 'Strategist' : 'Analyst';
+  // Replaced manual label with logic below
 
   const userTier = userProfile.subscription as 'GRINDER' | 'STRATEGIST' | 'EXECUTIVE';
 
@@ -59,7 +60,7 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
       <div className="shrink-0 p-6 lg:p-8 bg-gradient-to-b from-[#FFFBF0] to-white z-20 relative border-b border-phoenix-gold/30">
 
         {/* Dynamic Header */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-phoenix-gold/10 flex items-center justify-center border border-phoenix-gold/30">
               <Crown size={14} className="text-phoenix-gold" />
@@ -74,15 +75,15 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
             </div>
           </div>
 
-          {/* Status Badge */}
-          <div className={`px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-wider flex items-center gap-2
-                ${userTier === 'EXECUTIVE'
-              ? 'bg-amber-50 border-phoenix-gold text-phoenix-gold'
-              : 'bg-slate-50 border-slate-200 text-slate-500'
-            }`}>
-            <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${userTier === 'EXECUTIVE' ? 'bg-phoenix-gold' : 'bg-slate-400'}`}></div>
-            {tierLabel} Clearance
-          </div>
+          {/* RIGHT SIDE: Priority Uplink (Executive) OR Status Badge (Others) */}
+          {userTier === 'EXECUTIVE' ? (
+            <PriorityUplink isVisible={true} />
+          ) : (
+            <div className="px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-wider flex items-center gap-2 bg-slate-50 border-slate-200 text-slate-500">
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-pulse"></div>
+              {userTier === 'STRATEGIST' ? 'Strategist' : 'Analyst'} Clearance
+            </div>
+          )}
         </div>
 
         {/* Narrative Content */}

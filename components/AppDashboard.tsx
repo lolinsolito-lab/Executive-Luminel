@@ -321,9 +321,7 @@ export const AppDashboard: React.FC<AppDashboardProps> = ({ userProfile, setUser
                 userEmail={userProfile.email}
             />
 
-            <PriorityUplink
-                isVisible={userProfile.subscription === 'EXECUTIVE'}
-            />
+
 
             <GenesisModal
                 isOpen={isGenesisOpen}
