@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [react()],
     build: {
+      sourcemap: false, // ANTI-HACKER: Disable source maps to hide code structure
       rollupOptions: {
         output: {
           manualChunks: {

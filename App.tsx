@@ -73,19 +73,25 @@ const App: React.FC = () => {
       // Clear previous logs to simulate a fresh boot
       // console.clear(); // Optional: keeps it very clean but might hide useful errors
 
-      console.group('%c EXECUTIVE LUMINEL ', titleStyle);
-      console.log('%c V7.9 PHOENIX PROTOCOL // SYSTEM ONLINE ', badgeStyle);
-      console.log(''); // Spacer
-      console.log(`%c[SYSTEM] Control System....... %cACTIVATED`, lineStyle, 'color: #10B981; font-weight: bold;');
-      console.log(`%c[INTEL]  Rat Trap............. %cDETECTED`, lineStyle, 'color: #EF4444; font-weight: bold;');
-      console.log(`%c[MODE]   Evasion.............. %cO CI SEI, O CI FAI`, lineStyle, 'color: #D4AF37; font-weight: bold;');
-      console.log(''); // Spacer
-      console.groupEnd();
+      // USE TIMEOUT TO DETACH FROM STACK TRACE (ANTI-REVERSE ENGINEERING TRICK)
+      setTimeout(() => {
+        const log = console.log.bind(console);
+        const group = console.group.bind(console);
+        const groupEnd = console.groupEnd.bind(console);
+
+        group('%c EXECUTIVE LUMINEL ', titleStyle);
+        log('%c V7.9 PHOENIX PROTOCOL // SYSTEM ONLINE ', badgeStyle);
+        log(''); // Spacer
+        log(`%c[SYSTEM] Control System....... %cACTIVATED`, lineStyle, 'color: #10B981; font-weight: bold;');
+        log(`%c[INTEL]  Rat Trap............. %cDETECTED`, lineStyle, 'color: #EF4444; font-weight: bold;');
+        log(`%c[MODE]   Evasion.............. %cO CI SEI, O CI FAI`, lineStyle, 'color: #D4AF37; font-weight: bold;');
+        log(''); // Spacer
+        groupEnd();
+      }, 0);
     };
 
     initSignature();
 
-    // 1. Check Session
     // 1. Check Session
     const initSession = async () => {
       try {
